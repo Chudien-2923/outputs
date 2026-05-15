@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Thuỷ Nguyên · Product × Concept</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0b0b0b;--s1:#131313;--s2:#1c1c1c;--bd:#222;--gold:#c9a86c;--tx:#e8e4dc;--tx2:#888;--tx3:#444}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:'Georgia',serif;font-size:14px}
+
+.hd{position:sticky;top:0;z-index:200;background:rgba(11,11,11,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:16px 48px}
+.hd-brand{font-size:11px;letter-spacing:.4em;color:var(--gold);text-transform:uppercase}
+.hd-nav{display:flex;gap:24px}
+.hd-nav a{font-size:10px;letter-spacing:.2em;color:var(--tx3);text-decoration:none;text-transform:uppercase;transition:color .2s}
+.hd-nav a:hover{color:var(--tx2)}
+
+.intro{padding:64px 48px 52px;border-bottom:1px solid var(--bd)}
+.intro-eyebrow{font-size:10px;letter-spacing:.35em;color:var(--tx3);text-transform:uppercase;margin-bottom:18px}
+.intro-h1{font-size:38px;font-weight:300;letter-spacing:.04em;line-height:1.15;margin-bottom:18px}
+.intro-sub{font-size:13px;color:var(--tx2);line-height:1.9;max-width:560px;margin-bottom:40px}
+
+/* Workflow diagram */
+.workflow{display:grid;grid-template-columns:1fr 40px 1fr;gap:0;max-width:800px;margin-bottom:0}
+.wf-step{background:var(--s1);border:1px solid var(--bd);padding:24px 28px}
+.wf-arrow{display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--tx3)}
+.wf-num{font-size:10px;letter-spacing:.3em;color:var(--tx3);text-transform:uppercase;margin-bottom:8px}
+.wf-title{font-size:16px;font-weight:300;letter-spacing:.05em;margin-bottom:10px}
+.wf-items{list-style:none}
+.wf-items li{font-size:11px;color:var(--tx2);line-height:1.7;padding-left:14px;position:relative}
+.wf-items li::before{content:'→';position:absolute;left:0;color:var(--tx3)}
+.wf-note{font-size:10px;color:var(--tx3);margin-top:10px;font-style:italic;border-top:1px solid var(--bd);padding-top:8px}
+
+/* Shot list in workflow */
+.shot-list{margin-top:8px}
+.shot-item{display:flex;gap:10px;align-items:baseline;font-size:11px;color:var(--tx2);line-height:1.9}
+.shot-item .sn{font-size:10px;font-family:monospace;color:var(--gold);min-width:22px}
+
+/* Concept section */
+.cs{border-bottom:1px solid var(--bd)}
+.ch{display:grid;grid-template-columns:1fr 1fr;min-height:440px}
+.ch-img{overflow:hidden}
+.ch-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease;display:block}
+.ch-img:hover img{transform:scale(1.04)}
+.ch-info{background:var(--s1);padding:52px 48px;display:flex;flex-direction:column;justify-content:center}
+.ch-num{font-size:10px;letter-spacing:.35em;color:var(--tx3);text-transform:uppercase;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--bd)}
+.ch-name{font-size:44px;font-weight:300;letter-spacing:.06em;line-height:1;margin-bottom:6px}
+.ch-mood{font-size:13px;font-style:italic;letter-spacing:.08em;margin-bottom:18px;opacity:.7}
+.ch-desc{font-size:13px;color:#8c8882;line-height:1.85;margin-bottom:22px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:22px}
+.chip{padding:4px 12px;border:1px solid var(--bd);font-size:10px;color:var(--tx3);letter-spacing:.08em}
+.ch-meta{font-size:11px;color:var(--tx3);letter-spacing:.12em}
+.ch-meta strong{display:block;font-size:22px;font-weight:300;line-height:1.1}
+.ch-ref{margin-top:18px;background:var(--bg);border:1px solid var(--bd);padding:10px 14px;font-family:'Courier New',monospace;font-size:10px;color:var(--tx3)}
+.ch-ref-lbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:3px;opacity:.6}
+
+.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1px;background:var(--bd);border-top:1px solid var(--bd)}
+.pc{background:var(--bg);cursor:pointer;transition:background .2s;display:flex;flex-direction:column;position:relative}
+.pc:hover{background:var(--s1)}
+.pc-stripe{height:2px;transition:opacity .2s;opacity:0}
+.pc:hover .pc-stripe{opacity:1}
+.pc-img{aspect-ratio:1;background:#f3f2ee;overflow:hidden;position:relative}
+.pc-img img{width:100%;height:100%;object-fit:contain;padding:18px;transition:transform .4s ease}
+.pc:hover .pc-img img{transform:scale(1.05)}
+.pc-peek{position:absolute;inset:0;background:rgba(0,0,0,0);display:flex;align-items:flex-end;padding:12px;opacity:0;transition:all .3s}
+.pc:hover .pc-peek{opacity:1;background:rgba(0,0,0,.22)}
+.pc-peek-txt{font-size:10px;color:rgba(255,255,255,.75);font-family:'Courier New',monospace;background:rgba(0,0,0,.7);padding:6px 9px;line-height:1.5;max-height:52px;overflow:hidden}
+.pc-body{padding:14px 18px 18px;flex:1;display:flex;flex-direction:column}
+.pc-code{font-size:10px;letter-spacing:.25em;color:var(--tx3);font-family:monospace;margin-bottom:3px}
+.pc-title{font-size:12px;color:#bab6ae;line-height:1.5;flex:1;margin-bottom:10px}
+.pc-cta{align-self:flex-start;font-size:10px;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;background:none;border:1px solid rgba(201,168,108,.2);padding:5px 11px;cursor:pointer;font-family:inherit;transition:all .2s}
+.pc-cta:hover{background:rgba(201,168,108,.08);border-color:var(--gold)}
+
+/* Modal */
+.mb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;align-items:center;justify-content:center;padding:20px}
+.mb.open{display:flex}
+.modal{background:var(--s1);border:1px solid var(--bd);max-width:1020px;width:100%;max-height:92vh;display:grid;grid-template-columns:320px 1fr;overflow:hidden;position:relative}
+.mx{position:absolute;top:12px;right:12px;z-index:10;width:28px;height:28px;background:var(--s2);border:1px solid var(--bd);color:var(--tx2);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.mx:hover{background:var(--bd);color:var(--tx)}
+
+/* Modal left */
+.ml{display:flex;flex-direction:column;border-right:1px solid var(--bd)}
+.ml-prod{flex:1;background:#f3f2ee;min-height:220px;overflow:hidden}
+.ml-prod img{width:100%;height:100%;object-fit:contain;padding:24px}
+.ml-ref{height:160px;overflow:hidden;border-top:1px solid var(--bd);position:relative}
+.ml-ref img{width:100%;height:100%;object-fit:cover}
+.ml-ref-cap{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.65);padding:5px 10px;font-size:9px;letter-spacing:.15em;color:rgba(255,255,255,.4);text-transform:uppercase;font-family:monospace}
+
+/* Modal right */
+.mr{padding:28px 28px 20px;overflow-y:auto;display:flex;flex-direction:column}
+.mr-code{font-size:10px;letter-spacing:.25em;color:var(--tx3);font-family:monospace;margin-bottom:2px}
+.mr-name{font-size:17px;font-weight:300;letter-spacing:.04em;margin-bottom:5px}
+.mr-ctag{display:inline-block;font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:2px 9px;border:1px solid;margin-bottom:18px}
+
+/* Shot tabs */
+.shot-tabs{display:flex;gap:2px;margin-bottom:14px;flex-wrap:wrap}
+.shot-tab{padding:5px 9px;background:var(--s2);border:1px solid var(--bd);font-size:9px;letter-spacing:.12em;color:var(--tx3);text-transform:uppercase;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.shot-tab:hover{background:var(--bd);color:var(--tx2)}
+.shot-tab.active{color:#0b0b0b;border-color:transparent}
+
+/* Input guide */
+.input-guide{background:rgba(201,168,108,.05);border:1px solid rgba(201,168,108,.15);padding:9px 12px;margin-bottom:10px}
+.ig-label{font-size:9px;letter-spacing:.25em;color:var(--gold);text-transform:uppercase;margin-bottom:4px}
+.ig-items{font-family:'Courier New',monospace;font-size:10px;color:var(--tx2);line-height:1.75}
+.ig-item::before{content:'↳ '}
+
+/* AR badge */
+.ar-badge{display:inline-block;padding:2px 8px;background:var(--bd);font-size:9px;font-family:monospace;color:var(--tx2);margin-bottom:8px}
+
+.prompt-box{background:var(--bg);border:1px solid var(--bd);padding:14px;font-family:'Courier New',monospace;font-size:11px;color:#9a958f;line-height:1.85;white-space:pre-wrap;word-break:break-word;margin-bottom:12px;flex:1;min-height:100px}
+.copy-btn{padding:10px;background:var(--gold);color:#0b0b0b;border:none;font-size:10px;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;font-family:inherit;transition:all .2s;width:100%}
+.copy-btn:hover{opacity:.88}
+.copy-btn.ok{background:#4e8a68;color:#fff}
+
+.toast{position:fixed;bottom:24px;right:24px;background:#4e8a68;color:#fff;padding:8px 16px;font-size:11px;letter-spacing:.15em;transform:translateY(60px);opacity:0;transition:all .3s;z-index:1000}
+.toast.show{transform:translateY(0);opacity:1}
+
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:#2a2a2a}
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <div class="hd-brand">Thuỷ Nguyên · Product × Concept</div>
+  <nav class="hd-nav">
+    <a href="#japandi">Japandi</a>
+    <a href="#elegant-light">Elegant Light</a>
+    <a href="#elegant-dark">Elegant Dark</a>
+    <a href="#collect1">Collect 1</a>
+    <a href="#collect4">Collect 4</a>
+  </nav>
+</div>
+
+<div class="intro">
+  <div class="intro-eyebrow">AI Image Generation Workflow · GPT-image-2 · 22 sản phẩm × 4 concept</div>
+  <h1 class="intro-h1">Product × Concept<br>7-Shot System</h1>
+  <p class="intro-sub">Mỗi sản phẩm generate thành bộ 7 góc nhất quán. Bước 1 tạo Hero shot. Bước 2 dùng ảnh Hero đó làm input để phát triển các góc còn lại.</p>
+  <div class="workflow">
+    <div class="wf-step">
+      <div class="wf-num">Bước 1 — Hero</div>
+      <div class="wf-title">Generate từ đầu</div>
+      <ul class="wf-items">
+        <li>Product FRONT / FRONT 34 image</li>
+        <li>Concept reference image</li>
+        <li>Text prompt (Shot 01)</li>
+      </ul>
+      <div class="wf-note">Output: hero.jpg — ảnh sản phẩm trong không gian mới</div>
+    </div>
+    <div class="wf-arrow">→</div>
+    <div class="wf-step">
+      <div class="wf-num">Bước 2 — Angle Variants</div>
+      <div class="wf-title">Phát triển từ Hero</div>
+      <div class="shot-list">
+        <div class="shot-item"><span class="sn">02</span> Wide Room (16:9)</div>
+        <div class="shot-item"><span class="sn">03</span> Side Profile / Overhead (4:5 / 1:1)</div>
+        <div class="shot-item"><span class="sn">04</span> Front Straight (4:5)</div>
+        <div class="shot-item"><span class="sn">05</span> Detail Hardware (1:1)</div>
+        <div class="shot-item"><span class="sn">06</span> Detail Surface (1:1)</div>
+        <div class="shot-item"><span class="sn">07</span> Styled Atmosphere (4:5)</div>
+      </div>
+      <div class="wf-note">Input: hero.jpg — giữ nguyên env, chỉ đổi góc + mood</div>
+    </div>
+  </div>
+</div>
+
+<div id="root"></div>
+
+<div class="mb" id="mb">
+  <div class="modal">
+    <button class="mx" id="mx">✕</button>
+    <div class="ml">
+      <div class="ml-prod"><img id="mProdImg" src="" alt=""></div>
+      <div class="ml-ref">
+        <img id="mRefImg" src="" alt="">
+        <div class="ml-ref-cap" id="mRefCap"></div>
+      </div>
+    </div>
+    <div class="mr">
+      <div class="mr-code" id="mCode"></div>
+      <div class="mr-name" id="mName"></div>
+      <div class="mr-ctag" id="mCtag"></div>
+      <div class="shot-tabs" id="shotTabs"></div>
+      <div class="input-guide">
+        <div class="ig-label">Input cho GPT-image-2</div>
+        <div class="ig-items" id="igItems"></div>
+      </div>
+      <div class="ar-badge" id="arBadge"></div>
+      <div class="prompt-box" id="mPrompt"></div>
+      <button class="copy-btn" id="copyBtn">⊕ Copy Prompt</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Prompt đã copy ✓</div>
+
+<script>
+const DATA = [
+  {
+    id:'japandi', num:'01', name:'JAPANDI', color:'#8ca498',
+    mood:'Zen · Earthy · Organic',
+    desc:'Tường bê tông xám ấm, sàn concrete, kệ gỗ oak, đèn rattan, cỏ pampas khô. Form oval tối giản đặt trong không gian wabi-sabi — cảm giác onsen Nhật giữa căn hộ Việt.',
+    palette:['Warm Grey','Cream','Natural Wood','Matte Black'],
+    env:'warm grey concrete plaster walls, concrete floor, natural oak wood shelf, rattan pendant light, dried botanical elements',
+    ref:'../context/references/Concept/Japandi/f82a66dbb4af6f189abe60436b381604.jpg',
+    refNote:'Japandi — concrete + cream oval + rattan pendant',
+    products:[
+      {code:'RY 001', type:'freestanding', desc:'Oval trắng minimal · không faucet',
+       img:'../context/images/Product/RY 001/PRODUCT SHOT 01/RY 001 - FRONT 34.PNG',
+       hero:'A sleek white oval freestanding bathtub with smooth matte-gloss surface and a small chrome rectangular overflow trim, placed in a serene Japandi bathroom. Warm grey textured concrete plaster walls. A single vertical warm LED strip recessed behind a thin oak wood batten shelf. A dried Japanese cherry blossom branch in a round woven rattan basket on the floor. Natural linen bath mat on concrete floor. Matte black wall-mounted faucet beside the tub. Soft diffused natural light from a frosted high window. Photorealistic architectural visualization, wabi-sabi spa aesthetic, 4K, warm grey and cream palette. --ar 4:5'},
+      {code:'RY 004', type:'freestanding', desc:'Slipper high-back sculptural · không faucet',
+       img:'../context/images/Product/RY 004/PRODUCT SHOT 1/RY 004 - FRONT 34.png',
+       hero:'A white matte high-back slipper freestanding bathtub with sculpted raised backrest and clean smooth body, in a minimalist Japandi bathroom. Raw warm grey concrete plaster walls. A low floating oak wood shelf holds amber glass bottles and a white ceramic vessel. Dried pampas grass in a matte white cylinder vase beside the tub. Natural linen towel draped over the raised tub edge. Matte black freestanding floor-mount faucet. Soft warm morning side light from a narrow tall window. Photorealistic interior visualization, Japanese onsen aesthetic, warm grey and cream palette, 4K. --ar 4:5'},
+      {code:'RY 005', type:'freestanding', desc:'Oval rộng low-profile · không faucet',
+       img:'../context/images/Product/RY 005/PRODUCT SHOT 1/RY 005 - FRONT 34.png',
+       hero:'A wide white gloss oval freestanding bathtub with smooth low-profile silhouette, centered in a Japandi-style bathroom. Warm concrete plaster walls in muted grey-beige. A rattan sphere pendant light hanging above. Oak floating shelf with folded linen towels and small dark glass bottles. Concrete floor with textured linen bath rug. Soft diffused daylight from left. Matte black floor-standing faucet. Photorealistic architectural render, calm organic spa mood, 4K, warm neutral tones. --ar 4:5'},
+      {code:'RY 009', type:'freestanding', desc:'Oval compact nhỏ gọn · không faucet',
+       img:'../context/images/Product/RY 009/PRODUCT SHOT 1/RY 009 - FRONT 34.png',
+       hero:'A compact white gloss oval freestanding bathtub with minimal chrome round drain, in an intimate Japandi bathroom. Raw textured warm grey concrete walls. A warm amber LED strip recessed behind a thin wood batten. A small dark walnut three-legged stool with folded grey linen towels and a smooth grey river pebble. Matte black floor-standing faucet. Soft natural top light. Photorealistic render, wabi-sabi minimal aesthetic, warm earthy tones, 4K. --ar 4:5'},
+      {code:'RY 012', type:'freestanding', desc:'Oval slim low-profile · không faucet',
+       img:'../context/images/Product/RY 012/PRODUCT SHOT 1/RY 012 - FRONT 34.png',
+       hero:'A slim low-profile white freestanding oval bathtub with clean chrome rectangular drain insert, in a serene Japandi bathroom. Warm plaster-textured concrete walls in grey-sand tone. Dried botanical arrangement in a woven ceramic vase on the floor. A minimal wooden bath tray across the rim holding a white candle and amber glass bottles. Matte black wall-mounted faucet. Calm editorial lighting with soft directional shadows. Photorealistic product visualization, Japanese minimalist spa atmosphere, 4K. --ar 4:5'}
+    ]
+  },
+  {
+    id:'elegant-light', num:'02', name:'ELEGANT LIGHT', color:'#d4b896',
+    mood:'Warm Luxury · Marble · Airy',
+    desc:'Tường marble Calacatta trắng vân vàng, LED ambient ấm, sàn marble đánh bóng. Tôn lên vẻ sang trọng của sản phẩm có faucet set hoặc chân điêu khắc.',
+    palette:['Calacatta White','Gold Vein','Warm LED','Chrome & Brass'],
+    env:'white Calacatta marble walls with gold-grey veining, warm LED ambient strip along ledge, polished marble floor',
+    ref:'../context/references/Concept/Elegant/1-sculpted-marble-serenity.webp',
+    refNote:'Elegant/1-sculpted-marble-serenity.webp',
+    products:[
+      {code:'RY 002', type:'freestanding', desc:'Oval trắng + bộ vòi chrome + whirlpool jets',
+       img:'../context/images/Product/RY 002/PRODUCT SHOT 01/RY 002 - FRONT 34.png',
+       hero:'A glossy white oval freestanding bathtub with integrated deck-mounted chrome 5-piece faucet set and handheld shower, centered in a luxurious marble bathroom. Floor-to-ceiling Calacatta white marble wall panels with subtle gold-grey veining. Warm LED ambient strip along the upper marble ledge. Polished marble floor with faint warm reflection. A clear glass vase with dried botanicals on the shelf. Small amber glass apothecary bottles and a reed diffuser. Soft warm recessed ceiling spotlights. Photorealistic architectural visualization, luxury hotel spa aesthetic, champagne white and gold palette, 4K. --ar 4:5'},
+      {code:'RY 006', type:'freestanding', desc:'Clawfoot trắng · chân sư tử VÀNG gold',
+       img:'../context/images/Product/RY 006/PRODUCT SHOT 1/RY 006 - FRONT 34.png',
+       hero:'A classic white freestanding bathtub with ornate gold-finished lion-paw claw feet, in an opulent marble bathroom. White Calacatta marble walls and polished floor with warm gold veining. Warm recessed LED ceiling spots. A gold vintage floor-standing faucet with cross handles. Two tall white pillar candles in gold holders on the floor. Antique amber glass vessels on a marble ledge shelf. Soft warm natural light through a frosted arched window. Photorealistic render, old-world luxury meets contemporary marble elegance, warm gold and white palette, 4K. --ar 4:5'},
+      {code:'RY 013', type:'freestanding', desc:'Slipper oval trắng + bộ vòi chrome 5-piece',
+       img:'../context/images/Product/RY 013/PRODUCT SHOT 1/RY 013 - FRONT 34.png',
+       hero:'A white freestanding oval slipper bathtub with gently elevated backrest and integrated deck-mounted chrome 5-piece faucet set with handheld shower, in a luxurious marble spa bathroom. Large-format Calacatta marble slab walls with soft gold-grey veining. Warm LED strip hidden along the upper marble ledge. Polished marble floor. Small marble shelf with amber glass bottles and a single dried stem. Soft warm directional light. Photorealistic luxury interior visualization, spa-hotel aesthetic, warm white and gold palette, 4K. --ar 4:5'},
+      {code:'RY 022', type:'freestanding', desc:'Oval trắng + cross-handle chrome + jets',
+       img:'../context/images/Product/RY 022/PRODUCT SHOT 1.png',
+       hero:'A large glossy white oval freestanding bathtub with integrated deck-mounted chrome cross-handle 5-piece faucet set and handheld shower, in an elegant marble bathroom. Floor-to-ceiling Calacatta white marble wall panels. Warm recessed LED ceiling spotlights. A rectangular niche shelf in the marble wall holds small amber bottles and a white ceramic piece. Polished marble floor with faint reflection. Photorealistic architectural render, high-end residential spa, warm champagne-white palette, 4K. --ar 4:5'}
+    ]
+  },
+  {
+    id:'elegant-dark', num:'03', name:'ELEGANT DARK', color:'#7a7a7a',
+    mood:'Moody · Bold · Dramatic',
+    desc:'Tường charcoal xám đậm, sàn concrete tối, đèn pendant matte black. Tạo contrast mạnh cho sản phẩm màu đậm hoặc silhouette ấn tượng.',
+    palette:['Charcoal','Matte Black','Polished Concrete','Pendant Glow'],
+    env:'dark charcoal smooth plaster walls, dark polished concrete floor, matte black teardrop pendant lights, indoor plant accent',
+    ref:'../context/references/Concept/Elegant/13-matte-black-allure.webp',
+    refNote:'Elegant/13-matte-black-allure.webp',
+    products:[
+      {code:'RY 003', type:'freestanding', desc:'Oval ĐEN ngoài · TRẮNG trong · deck faucet',
+       img:'../context/images/Product/RY 003/PRODUCT SHOT 1/RY 003 - FRONT 34.png',
+       hero:'A striking freestanding oval bathtub with deep matte black exterior and clean glossy white interior, in a dramatic dark bathroom. Dark charcoal smooth plaster walls. Two matte black teardrop pendant lights hanging above. A tall indoor olive tree in a matte black pot in the far corner. Dark polished concrete floor. Matte black floor-standing faucet. Dramatic natural side light from a tall window casting bold shadow play. Photorealistic render, moody luxury editorial, high contrast black and white palette, 4K. --ar 4:5'},
+      {code:'RY 007', type:'freestanding', desc:'Clawfoot trắng · chân CHROME ornate',
+       img:'../context/images/Product/RY 007/PRODUCT SHOT 1/RY 007 - FRONT 34.png',
+       hero:'A classic white freestanding double-slipper clawfoot bathtub with ornate chrome claw feet, in a moody dark charcoal bathroom. Dark grey smooth plaster walls. Two hanging pendant lights with warm inner glow. A large indoor ficus tree in a matte charcoal ceramic pot. Dark polished concrete floor. Chrome floor-standing vintage-style faucet set. Atmospheric side window light creating dramatic soft shadow. Photorealistic visualization, dark moody editorial interior, charcoal and chrome and white palette, 4K. --ar 4:5'},
+      {code:'RY 008', type:'freestanding', desc:'Slipper asymmetric trắng high-back · jets',
+       img:'../context/images/Product/RY 008/PRODUCT SHOT 1/RY 008 - FRONT 34.png',
+       hero:'A white asymmetric high-back slipper freestanding bathtub with dramatic sculptural curved silhouette, in a moody dark minimal bathroom. Dark charcoal textured plaster walls. Soft cone-shaped matte black pendant lights overhead. Dark polished concrete floor. Single large window casting dramatic elongated floor shadow. Chrome deck-mounted faucet and hand shower. A small matte black ceramic side table with a stone soap dish. Photorealistic editorial render, dark luxury mood, high contrast dramatic lighting, 4K. --ar 4:5'}
+    ]
+  },
+  {
+    id:'collect1', num:'04', name:'COLLECT 1', color:'#8a6642',
+    mood:'Cinematic · Dark Wood · Editorial',
+    desc:'Tường ốp gỗ walnut tối vertical panels, sàn concrete xám, ánh nắng xuyên cửa sổ tạo bóng kịch tính. Phong cách editorial — như chụp cho tạp chí interior luxury.',
+    palette:['Dark Walnut','Concrete Grey','Dramatic Shadow','Brushed Steel'],
+    env:'dark walnut vertical wood panel walls with fine grain texture, polished concrete floor, dramatic parallel light and shadow from a hidden window',
+    ref:'../context/references/Concept/Collect 1/behance_img_1.jpg',
+    refNote:'Collect 1/behance_img_1.jpg',
+    products:[
+      {code:'RY 010', type:'freestanding', desc:'Rectangular angular + headrest đen + jets',
+       img:'../context/images/Product/RY 010/PRODUCT SHOT 1/RY 010 - FRONT 34.png',
+       hero:'A sharp-edged white rectangular freestanding bathtub with deck-mounted chrome cross-handle faucet set, handheld shower, and a black cushioned neck pillow headrest, in a cinematic dark wood bathroom. Dark walnut vertical wood panel walls. Polished concrete floor. Dramatic natural sunlight casting bold parallel shadow stripes across the wood panels. A small dark walnut three-legged side stool with amber glass grooming bottles. Photorealistic architectural visualization, dark luxury editorial aesthetic, dark brown and white contrast, 4K. --ar 4:5'},
+      {code:'RY 011', type:'freestanding', desc:'Rectangular trắng + blue glass panel side',
+       img:'../context/images/Product/RY 011/PRODUCT SHOT 1/RY 011 - FRONT 34.png',
+       hero:'A modern rectangular drop-in bathtub with white acrylic body and a glowing translucent deep blue acrylic side panel, in a sophisticated dark wood bathroom. Dark walnut vertical wood panel walls. Warm directional light creates golden shadow patterns across the wood grain. The blue panel glows as a cool accent against the warm dark wood. Concrete floor. A single amber glass bottle on a walnut tray. Photorealistic render, contemporary luxury with dark wood and cool blue accent, 4K. --ar 4:5'}
+    ]
+  },
+  {
+    id:'collect4', num:'05', name:'COLLECT 4', color:'#c4a882',
+    mood:'Modern Apartment · Travertine · Warm Neutral',
+    desc:'Toàn bộ phòng tắm ốp travertine beige/sand, cabin shower kính frosted, faucet brushed steel. Setting thực tế nhất cho chung cư.',
+    palette:['Travertine Beige','Sand Stone','Brushed Steel','Frosted Glass'],
+    env:'warm beige travertine limestone tile walls and floor, frosted glass shower partition, brushed steel fixtures, recessed ceiling downlights',
+    ref:'../context/references/Concept/Collect 4/behance_img_1.jpg',
+    refNote:'Collect 4/behance_img_1.jpg',
+    products:[
+      {code:'RY 014', type:'builtin', desc:'Rectangular 2 người + blue glass + 2 headrests',
+       img:'../context/images/Product/RY 014/PRODUCT SHOT 1/RY 014 - FRONT 34.png',
+       hero:'A spacious two-person rectangular bathtub with white body, translucent blue glowing acrylic side panels, and two black cushioned headrests, in a luxurious travertine master bathroom. Warm beige travertine tile walls and polished floor. Brushed steel deck faucet. Adjacent frosted glass shower partition. Recessed ceiling warm downlights. A wooden bath tray across the tub with a candle and two glass bottles. Photorealistic architectural render, modern luxury apartment master bathroom, warm beige and cool blue accent, 4K. --ar 4:5'},
+      {code:'RY 015', type:'corner', desc:'Corner pentagonal + blue glass front + jets',
+       img:'../context/images/Product/RY 015/z4704402657225b72f9b2e28b23f35ce4fe053e8f14d94-1-9974.jpg',
+       hero:'A white pentagonal corner bathtub with a glowing translucent blue front panel and whirlpool jets, installed in the corner of a modern luxury apartment bathroom. Travertine limestone tiles in warm sand-beige on all walls and floor. Brushed steel floor-standing faucet beside the tub. Frosted glass shower partition visible on one side. Warm recessed ceiling spotlights. Photorealistic interior render, modern luxury apartment bathroom, warm travertine and blue glass accent, 4K. --ar 4:5'},
+      {code:'RY 016', type:'corner', desc:'Corner trắng + wave texture apron',
+       img:'../context/images/Product/RY 016/PRODUCT SHOT 1/RY 016 - FRONT 34.png',
+       hero:'A white corner bathtub with a ribbed wave-texture apron panel, in the corner of a modern travertine bathroom. Warm beige travertine tile walls and floor. Brushed steel freestanding faucet beside the tub. Frosted glass shower enclosure adjacent. Warm recessed ceiling lighting. Rolled white towels on a built-in travertine niche shelf. Photorealistic visualization, modern residential luxury, warm beige and white palette, 4K. --ar 4:5'},
+      {code:'RY 017', type:'corner', desc:'Corner wave texture · kích thước khác',
+       img:'../context/images/Product/RY 017/PRODUCT SHOT 1/RY 017 - FRONT.png',
+       hero:'A white corner bathtub with ridged ribbed apron panels, in the corner of a travertine-clad modern bathroom. Warm sand-toned travertine tiles cover walls and floor seamlessly. Brushed champagne steel floor-standing faucet. Frosted glass shower screen to one side. Warm recessed ceiling lighting. Small stone soap dish and minimal trailing plant as accessories. Photorealistic render, modern apartment luxury, warm neutral travertine palette, 4K. --ar 4:5'},
+      {code:'RY 018', type:'corner', desc:'Corner pentagonal + wave texture all-around',
+       img:'../context/images/Product/RY 018/PRODUCT SHOT 1/PRODUCT SHOT 1.png',
+       hero:'A white pentagonal corner bathtub with wave-textured all-around apron panels, in a modern luxury bathroom corner. Warm beige travertine wall tiles and polished stone floor. Brushed steel side faucet set. Frosted glass shower partition adjacent. Recessed warm ceiling downlights. A small built-in stone niche shelf holds amber glass bath products. Photorealistic visualization, warm beige travertine and chrome, 4K. --ar 4:5'},
+      {code:'RY 019', type:'builtin', desc:'Built-in rectangular + 2 headrests đen + jets',
+       img:'../context/images/Product/RY 019/PRODUCT SHOT 1/PRODUCT SHOT 1.png',
+       hero:'A white rectangular drop-in alcove bathtub with two black cushioned neck pillow headrests and whirlpool jets, in a contemporary luxury bathroom alcove. Travertine limestone tiles on walls and floor in warm sand-beige. Chrome deck-mount faucet on the tub ledge. Frosted glass shower enclosure visible to the right. Warm recessed ceiling spotlights. Folded white and grey linen towels on a wall niche shelf. Photorealistic interior render, modern apartment master bathroom, warm beige and chrome palette, 4K. --ar 4:5'},
+      {code:'RY 020', type:'builtin', desc:'Built-in rectangular + raised panel apron',
+       img:'../context/images/Product/RY 020/PRODUCT SHOT 1/PRODUCT SHOT 1.png',
+       hero:'A white rectangular alcove bathtub with a classic raised panel apron skirt, in a refined modern bathroom alcove. Travertine beige tile walls and floor. A brushed steel floor-standing cross-handle faucet set beside the tub. Frosted glass shower partition on one side. Warm recessed ceiling lights. A white linen towel draped over the tub edge. A small single-stem plant on the wall ledge. Photorealistic architectural visualization, warm travertine residential luxury, clean classic aesthetic, 4K. --ar 4:5'},
+      {code:'RY 021', type:'builtin', desc:'Built-in rectangular · simple clean + jets',
+       img:'../context/images/Product/RY 021/PRODUCT SHOT 1.png',
+       hero:'A white rectangular alcove drop-in bathtub with minimal clean apron and chrome deck-mount faucet set, in a modern apartment bathroom. Warm beige travertine stone tiles on walls and floor. Frosted glass shower enclosure to the side. Recessed warm ceiling downlights. A minimal wooden bath tray across the rim with a white candle and natural soap bar. Rolled white towels on a built-in side niche shelf. Photorealistic interior render, modern apartment master bathroom, warm neutral travertine, 4K. --ar 4:5'}
+    ]
+  }
+];
+
+function buildShots(concept, product) {
+  const e = concept.env;
+  const isCorner = product.type === 'corner' || product.type === 'builtin';
+  return [
+    {
+      num:'01', label:'HERO', ar:'4:5',
+      inputs:['Product FRONT 34 image', 'Concept reference image'],
+      prompt: product.hero
+    },
+    {
+      num:'02', label:'WIDE ROOM', ar:'16:9',
+      inputs:['Generated hero image (output từ Shot 01)'],
+      prompt:`Using the generated hero image as your environment and style reference, pull the camera back to reveal the full bathroom space in a wide-angle view. The bathtub remains visible but now the entire room is shown — more of the ${e}. Same color palette, same lighting direction, same mood. Do not change the bathtub design. Wide-angle architectural interior photography, 4K. --ar 16:9`
+    },
+    {
+      num:'03', label: isCorner ? 'OVERHEAD':'SIDE PROFILE', ar: isCorner ? '1:1':'4:5',
+      inputs:['Generated hero image (output từ Shot 01)'],
+      prompt: isCorner
+        ? `Using the generated hero image as your style reference, reposition the camera to a direct overhead bird's eye view looking straight down into the bathtub. Shows the full interior basin, the surrounding ${e.split(',')[0]} floor tiles, and the partial walls from above. Same ambient lighting from above. Do not change the bathtub design. Top-down architectural photography, 4K. --ar 1:1`
+        : `Using the generated hero image as your style reference, reposition the camera to a strict 90-degree side view of the bathtub. The complete silhouette profile of the tub is the hero of the shot — showing its form, height, and curved/angular shape. ${e.split(',')[0]} wall visible in the background. Same lighting. Do not change the bathtub design. Clean editorial side-profile product photography, 4K. --ar 4:5`
+    },
+    {
+      num:'04', label:'FRONT STRAIGHT', ar:'4:5',
+      inputs:['Generated hero image (output từ Shot 01)'],
+      prompt:`Using the generated hero image as your style reference, center the camera directly facing the front of the bathtub for a symmetrical straight-on composition. The tub is perfectly centered in the frame with equal space on both sides. Same ${e.split(',')[0]} background. Same lighting. Do not change the bathtub design. Clean symmetrical catalog product photography, 4K. --ar 4:5`
+    },
+    {
+      num:'05', label:'DETAIL — HW', ar:'1:1',
+      inputs:['Generated hero image (output từ Shot 01)'],
+      prompt:`Using the generated hero image as your style reference, move the camera in for an extreme close-up macro shot of the chrome faucet, handles, or drain hardware detail. The metal fixture is in sharp focus with shallow depth of field — background softly blurred. Same ${concept.mood.split('·')[0].trim().toLowerCase()} ambient lighting from the hero environment. Do not change the hardware design. Editorial product detail photography, 4K. --ar 1:1`
+    },
+    {
+      num:'06', label:'DETAIL — SURFACE', ar:'1:1',
+      inputs:['Generated hero image (output từ Shot 01)'],
+      prompt:`Using the generated hero image as your style reference, move the camera in for a close-up macro shot of the bathtub's rim and outer body surface. Shows the material quality — the smooth gloss or matte finish, the precise clean edge profile, and the surface texture. Shallow depth of field. Same ambient lighting from the hero environment. Do not change the bathtub surface design. Editorial material detail photography, 4K. --ar 1:1`
+    },
+    {
+      num:'07', label:'ATMOSPHERE', ar:'4:5',
+      inputs:['Generated hero image (output từ Shot 01)'],
+      prompt:`Using the generated hero image as your environment and style reference, fill the bathtub with warm steaming water. Place a slim dark wooden bath tray across the rim holding: one lit white pillar candle, a small amber glass bottle, and a natural soap bar. Drape a soft linen towel over one edge. Gentle steam rises from the warm water surface. Keep the same ${e} environment and same lighting — but the mood is now warmer, more intimate, more inviting. Do not change the bathtub design. Lifestyle spa photography, 4K. --ar 4:5`
+    }
+  ];
+}
+
+// State
+let activePrompt = '';
+let currentShots = [];
+let activeShot = 0;
+
+const mb = document.getElementById('mb');
+document.getElementById('mx').onclick = closeModal;
+mb.addEventListener('click', e => { if(e.target===mb) closeModal(); });
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+function closeModal(){ mb.classList.remove('open'); }
+
+function openModal(ci, pi) {
+  const c = DATA[ci], p = c.products[pi];
+  currentShots = buildShots(c, p);
+  activeShot = 0;
+
+  document.getElementById('mProdImg').src = p.img;
+  document.getElementById('mRefImg').src = c.ref;
+  document.getElementById('mRefCap').textContent = 'Concept ref: ' + c.refNote;
+  document.getElementById('mCode').textContent = p.code;
+  document.getElementById('mName').textContent = p.desc;
+  const ct = document.getElementById('mCtag');
+  ct.textContent = c.name;
+  ct.style.borderColor = c.color;
+  ct.style.color = c.color;
+  document.getElementById('copyBtn').classList.remove('ok');
+  document.getElementById('copyBtn').textContent = '⊕ Copy Prompt';
+
+  // Build tabs
+  const tabs = document.getElementById('shotTabs');
+  tabs.innerHTML = '';
+  currentShots.forEach((s,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'shot-tab' + (i===0?' active':'');
+    btn.style.setProperty('--ccolor', c.color);
+    btn.textContent = s.num + ' ' + s.label;
+    if(i===0) btn.style.background = c.color;
+    btn.onclick = () => selectShot(i, c.color);
+    tabs.appendChild(btn);
+  });
+
+  renderShot(0);
+  mb.classList.add('open');
+}
+
+function selectShot(idx, color) {
+  activeShot = idx;
+  document.querySelectorAll('.shot-tab').forEach((t,i) => {
+    if(i===idx){ t.classList.add('active'); t.style.background=color; t.style.color='#0b0b0b'; t.style.borderColor=color; }
+    else { t.classList.remove('active'); t.style.background=''; t.style.color=''; t.style.borderColor=''; }
+  });
+  renderShot(idx);
+}
+
+function renderShot(idx) {
+  const s = currentShots[idx];
+  activePrompt = s.prompt;
+  const ig = document.getElementById('igItems');
+  ig.innerHTML = s.inputs.map(i=>`<div class="ig-item">${i}</div>`).join('');
+  document.getElementById('arBadge').textContent = 'Aspect ratio: --ar ' + s.ar;
+  document.getElementById('mPrompt').textContent = s.prompt;
+  document.getElementById('copyBtn').classList.remove('ok');
+  document.getElementById('copyBtn').textContent = '⊕ Copy Prompt';
+}
+
+document.getElementById('copyBtn').onclick = function(){
+  navigator.clipboard.writeText(activePrompt).then(()=>{
+    this.classList.add('ok'); this.textContent='✓ Đã Copy!';
+    const t=document.getElementById('toast'); t.classList.add('show');
+    setTimeout(()=>{ t.classList.remove('show'); this.classList.remove('ok'); this.textContent='⊕ Copy Prompt'; }, 2500);
+  });
+};
+
+// Render sections
+const root = document.getElementById('root');
+DATA.forEach((c,ci)=>{
+  const sec = document.createElement('section');
+  sec.className='cs'; sec.id=c.id;
+  const chips = c.palette.map(p=>`<span class="chip">${p}</span>`).join('');
+  const cards = c.products.map((p,pi)=>`
+    <div class="pc" data-ci="${ci}" data-pi="${pi}">
+      <div class="pc-stripe" style="background:${c.color}"></div>
+      <div class="pc-img">
+        <img src="${p.img}" alt="${p.code}" loading="lazy">
+        <div class="pc-peek"><div class="pc-peek-txt">${p.hero.substring(0,85)}…</div></div>
+      </div>
+      <div class="pc-body">
+        <div class="pc-code">${p.code}</div>
+        <div class="pc-title">${p.desc}</div>
+        <button class="pc-cta">7 Shots →</button>
+      </div>
+    </div>`).join('');
+  sec.innerHTML=`
+    <div class="ch">
+      <div class="ch-img"><img src="${c.ref}" alt="${c.name}" loading="lazy"></div>
+      <div class="ch-info">
+        <div class="ch-num">Concept ${c.num}</div>
+        <div class="ch-name" style="color:${c.color}">${c.name}</div>
+        <div class="ch-mood" style="color:${c.color}">${c.mood}</div>
+        <div class="ch-desc">${c.desc}</div>
+        <div class="chips">${chips}</div>
+        <div class="ch-meta"><strong style="color:${c.color}">${c.products.length}</strong> sản phẩm · 7 shots mỗi sản phẩm</div>
+        <div class="ch-ref"><div class="ch-ref-lbl">Reference image</div>${c.refNote}</div>
+      </div>
+    </div>
+    <div class="pg">${cards}</div>`;
+  root.appendChild(sec);
+});
+
+root.addEventListener('click', e=>{
+  const card=e.target.closest('.pc');
+  if(card) openModal(+card.dataset.ci, +card.dataset.pi);
+});
+</script>
+</body>
+</html>
