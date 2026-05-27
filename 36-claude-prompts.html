@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>36 Claude Prompts Để Kéo Brand Đi Nhanh Hơn</title>
+  <style>
+    :root {
+      --warm-canvas: #f5f3ea;
+      --deep-ink: #101418;
+      --willow-green: #1f6f50;
+      --system-blue: #1d4ed8;
+      --mint-signal: #35c48b;
+      --night-forest: #0b1514;
+      --claude-ember: #d97745;
+      --soft-ember: #f3c7ae;
+      --soft-green: #d8f5b0;
+      --soft-blue: #dcebff;
+      --line: #dfded4;
+      --muted: #66706b;
+      --card: #fffdf6;
+      --white: #ffffff;
+      --shadow: 0 18px 48px rgba(16, 20, 24, 0.10);
+      --mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --display: "Space Grotesk", Inter, ui-sans-serif, system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--deep-ink);
+      background:
+        linear-gradient(rgba(223, 222, 212, 0.72) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(223, 222, 212, 0.72) 1px, transparent 1px),
+        var(--warm-canvas);
+      background-size: 72px 72px;
+      font-family: var(--sans);
+      line-height: 1.55;
+    }
+
+    a { color: inherit; }
+
+    .page {
+      width: min(1180px, calc(100% - 36px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 72px 0 42px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+      gap: 48px;
+      align-items: end;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: 1px solid rgba(31, 111, 80, 0.25);
+      border-radius: 999px;
+      background: rgba(255, 253, 246, 0.82);
+      color: var(--willow-green);
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow-mark {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--mint-signal);
+      box-shadow: 0 0 0 6px rgba(53, 196, 139, 0.16);
+    }
+
+    h1, h2, h3 {
+      font-family: var(--display);
+      letter-spacing: 0;
+      margin: 0;
+      line-height: 1.02;
+    }
+
+    h1 {
+      max-width: 780px;
+      margin-top: 24px;
+      font-size: clamp(52px, 8vw, 104px);
+    }
+
+    .hero-copy {
+      max-width: 680px;
+      margin: 28px 0 0;
+      font-size: 22px;
+      color: #26302b;
+    }
+
+    .hero-card {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255, 253, 246, 0.92);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-card-top {
+      padding: 30px;
+      background: var(--night-forest);
+      color: var(--white);
+    }
+
+    .hero-card-top strong {
+      display: block;
+      font-family: var(--display);
+      font-size: 64px;
+      line-height: 0.9;
+    }
+
+    .hero-card-top span {
+      display: block;
+      margin-top: 12px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--soft-green);
+      text-transform: uppercase;
+    }
+
+    .hero-card-body {
+      padding: 24px 30px 30px;
+    }
+
+    .hero-card-body p {
+      margin: 0 0 16px;
+      color: var(--muted);
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 9px 12px;
+      background: var(--soft-green);
+      color: var(--night-forest);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .quick-start {
+      margin: 18px 0 54px;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255, 253, 246, 0.86);
+      box-shadow: 0 10px 30px rgba(16, 20, 24, 0.06);
+    }
+
+    .quick-start h2 {
+      font-size: 30px;
+      margin-bottom: 14px;
+    }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .quick-item {
+      min-height: 132px;
+      padding: 18px;
+      border-radius: 18px;
+      background: var(--white);
+      border: 1px solid var(--line);
+    }
+
+    .quick-item b {
+      display: block;
+      margin-bottom: 8px;
+      font-family: var(--display);
+      font-size: 18px;
+    }
+
+    .quick-item span {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .section {
+      padding: 30px 0 48px;
+    }
+
+    .section-head {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 18px 0;
+      margin-bottom: 20px;
+      background: linear-gradient(to bottom, var(--warm-canvas) 72%, rgba(245, 243, 234, 0));
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .section-index {
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      background: var(--deep-ink);
+      color: var(--white);
+      font-family: var(--mono);
+      font-weight: 800;
+    }
+
+    .section h2 {
+      font-size: clamp(34px, 5vw, 60px);
+    }
+
+    .section-sub {
+      max-width: 360px;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .prompt-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .prompt-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 360px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255, 253, 246, 0.94);
+      box-shadow: 0 12px 34px rgba(16, 20, 24, 0.06);
+      overflow: hidden;
+    }
+
+    .prompt-card.featured {
+      background: var(--soft-green);
+    }
+
+    .card-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 20px 20px 14px;
+      border-bottom: 1px solid rgba(16, 20, 24, 0.08);
+    }
+
+    .num {
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--night-forest);
+      color: var(--white);
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .card-head h3 {
+      padding-top: 3px;
+      font-size: 22px;
+      line-height: 1.12;
+    }
+
+    .prompt-body {
+      flex: 1;
+      padding: 18px 20px 20px;
+    }
+
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.58;
+      color: #222925;
+    }
+
+    .card-actions {
+      padding: 0 20px 20px;
+    }
+
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: var(--deep-ink);
+      color: var(--white);
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    button:hover { background: var(--willow-green); }
+
+    .final-note {
+      margin: 42px 0 80px;
+      padding: 30px;
+      border-radius: 24px;
+      background: var(--night-forest);
+      color: var(--white);
+    }
+
+    .final-note h2 {
+      margin-bottom: 14px;
+      font-size: 34px;
+    }
+
+    .final-note p {
+      max-width: 760px;
+      margin: 0;
+      color: #d9e6dc;
+      font-size: 18px;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 28px 0 46px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 13px;
+    }
+
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 42px;
+      }
+
+      .quick-grid,
+      .prompt-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .section-head {
+        position: static;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .section-sub {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        width: min(100% - 24px, 1180px);
+      }
+
+      .quick-grid,
+      .prompt-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy {
+        font-size: 18px;
+      }
+
+      .prompt-card {
+        min-height: auto;
+      }
+
+      footer {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-mark"></span> Claude Prompt Bank</div>
+        <h1>36 Claude Prompts Để Kéo Brand Đi Nhanh Hơn</h1>
+        <p class="hero-copy">Dành cho chủ shop, solopreneur, freelancer, hoặc team nhỏ muốn dùng AI để bớt sót việc trong content, bán hàng, chăm khách và vận hành.</p>
+        <div class="pill-row">
+          <a class="pill" href="#attract">Attract</a>
+          <a class="pill" href="#convert">Convert</a>
+          <a class="pill" href="#retain">Retain</a>
+          <a class="pill" href="#operate">Operate</a>
+        </div>
+      </div>
+      <aside class="hero-card">
+        <div class="hero-card-top">
+          <strong>36</strong>
+          <span>Prompt chia theo 4 khúc brand hay đau nhất</span>
+        </div>
+        <div class="hero-card-body">
+          <p>Đừng dùng hết trong một ngày. Dùng vậy loạn.</p>
+          <p>Chọn khúc đang đau nhất, copy prompt, thay thông tin thật vào rồi chạy trước.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="quick-start">
+      <h2>Cách Dùng Nhanh</h2>
+      <p>Trong mỗi prompt, thay các phần trong ngoặc vuông như <code>[brand]</code>, <code>[sản phẩm/dịch vụ]</code>, <code>[audience]</code>, <code>[mục tiêu]</code> bằng thông tin thật của bạn.</p>
+      <div class="quick-grid">
+        <div class="quick-item"><b>Thiếu content đều</b><span>Dùng nhóm Attract.</span></div>
+        <div class="quick-item"><b>Có khách hỏi nhưng chưa chốt</b><span>Dùng nhóm Convert.</span></div>
+        <div class="quick-item"><b>Khách mua xong rồi biến mất</b><span>Dùng nhóm Retain.</span></div>
+        <div class="quick-item"><b>Team làm việc lộn xộn</b><span>Dùng nhóm Operate.</span></div>
+      </div>
+    </section>
+
+    <div id="app"></div>
+
+    <section class="final-note">
+      <h2>Nếu chưa biết bắt đầu từ đâu</h2>
+      <p>Dùng 3 prompt trước: Lịch Content 30 Ngày, Follow-up Sequence, và Customer FAQ Page. Ba cái này thường chạm đúng việc lặp lại hằng ngày nhất.</p>
+    </section>
+  </main>
+
+  <footer class="page">
+    <span>Phan Duy Diện</span>
+    <span>@chudien · OS Second Brains</span>
+  </footer>
+
+  <script>
+    const groups = [
+      {
+        id: "attract",
+        index: "01",
+        title: "Attract",
+        subtitle: "Kéo khách mới",
+        description: "Dùng khi brand đang thiếu nội dung đều, thiếu giọng viết, thiếu angle kéo người mới.",
+        items: [
+          ["Brand Voice Guide", "Bạn là brand strategist. Hãy tạo brand voice guide cho [brand] trong ngành [ngành hàng].\nKhách hàng chính là [mô tả khách hàng]. Brand muốn được cảm nhận là [3-5 tính từ].\nHãy viết: tính cách thương hiệu, cách xưng hô, từ nên dùng, từ nên tránh, 5 ví dụ câu đúng giọng, 5 ví dụ câu sai giọng, và checklist để team tự kiểm tra trước khi đăng."],
+          ["Lịch Content 30 Ngày", "Bạn là social media strategist cho [brand]. Hãy tạo lịch content 30 ngày cho [platform].\nMục tiêu là [mục tiêu: kéo khách mới / tăng inbox / bán sản phẩm / xây trust].\nChia content theo 4 nhóm: giáo dục, giải trí nhẹ, proof, bán hàng mềm.\nMỗi ngày gồm: hook, format, ý chính, CTA, và lý do bài đó nên tồn tại.\nTránh filler content và tránh giọng quá bán hàng."],
+          ["Repurpose 1 Nội Dung Thành Nhiều Format", "Tôi có nội dung gốc sau: [dán nội dung].\nHãy biến nó thành 6 format: Facebook post, carousel outline, short video script, email ngắn, Zalo/DM message, và blog intro.\nMỗi format phải viết lại theo đúng ngữ cảnh nền tảng, không chỉ cắt ngắn từ bản gốc.\nGiữ cùng một insight chính, nhưng đổi hook và CTA cho phù hợp."],
+          ["Email Campaign Sequence", "Bạn là direct response copywriter. Hãy viết chuỗi 5 email cho [sản phẩm/dịch vụ].\nĐối tượng là [khách hàng]. Mục tiêu là [mục tiêu].\nEmail 1: welcome + vấn đề chính.\nEmail 2: insight/giá trị.\nEmail 3: giới thiệu sản phẩm.\nEmail 4: xử lý 3 phản đối phổ biến.\nEmail 5: CTA rõ ràng.\nGiọng viết tự nhiên, không clickbait, mỗi email dưới 220 từ."],
+          ["Ad Copy Variations", "Hãy viết 12 biến thể ad copy cho [sản phẩm/dịch vụ].\nChia thành 4 angle: nỗi đau, kết quả mong muốn, proof, offer.\nMỗi biến thể gồm: primary text dưới 120 từ, headline dưới 12 từ, CTA, và gợi ý visual.\nGhi rõ biến thể nào phù hợp cho cold audience, warm audience, retargeting."],
+          ["Carousel Script", "Bạn là content writer chuyên viết carousel có save/share.\nHãy viết outline 8 slide cho chủ đề: [chủ đề].\nSlide 1 phải dừng scroll. Slide 2 nêu vấn đề. Slide 3-6 đưa các điểm chính. Slide 7 tóm lại. Slide 8 CTA mềm.\nMỗi slide tối đa 25 từ, ngôn ngữ đời thường, có thể dùng ví dụ cụ thể."],
+          ["YouTube / Podcast Script", "Hãy viết script video/podcast dài [thời lượng] về chủ đề [chủ đề].\nĐối tượng nghe là [audience].\nCấu trúc gồm: hook 15 giây đầu, setup vấn đề, 3-5 phần chính, ví dụ thực tế, đoạn recap, CTA cuối.\nViết như người thật đang nói, không bullet quá khô."],
+          ["SEO Blog Post", "Bạn là SEO content writer. Hãy viết outline bài blog cho keyword [keyword].\nNgười đọc là [audience] và họ đang muốn [intent].\nTạo title, meta description, H2/H3, FAQ, ví dụ thực tế, và CTA cuối.\nƯu tiên trả lời đúng câu hỏi người đọc, không nhồi keyword."],
+          ["Mô Tả Sản Phẩm / Dịch Vụ", "Hãy viết 3 phiên bản mô tả cho [sản phẩm/dịch vụ]: ngắn 50 từ, trung bình 150 từ, dài 300 từ.\nKhách hàng mục tiêu là [audience].\nMỗi phiên bản phải nói rõ: vấn đề khách gặp, sản phẩm giúp gì, điểm khác biệt, cảm giác sau khi dùng, và CTA.\nTránh từ sáo rỗng như \"tốt nhất\", \"đẳng cấp\", \"hoàn hảo\"."]
+        ]
+      },
+      {
+        id: "convert",
+        index: "02",
+        title: "Convert",
+        subtitle: "Chuyển người quan tâm thành khách",
+        description: "Dùng khi có khách hỏi, có lead, có người quan tâm nhưng chưa biết follow-up hoặc chốt mềm.",
+        items: [
+          ["Follow-up Sequence", "Hãy viết chuỗi 4 tin nhắn follow-up cho khách đã hỏi về [sản phẩm/dịch vụ] nhưng chưa mua.\nTin 1: nhắc nhẹ + mở lại cuộc trò chuyện.\nTin 2: xử lý phản đối phổ biến.\nTin 3: đưa proof hoặc lợi ích cụ thể.\nTin 4: CTA rõ ràng nhưng không ép.\nMỗi tin dưới 70 từ, giọng tự nhiên như người thật nhắn."],
+          ["Sales Page Copy", "Bạn là conversion copywriter. Hãy viết sales page cho [offer].\nCấu trúc: headline, subheadline, vấn đề, vì sao vấn đề này quan trọng, giải pháp, sản phẩm gồm gì, proof, FAQ, offer, CTA.\nViết cho khách hàng [audience], giọng rõ ràng, không thổi phồng."],
+          ["Discovery Call Script", "Hãy viết script cuộc gọi tư vấn cho [dịch vụ].\nMục tiêu là hiểu nhu cầu khách và xem họ có phù hợp không.\nBao gồm: mở đầu, câu hỏi về tình trạng hiện tại, mục tiêu, rào cản, ngân sách/kỳ vọng, cách chuyển sang phần đề xuất, và câu kết thúc.\nKhông aggressive, không tạo áp lực giả."],
+          ["Proposal Template", "Hãy tạo proposal template cho [dịch vụ].\nBao gồm: tóm tắt tình trạng khách, mục tiêu, phạm vi công việc, deliverables, timeline, giá, điều kiện thanh toán, cách làm việc, next step.\nGiọng chuyên nghiệp nhưng ấm, dễ hiểu, không quá corporate."],
+          ["Objection Handling Scripts", "Khách thường phản đối [liệt kê phản đối].\nHãy viết script trả lời cho từng phản đối theo cấu trúc: đồng cảm, làm rõ, giải thích, ví dụ/proof, câu hỏi mở để tiếp tục cuộc trò chuyện.\nGiọng tự tin, không phòng thủ, không cãi khách."],
+          ["Bài Bán Mềm Trên Social", "Hãy viết một bài Facebook/LinkedIn bán mềm cho [offer].\nMở bằng một vấn đề thật của khách, kể một tình huống cụ thể, đưa insight, rồi mới giới thiệu offer như một giải pháp tự nhiên.\nKhông viết như quảng cáo. Không dùng giọng guru. CTA mềm ở cuối."],
+          ["Referral Message", "Hãy viết 3 phiên bản tin nhắn xin referral cho [dịch vụ/sản phẩm].\nPhiên bản 1 gửi khách thân. Phiên bản 2 gửi đối tác. Phiên bản 3 gửi khách cũ lâu rồi chưa nói chuyện.\nMỗi tin dưới 100 từ, rõ lợi ích cho người được giới thiệu, không làm người nhận thấy bị lợi dụng."],
+          ["Lead Qualification Script", "Hãy tạo bộ câu hỏi lọc lead cho [sản phẩm/dịch vụ].\nMục tiêu là biết khách có đúng tệp không trước khi tư vấn sâu.\nChia câu hỏi theo: nhu cầu, ngân sách, timeline, quyền quyết định, vấn đề hiện tại, mức độ sẵn sàng mua.\nCuối cùng tạo hướng xử lý cho từng nhóm câu trả lời."],
+          ["Cold Outreach Message", "Hãy viết 5 tin nhắn outreach cho [platform] để tiếp cận [đối tượng].\nMỗi tin phải cá nhân hoá được, nói rõ lý do liên hệ, vấn đề có thể giúp, một dòng proof ngắn, và CTA rất nhẹ.\nKhông khen giả, không spam, không quá 90 từ."]
+        ]
+      },
+      {
+        id: "retain",
+        index: "03",
+        title: "Retain",
+        subtitle: "Chăm khách đã mua",
+        description: "Dùng khi khách mua xong rồi biến mất, hoặc team chưa có quy trình chăm khách rõ ràng.",
+        items: [
+          ["Onboarding Document", "Hãy viết tài liệu onboarding cho khách mới của [sản phẩm/dịch vụ].\nBao gồm: lời chào, điều gì sẽ xảy ra trong 30 ngày đầu, khách cần chuẩn bị gì, timeline, cách liên hệ, thời gian phản hồi, FAQ, và cách đo kết quả.\nGiọng rõ ràng, ấm, tạo cảm giác yên tâm."],
+          ["Customer FAQ Page", "Hãy tạo FAQ page cho [sản phẩm/dịch vụ].\nNhóm câu hỏi theo: trước khi mua, giá/thanh toán, giao hàng/triển khai, bảo hành/hỗ trợ, sau khi mua.\nViết câu hỏi bằng ngôn ngữ khách thật sự sẽ hỏi, trả lời ngắn, rõ, không corporate."],
+          ["Xin Review / Testimonial", "Hãy viết 3 phiên bản tin nhắn xin review cho khách đã mua [sản phẩm/dịch vụ].\nPhiên bản 1: email ngắn. Phiên bản 2: tin nhắn Zalo/DM. Phiên bản 3: follow-up sau 3 ngày.\nTin nhắn phải biết ơn, dễ trả lời, có gợi ý 3 câu hỏi để khách không phải nghĩ nhiều."],
+          ["Client Check-in Message", "Hãy viết 4 tin nhắn check-in với khách ở các thời điểm: sau khi mua 1 ngày, sau 1 tuần, giữa quá trình, sau khi hoàn tất.\nMỗi tin phải có một câu hỏi cụ thể để phát hiện vấn đề sớm.\nGiọng thân thiện, không máy móc, dưới 80 từ."],
+          ["Post-purchase Email Sequence", "Hãy viết chuỗi 4 email sau mua cho khách đã mua [sản phẩm].\nEmail 1: xác nhận + hướng dẫn bước đầu.\nEmail 2: cách dùng để có kết quả tốt nhất.\nEmail 3: check-in và xử lý vướng mắc.\nEmail 4: gợi ý mua lại / giới thiệu bạn bè.\nMỗi email dưới 180 từ."],
+          ["Feedback Survey", "Hãy tạo khảo sát feedback 8 câu cho khách sau khi dùng [sản phẩm/dịch vụ].\nKết hợp câu hỏi rating, câu hỏi mở, câu hỏi về điểm hài lòng, điểm khó chịu, điều khiến họ mua lại, và điều khiến họ ngần ngại giới thiệu.\nViết ngắn, dễ trả lời trong 2 phút."],
+          ["Cancellation / Churn Response", "Khách muốn huỷ / ngừng dùng [dịch vụ]. Hãy viết 3 phản hồi:\n1. Huỷ vì giá.\n2. Huỷ vì chưa thấy kết quả.\n3. Huỷ vì chọn bên khác.\nMỗi phản hồi phải tôn trọng khách, hỏi rõ lý do, đề xuất hướng xử lý nếu phù hợp, không nài ép."],
+          ["Community Welcome Message", "Hãy viết tin nhắn chào mừng thành viên mới vào cộng đồng [tên cộng đồng].\nBao gồm: lời chào, cộng đồng này dành cho ai, nên bắt đầu từ đâu, 3 nội dung quan trọng nên đọc, cách tự giới thiệu, và một câu hỏi mở để họ phản hồi.\nGiọng thân thiện, không như nội quy khô cứng."],
+          ["Retention Campaign", "Hãy viết campaign 3 tin nhắn để kéo khách cũ quay lại mua [sản phẩm/dịch vụ].\nTin 1: nhắc lại vấn đề/nhu cầu cũ.\nTin 2: cập nhật giá trị mới hoặc offer mới.\nTin 3: CTA rõ ràng.\nGiọng như người thật nhớ tới khách, không giống tin nhắn hàng loạt."]
+        ]
+      },
+      {
+        id: "operate",
+        index: "04",
+        title: "Operate",
+        subtitle: "Dọn lại vận hành",
+        description: "Dùng khi công việc lặp lại nhiều, team hay hỏi lại, hoặc freelancer làm sai vì brief chưa rõ.",
+        items: [
+          ["SOP Cho Việc Lặp Lại", "Hãy viết SOP cho quy trình [tên quy trình].\nĐối tượng đọc là nhân sự mới, chưa biết gì.\nBao gồm: mục tiêu, khi nào dùng, checklist trước khi làm, từng bước thực hiện, lỗi thường gặp, cách kiểm tra kết quả, và ví dụ đầu ra đúng.\nViết rõ đến mức người mới có thể làm mà không hỏi lại quá nhiều."],
+          ["Audience Research Summary", "Từ dữ liệu khách hàng sau: [dán dữ liệu/interview/comment/inbox].\nHãy tổng hợp thành audience research summary gồm: chân dung khách, vấn đề chính, mong muốn, nỗi sợ, từ ngữ họ hay dùng, câu hỏi hay gặp, trigger mua hàng, và 3 insight có thể dùng cho content/ads."],
+          ["Weekly Report Template", "Hãy tạo template báo cáo tuần cho team [team].\nBáo cáo phải điền được trong 10 phút.\nBao gồm: 3 việc xong, 3 ưu tiên tuần tới, blocker, số liệu chính, điều bất thường, bài học, và quyết định cần chốt.\nGiữ format cố định để tuần nào cũng dùng được."],
+          ["Project Brief", "Hãy tạo project brief cho dự án [dự án].\nBao gồm: mục tiêu, bối cảnh, deliverables, timeline, milestone, người phụ trách, đầu vào cần có, tiêu chí hoàn thành, rủi ro, và những việc không nằm trong scope.\nViết để freelancer/team đọc xong biết phải làm gì ngay."],
+          ["Client Report Template", "Hãy tạo template report gửi khách hàng cho [dịch vụ].\nBao gồm: summary, việc đã làm, số liệu chính, ý nghĩa của số liệu, vấn đề gặp phải, việc cần khách phản hồi, kế hoạch tháng tới.\nGiọng rõ ràng, có trách nhiệm, không giấu vấn đề."],
+          ["Brief Cho Freelancer", "Hãy viết brief cho freelancer làm [đầu việc].\nBao gồm: mục tiêu, bối cảnh brand, deliverables, deadline, format bàn giao, reference tốt/xấu, yêu cầu bắt buộc, quyền chỉnh sửa, cách feedback, và tiêu chí nghiệm thu.\nViết rõ để giảm đoán mò."],
+          ["Brand Guidelines Document", "Hãy tạo outline brand guidelines document cho [brand].\nBao gồm: positioning, audience, brand personality, tone of voice, logo usage, color palette, typography, imagery style, social examples, điều nên làm, điều không được làm.\nViết để nhân sự mới hoặc freelancer dùng được."],
+          ["Campaign Performance Report", "Từ dữ liệu campaign sau: [dán số liệu].\nHãy viết campaign performance report gồm: mục tiêu ban đầu, kết quả chính, cái gì hiệu quả, cái gì không hiệu quả, vì sao, bài học, và đề xuất lần sau.\nKhông chỉ đọc số liệu, hãy giải thích ý nghĩa kinh doanh."],
+          ["Competitive Analysis Report", "Hãy phân tích 5 đối thủ của [brand] dựa trên dữ liệu sau: [dán link/nội dung/screenshot].\nSo sánh theo: positioning, thông điệp, visual, content angle, offer, điểm mạnh, điểm yếu, khoảng trống thị trường.\nKết thúc bằng 5 cơ hội mà brand có thể khai thác."]
+        ]
+      }
+    ];
+
+    const app = document.querySelector("#app");
+    let counter = 1;
+
+    groups.forEach(group => {
+      const section = document.createElement("section");
+      section.className = "section";
+      section.id = group.id;
+      section.innerHTML = `
+        <div class="section-head">
+          <div class="section-title">
+            <span class="section-index">${group.index}</span>
+            <div>
+              <h2>${group.title}</h2>
+              <div class="eyebrow" style="margin-top: 14px">${group.subtitle}</div>
+            </div>
+          </div>
+          <p class="section-sub">${group.description}</p>
+        </div>
+        <div class="prompt-grid"></div>
+      `;
+
+      const grid = section.querySelector(".prompt-grid");
+      group.items.forEach((item, idx) => {
+        const [title, prompt] = item;
+        const card = document.createElement("article");
+        card.className = `prompt-card ${idx % 2 === 1 ? "featured" : ""}`;
+        card.innerHTML = `
+          <div class="card-head">
+            <span class="num">${counter}</span>
+            <h3>${title}</h3>
+          </div>
+          <div class="prompt-body"><pre>${prompt}</pre></div>
+          <div class="card-actions"><button type="button">Copy prompt</button></div>
+        `;
+
+        const button = card.querySelector("button");
+        button.addEventListener("click", async () => {
+          await navigator.clipboard.writeText(prompt);
+          button.textContent = "Copied";
+          setTimeout(() => button.textContent = "Copy prompt", 1200);
+        });
+
+        grid.appendChild(card);
+        counter += 1;
+      });
+
+      app.appendChild(section);
+    });
+  </script>
+</body>
+</html>
