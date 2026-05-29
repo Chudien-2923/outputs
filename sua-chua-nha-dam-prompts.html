@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>7 Prompt tạo ảnh quảng cáo sản phẩm bằng AI</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #f7faf2;
+      --paper: #ffffff;
+      --ink: #18351f;
+      --muted: #5f7463;
+      --line: #d9e4d2;
+      --green: #1d7a2e;
+      --green-2: #69a546;
+      --cream: #fff8dc;
+      --code: #0f2414;
+      --shadow: 0 18px 54px rgba(25, 66, 31, 0.13);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(145, 197, 85, 0.28), transparent 34rem),
+        linear-gradient(135deg, #f7faf2 0%, #eef7e9 44%, #fffdf2 100%);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 56px 0 34px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border: 1px solid rgba(29, 122, 46, 0.22);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.64);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 18px 0 12px;
+      max-width: 820px;
+      font-size: clamp(34px, 6vw, 72px);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 760px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(16px, 2vw, 19px);
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-block: 1px solid var(--line);
+      background: rgba(247, 250, 242, 0.88);
+      backdrop-filter: blur(16px);
+    }
+
+    .toolbar-inner {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 12px 0;
+    }
+
+    .chip {
+      flex: 0 0 auto;
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.74);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .chip:hover {
+      border-color: rgba(29, 122, 46, 0.4);
+      color: var(--green);
+    }
+
+    .guide {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      margin: 28px 0 24px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.74);
+      box-shadow: 0 10px 34px rgba(25, 66, 31, 0.08);
+      padding: 20px;
+    }
+
+    .panel h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .panel p,
+    .panel li {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .panel p {
+      margin: 0;
+    }
+
+    .panel ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    main {
+      display: grid;
+      gap: 22px;
+      padding: 18px 0 70px;
+    }
+
+    .prompt-card {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
+      gap: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      scroll-margin-top: 86px;
+    }
+
+    .visual {
+      position: relative;
+      min-height: 420px;
+      background: #e8f3df;
+    }
+
+    .visual img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .badge {
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.86);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 900;
+      box-shadow: 0 8px 22px rgba(25, 66, 31, 0.14);
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      padding: clamp(22px, 4vw, 38px);
+    }
+
+    .kicker {
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      margin: 8px 0 10px;
+      font-size: clamp(24px, 3vw, 38px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .summary {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    pre {
+      flex: 1;
+      min-height: 210px;
+      margin: 0;
+      padding: 18px;
+      overflow: auto;
+      border: 1px solid rgba(29, 122, 46, 0.22);
+      border-radius: 16px;
+      background: linear-gradient(180deg, #122918 0%, #0f2113 100%);
+      color: #e7f5dd;
+      font: 14px/1.65 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      background: var(--green);
+      color: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 900;
+      padding: 12px 18px;
+      transition: transform 0.16s ease, background 0.16s ease;
+    }
+
+    button:hover {
+      background: #145c22;
+      transform: translateY(-1px);
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 0 42px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 40;
+      transform: translateY(18px);
+      opacity: 0;
+      border-radius: 999px;
+      background: var(--code);
+      color: #fff;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 800;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 820px) {
+      header {
+        padding-top: 38px;
+      }
+
+      .guide,
+      .prompt-card {
+        grid-template-columns: 1fr;
+      }
+
+      .visual {
+        min-height: auto;
+      }
+
+      .visual img {
+        aspect-ratio: 1;
+      }
+
+      .actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="shell">
+    <div class="eyebrow">AI Product Creative Prompts</div>
+    <h1>7 prompt tạo ảnh quảng cáo sản phẩm bằng AI</h1>
+    <p class="lead">Upload ảnh sản phẩm của bạn vào GPT Image / Gemini, chọn một hướng visual bên dưới, thay các biến trong ngoặc vuông rồi chạy thử. Prompt viết bằng tiếng Việt để dễ chỉnh cho shop, brand nhỏ và team marketing.</p>
+  </header>
+
+  <nav class="toolbar" aria-label="Danh sách prompt">
+    <div class="shell toolbar-inner">
+      <a class="chip" href="#prompt-1">1. Clean product shot</a>
+      <a class="chip" href="#prompt-2">2. Premium poster</a>
+      <a class="chip" href="#prompt-3">3. Splash motion</a>
+      <a class="chip" href="#prompt-4">4. Texture close-up</a>
+      <a class="chip" href="#prompt-5">5. Lifestyle hero</a>
+      <a class="chip" href="#prompt-6">6. Social ad layout</a>
+      <a class="chip" href="#prompt-7">7. Campaign key visual</a>
+    </div>
+  </nav>
+
+  <section class="shell guide">
+    <div class="panel">
+      <h2>Cách dùng nhanh</h2>
+      <p>Trước khi paste prompt, hãy upload một ảnh sản phẩm rõ bao bì. Sau đó thay các phần như <strong>[tên sản phẩm]</strong>, <strong>[màu chủ đạo]</strong>, <strong>[nguyên liệu chính]</strong>, <strong>[headline]</strong> để ra visual đúng brand của bạn.</p>
+    </div>
+    <div class="panel">
+      <h2>Biến số nên thay</h2>
+      <ul>
+        <li>[tên sản phẩm], [màu chủ đạo], [nguyên liệu chính]</li>
+        <li>[headline], [subheadline], [bối cảnh sử dụng]</li>
+        <li>[lợi ích 1], [lợi ích 2], [lợi ích 3]</li>
+      </ul>
+    </div>
+  </section>
+
+  <main class="shell">
+    <article class="prompt-card" id="prompt-1">
+      <div class="visual">
+        <span class="badge">Prompt 01</span>
+        <img src="assets/sua-chua-nha-dam-prompts/prompt-01.png" alt="Minh hoạ clean product shot cho sữa chua nha đam" />
+      </div>
+      <div class="content">
+        <div class="kicker">Clean Product Shot</div>
+        <h3>Sản phẩm rõ, nền sạch, nhìn premium</h3>
+        <p class="summary">Dùng khi cần packshot đẹp, ít chữ, dễ đưa vào bài giới thiệu sản phẩm hoặc landing page.</p>
+        <pre id="copy-1">Tạo một poster quảng cáo sản phẩm [tên sản phẩm] theo phong cách premium, sạch và hiện đại.
+Dùng ảnh sản phẩm đã upload làm nhân vật chính, giữ bao bì rõ và đúng hình dạng gốc.
+Bối cảnh là nền studio tối giản với màu [màu chủ đạo], ánh sáng mềm, bóng đổ thật và bố cục gọn.
+Thêm một vài nguyên liệu liên quan như [nguyên liệu chính] xung quanh sản phẩm, nhưng không làm rối khung hình.
+Typography nên tinh tế, dễ đọc, có cảm giác như một campaign social media cao cấp.</pre>
+        <div class="actions">
+          <button type="button" data-copy="copy-1">Copy prompt</button>
+          <span class="note">Hợp: packshot, launch post, product page</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="prompt-card" id="prompt-2">
+      <div class="visual">
+        <span class="badge">Prompt 02</span>
+        <img src="assets/sua-chua-nha-dam-prompts/prompt-02.png" alt="Minh hoạ premium poster cho sữa chua nha đam" />
+      </div>
+      <div class="content">
+        <div class="kicker">Premium Poster</div>
+        <h3>Poster nhìn đắt hơn, có mood campaign</h3>
+        <p class="summary">Dùng khi muốn ảnh có headline lớn, màu sắc rõ và cảm giác như một key visual quảng cáo.</p>
+        <pre id="copy-2">Thiết kế một poster quảng cáo 4:5 cho [tên sản phẩm] với cảm giác sang, hiện đại và có tính thời trang.
+Dùng nền gradient [màu chủ đạo] với ánh sáng chuyển nhẹ, tạo chiều sâu nhưng vẫn giữ bố cục tối giản.
+Đặt sản phẩm và [nguyên liệu chính] ở trung tâm hoặc nửa dưới khung hình, có bóng đổ tự nhiên.
+Typography dùng chữ lớn, có thể đặt lớp chữ phía sau sản phẩm để tạo cảm giác editorial.
+Nội dung chữ chính: "[headline]". Chữ phụ: "[subheadline]".
+Tổng thể giống một poster campaign FMCG cao cấp, sạch, cân bằng và dễ dùng cho social.</pre>
+        <div class="actions">
+          <button type="button" data-copy="copy-2">Copy prompt</button>
+          <span class="note">Hợp: poster social, bài launch, cover campaign</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="prompt-card" id="prompt-3">
+      <div class="visual">
+        <span class="badge">Prompt 03</span>
+        <img src="assets/sua-chua-nha-dam-prompts/prompt-03.png" alt="Minh hoạ splash motion shot cho sữa chua nha đam" />
+      </div>
+      <div class="content">
+        <div class="kicker">Splash / Motion Shot</div>
+        <h3>Có chuyển động, tươi và bắt mắt</h3>
+        <p class="summary">Hợp F&B, đồ uống, mỹ phẩm hoặc những sản phẩm cần tạo cảm giác mát, ngon, sống động.</p>
+        <pre id="copy-3">Tạo một ảnh quảng cáo [tên sản phẩm] có cảm giác chuyển động, tươi và ngon mắt.
+Dùng ảnh sản phẩm đã upload, đặt sản phẩm ở vị trí nổi bật, hơi nghiêng nhẹ nếu hợp bố cục.
+Nền dùng màu [màu chủ đạo] với ánh sáng studio mềm và bóng đổ tối giản.
+Thêm hiệu ứng [sữa / nước / bột / nguyên liệu] splash bay quanh sản phẩm, kèm [nguyên liệu chính] lơ lửng tự nhiên.
+Giữ bố cục sạch, không quá nhiều chi tiết, để sản phẩm vẫn là điểm nhìn chính.
+Phong cách: premium food advertising, realistic, modern, dùng được cho Instagram.</pre>
+        <div class="actions">
+          <button type="button" data-copy="copy-3">Copy prompt</button>
+          <span class="note">Hợp: F&B, beverage, cosmetic texture</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="prompt-card" id="prompt-4">
+      <div class="visual">
+        <span class="badge">Prompt 04</span>
+        <img src="assets/sua-chua-nha-dam-prompts/prompt-04.png" alt="Minh hoạ social ad layout cho sữa chua nha đam" />
+      </div>
+      <div class="content">
+        <div class="kicker">Social Ad Layout</div>
+        <h3>Ảnh có headline, benefit và CTA</h3>
+        <p class="summary">Dùng để test nhanh concept có thể chạy Facebook / Instagram, sau đó chỉnh chữ lại trong Figma.</p>
+        <pre id="copy-4">Tạo một layout quảng cáo social media 4:5 cho [tên sản phẩm].
+Dùng ảnh sản phẩm đã upload làm hero, giữ bao bì rõ và đặt trong bố cục dễ nhìn trên điện thoại.
+Nền dùng màu [màu chủ đạo] với gradient nhẹ, ánh sáng sạch và khoảng trống hợp lý cho chữ.
+Thêm headline ngắn: "[headline]". Thêm 2-3 benefit badge như [lợi ích 1], [lợi ích 2], [lợi ích 3].
+Có thể thêm icon nhỏ, nguyên liệu liên quan và một CTA gọn, nhưng không để AI viết quá nhiều chữ nhỏ.
+Phong cách: polished paid social creative, hiện đại, cân bằng, dễ đem vào Figma chỉnh lại text.</pre>
+        <div class="actions">
+          <button type="button" data-copy="copy-4">Copy prompt</button>
+          <span class="note">Hợp: paid social, offer post, performance creative</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="prompt-card" id="prompt-5">
+      <div class="visual">
+        <span class="badge">Prompt 05</span>
+        <img src="assets/sua-chua-nha-dam-prompts/prompt-05.png" alt="Minh hoạ texture close-up cho sữa chua nha đam" />
+      </div>
+      <div class="content">
+        <div class="kicker">Texture Close-up</div>
+        <h3>Bán cảm giác, không chỉ bán bao bì</h3>
+        <p class="summary">Dùng khi sản phẩm có texture đáng khoe: mềm, mịn, giòn, mọng, bóng, sánh hoặc tươi mát.</p>
+        <pre id="copy-5">Thiết kế một ảnh quảng cáo nhấn mạnh texture và cảm giác của [tên sản phẩm].
+Cho thấy cận cảnh [kết cấu chính: mềm, mịn, giòn, mọng, bóng, sánh...] cùng [nguyên liệu chính].
+Có thể thêm một bát / phần sản phẩm nhìn từ trên xuống để thấy rõ bề mặt và độ ngon.
+Đặt sản phẩm đã upload ở cạnh dưới hoặc một góc khung hình, đủ rõ nhưng không lấn át phần texture.
+Dùng ánh sáng mềm, độ sâu trường ảnh nhẹ, bóng đổ thật và styling cao cấp.
+Typography nên gọn, tinh tế, theo phong cách poster editorial cho ngành F&B / beauty / FMCG.</pre>
+        <div class="actions">
+          <button type="button" data-copy="copy-5">Copy prompt</button>
+          <span class="note">Hợp: food texture, ingredient post, sensory creative</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="prompt-card" id="prompt-6">
+      <div class="visual">
+        <span class="badge">Prompt 06</span>
+        <img src="assets/sua-chua-nha-dam-prompts/prompt-06.png" alt="Minh hoạ lifestyle hero cho sữa chua nha đam" />
+      </div>
+      <div class="content">
+        <div class="kicker">Lifestyle Hero</div>
+        <h3>Đặt sản phẩm vào bối cảnh đời sống</h3>
+        <p class="summary">Dùng để sản phẩm bớt lạnh, có ngữ cảnh sử dụng rõ hơn: bàn làm việc, phòng bếp, phòng tắm, túi xách.</p>
+        <pre id="copy-6">Tạo một poster quảng cáo lifestyle cho [tên sản phẩm] trong bối cảnh [bối cảnh sử dụng].
+Bố cục nên tự nhiên nhưng vẫn có cảm giác thương mại: sạch, sáng, có chủ đích và dễ dùng làm social ad.
+Dùng màu nền [màu chủ đạo] phối với các chi tiết hỗ trợ như [nguyên liệu / đạo cụ / vật dụng liên quan].
+Đặt sản phẩm ở vị trí hero, có ánh sáng studio mềm, bóng đổ thật và khoảng trống đủ để đặt chữ.
+Typography dùng chữ sans-serif sạch hoặc serif thanh lịch, không quá gắt.
+Tổng thể cần tạo cảm giác người xem có thể hình dung sản phẩm xuất hiện trong đời sống thật.</pre>
+        <div class="actions">
+          <button type="button" data-copy="copy-6">Copy prompt</button>
+          <span class="note">Hợp: lifestyle ad, use case post, brand mood</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="prompt-card" id="prompt-7">
+      <div class="visual">
+        <span class="badge">Prompt 07</span>
+        <img src="assets/sua-chua-nha-dam-prompts/prompt-07.png" alt="Minh hoạ campaign key visual cho sữa chua nha đam" />
+      </div>
+      <div class="content">
+        <div class="kicker">Campaign Key Visual</div>
+        <h3>Một hình chủ đạo cho cả campaign</h3>
+        <p class="summary">Dùng khi muốn tạo visual có thể kéo ra banner, landing page, cover launch hoặc poster campaign.</p>
+        <pre id="copy-7">Tạo một campaign key visual cho [tên sản phẩm] theo phong cách quảng cáo cao cấp.
+Dùng sản phẩm đã upload, đặt ở bố cục trung tâm hoặc nửa dưới khung hình với bóng đổ thật.
+Bối cảnh dùng màu [màu chủ đạo] có gradient mềm, ánh sáng studio cao cấp và nhiều negative space.
+Thêm [nguyên liệu chính], hiệu ứng texture / splash nhẹ và các chi tiết hỗ trợ thương hiệu.
+Typography nên thanh lịch, thời trang, không quá đậm; chữ có thể nằm phía sau sản phẩm để tạo chiều sâu.
+Nội dung chữ chính: "[headline]". Chữ phụ: "[subheadline]".
+Tổng thể phải đủ mạnh để dùng làm cover launch, banner landing page hoặc poster campaign.</pre>
+        <div class="actions">
+          <button type="button" data-copy="copy-7">Copy prompt</button>
+          <span class="note">Hợp: launch cover, campaign banner, hero visual</span>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="shell">
+    <strong>Lưu ý:</strong> AI có thể làm sai chữ trên ảnh. Cách ổn nhất là dùng AI để tạo visual trước, sau đó đưa vào Figma / Canva để chỉnh lại headline, logo, badge và CTA.
+  </footer>
+
+  <div class="toast" id="toast">Đã copy prompt</div>
+
+  <script>
+    const toast = document.getElementById('toast');
+    let toastTimer;
+
+    function showToast() {
+      clearTimeout(toastTimer);
+      toast.classList.add('show');
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 1600);
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+
+      const area = document.createElement('textarea');
+      area.value = text;
+      area.style.position = 'fixed';
+      area.style.left = '-999px';
+      document.body.appendChild(area);
+      area.focus();
+      area.select();
+      document.execCommand('copy');
+      area.remove();
+    }
+
+    document.querySelectorAll('[data-copy]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const target = document.getElementById(button.dataset.copy);
+        await copyText(target.innerText.trim());
+        const old = button.textContent;
+        button.textContent = 'Đã copy';
+        showToast();
+        setTimeout(() => {
+          button.textContent = old;
+        }, 1200);
+      });
+    });
+  </script>
+</body>
+</html>
