@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giáo án Coaching 1:1 — Ứng dụng AI sản xuất nội dung kênh du lịch</title>
+<style>
+  :root{
+    --ocean:#0d5c63;
+    --ocean-deep:#093f44;
+    --teal:#159199;
+    --sand:#e9a05c;
+    --sand-soft:#f4c89a;
+    --cream:#fbf7f0;
+    --paper:#ffffff;
+    --ink:#1d2b2c;
+    --ink-soft:#536061;
+    --line:#e6ddd0;
+    --shadow:0 18px 45px -22px rgba(9,63,68,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+    color:var(--ink);
+    background:var(--cream);
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:0 22px}
+
+  /* HERO */
+  .hero{
+    background:radial-gradient(120% 120% at 80% -10%,var(--teal) 0%,var(--ocean) 45%,var(--ocean-deep) 100%);
+    color:#eafafb;
+    padding:64px 0 76px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";position:absolute;left:0;right:0;bottom:-1px;height:48px;
+    background:var(--cream);
+    clip-path:polygon(0 100%,100% 100%,100% 0,0 60%);
+  }
+  .eyebrow{
+    display:inline-block;letter-spacing:.18em;text-transform:uppercase;
+    font-size:12px;font-weight:700;color:var(--sand-soft);
+    border:1px solid rgba(244,200,154,.4);border-radius:30px;
+    padding:7px 16px;margin-bottom:22px;
+  }
+  .hero h1{
+    font-size:33px;line-height:1.25;font-weight:800;letter-spacing:-.01em;
+    max-width:680px;margin-bottom:18px;
+  }
+  .hero p{font-size:17px;max-width:600px;color:#cfeef0}
+  .hero .meta{
+    margin-top:28px;display:flex;flex-wrap:wrap;gap:12px;
+  }
+  .pill{
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+    padding:9px 16px;border-radius:30px;font-size:14px;font-weight:600;color:#eafafb;
+  }
+
+  /* SECTION */
+  section{padding:42px 0}
+  .label{
+    display:flex;align-items:center;gap:10px;
+    font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--teal);margin-bottom:20px;
+  }
+  .label::before{content:"";width:26px;height:2px;background:var(--sand);border-radius:2px}
+  h2{font-size:23px;font-weight:800;letter-spacing:-.01em;margin-bottom:8px}
+
+  /* CARD LISTS */
+  .card{
+    background:var(--paper);border:1px solid var(--line);border-radius:18px;
+    padding:26px 28px;box-shadow:var(--shadow);
+  }
+  ul.clean{list-style:none}
+  ul.clean li{position:relative;padding-left:30px;margin:13px 0;font-size:16px}
+  ul.clean li::before{
+    content:"";position:absolute;left:0;top:9px;width:9px;height:9px;border-radius:50%;
+    background:var(--sand);
+  }
+  ul.check li::before{
+    content:"✓";left:0;top:0;width:auto;height:auto;background:none;
+    color:var(--teal);font-weight:800;font-size:16px;
+  }
+
+  /* BENEFIT GRID */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .benefit{
+    background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:22px;
+  }
+  .benefit .ic{font-size:24px;margin-bottom:10px}
+  .benefit h3{font-size:16px;margin-bottom:6px}
+  .benefit p{font-size:14px;color:var(--ink-soft)}
+
+  /* TIMELINE */
+  .timeline{position:relative;margin-top:6px}
+  .timeline::before{
+    content:"";position:absolute;left:23px;top:8px;bottom:8px;width:2px;
+    background:linear-gradient(var(--teal),var(--sand-soft));
+  }
+  .step{position:relative;padding-left:64px;margin-bottom:24px}
+  .step .num{
+    position:absolute;left:0;top:0;width:48px;height:48px;border-radius:50%;
+    background:var(--ocean);color:#fff;display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:18px;box-shadow:0 8px 18px -6px rgba(13,92,99,.6);z-index:1;
+  }
+  .step-body{
+    background:var(--paper);border:1px solid var(--line);border-radius:16px;
+    padding:20px 24px;box-shadow:0 12px 30px -24px rgba(9,63,68,.5);
+  }
+  .step-body h3{font-size:18px;margin-bottom:12px}
+  .step-body h3 span{color:var(--teal);font-weight:700}
+  .outcome{
+    margin-top:14px;padding:12px 16px;border-radius:11px;
+    background:#f0f8f7;border-left:3px solid var(--teal);
+    font-size:14.5px;color:var(--ocean-deep);
+  }
+  .outcome b{color:var(--teal)}
+
+  /* PRINCIPLES */
+  .principles{
+    background:linear-gradient(135deg,var(--ocean) 0%,var(--ocean-deep) 100%);
+    color:#eafafb;border-radius:20px;padding:34px 32px;box-shadow:var(--shadow);
+  }
+  .principles h2{color:#fff}
+  .principles .label{color:var(--sand-soft)}
+  .principles .label::before{background:var(--sand)}
+  .ratio{
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    margin:18px 0 22px;
+  }
+  .ratio .bar{flex:1;min-width:220px;height:40px;border-radius:30px;overflow:hidden;display:flex;border:1px solid rgba(255,255,255,.2)}
+  .ratio .ai{background:var(--teal);flex:0 0 80%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+  .ratio .you{background:var(--sand);flex:0 0 20%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#3a2410}
+  .principles ul.clean li{font-size:15px;color:#dff3f4}
+  .principles ul.clean li::before{background:var(--sand-soft)}
+  .principles ul.clean li b{color:#fff}
+
+  footer{padding:34px 0 48px;text-align:center;color:var(--ink-soft);font-size:13px}
+  footer .brand{font-weight:700;color:var(--ocean);font-size:15px;margin-bottom:4px}
+
+  @media(max-width:680px){
+    .wrap{padding:0 18px}
+    .hero{padding:46px 0 60px}
+    .hero h1{font-size:25px;line-height:1.3}
+    .hero p{font-size:15.5px}
+    .hero .meta{gap:8px}
+    .pill{font-size:13px;padding:8px 13px}
+    section{padding:32px 0}
+    .card{padding:22px 20px}
+    .grid{grid-template-columns:1fr;gap:12px}
+    h2{font-size:20px}
+    ul.clean li{font-size:15px}
+    .step{padding-left:52px;margin-bottom:20px}
+    .step .num{width:40px;height:40px;font-size:16px}
+    .step-body{padding:18px 18px}
+    .step-body h3{font-size:17px}
+    .timeline::before{left:19px}
+    .principles{padding:28px 22px}
+  }
+  @media(max-width:380px){
+    .hero h1{font-size:22px}
+    .step{padding-left:48px}
+    .step .num{width:36px;height:36px;font-size:15px}
+    .timeline::before{left:17px}
+  }
+  @media print{
+    body{background:#fff}
+    .card,.step-body,.benefit,.principles{box-shadow:none}
+    .hero::after{display:none}
+  }
+</style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="wrap">
+      <span class="eyebrow">Coaching 1:1 · Ứng dụng AI</span>
+      <h1>Sản xuất nội dung kênh du lịch bằng AI — đều đặn mỗi ngày, không còn kẹt khâu làm tay</h1>
+      <p>Lộ trình 5 buổi giúp chị tự ra <strong>bài viết · hình ảnh · video</strong> cho kênh, với một trợ lý AI riêng hiểu đúng phong cách và khách hàng của chị.</p>
+      <div class="meta">
+        <span class="pill">5 buổi học 1:1</span>
+        <span class="pill">Đồng hành 1 tháng</span>
+        <span class="pill">80% AI · 20% chị</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <section>
+      <div class="label">Dành cho chị nếu</div>
+      <div class="card">
+        <ul class="clean check">
+          <li>Đang một mình lo từ A–Z: nghĩ ý tưởng → viết bài → làm ảnh → dựng video.</li>
+          <li>Kẹt nặng nhất ở khâu edit / sản xuất video nên không ra bài đều được.</li>
+          <li>Muốn dùng AI <strong>bài bản, có quy trình</strong> — không còn làm kiểu chắp vá.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="label">Chị nhận được gì sau khoá</div>
+      <div class="grid">
+        <div class="benefit">
+          <div class="ic">🤖</div>
+          <h3>Trợ lý AI riêng</h3>
+          <p>Một trợ lý AI cho kênh — nhớ phong cách, lĩnh vực và khách hàng của chị.</p>
+        </div>
+        <div class="benefit">
+          <div class="ic">🧩</div>
+          <h3>Quy trình rõ ràng</h3>
+          <p>Sản xuất 3 loại nội dung: bài viết · hình ảnh · video, có công thức lặp lại.</p>
+        </div>
+        <div class="benefit">
+          <div class="ic">📅</div>
+          <h3>Ra bài đều đặn</h3>
+          <p>Tự ra nội dung mỗi ngày theo công thức 80% AI lo — 20% chị hoàn thiện.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="label">Cần chuẩn bị</div>
+      <div class="card">
+        <ul class="clean">
+          <li>Máy tính (Windows dùng tốt).</li>
+          <li>Đăng ký gói <strong>Google AI Pro</strong> (dùng tạo hình ảnh) — sẽ được hướng dẫn.</li>
+          <li><strong>Thông tin tour thật</strong> của chị (điểm đến, giá, lịch trình) làm nguyên liệu cho AI.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="label">Lộ trình 5 buổi</div>
+      <div class="timeline">
+
+        <div class="step">
+          <div class="num">1</div>
+          <div class="step-body">
+            <h3>Định hướng &amp; Thiết lập</h3>
+            <ul class="clean">
+              <li>Cài đặt trợ lý AI riêng cho kênh của chị.</li>
+              <li>Xác định phong cách nội dung, khách hàng mục tiêu và chủ đề chính.</li>
+              <li>Học cách tìm "format video đang thắng" để đi đúng hướng, bắt trend.</li>
+            </ul>
+            <div class="outcome"><b>Kết thúc buổi:</b> trợ lý AI đã hiểu kênh của chị, sẵn vài format mẫu để bắt đầu.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="num">2</div>
+          <div class="step-body">
+            <h3>Nội dung &amp; Kịch bản</h3>
+            <ul class="clean">
+              <li>Dùng AI viết bài và kịch bản video <strong>đúng giọng của chị</strong>, không máy móc.</li>
+              <li>Cách "dạy" AI giữ chất riêng của thương hiệu.</li>
+            </ul>
+            <div class="outcome"><b>Kết thúc buổi:</b> tự ra được kịch bản đăng được ngay.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="num">3</div>
+          <div class="step-body">
+            <h3>Hình ảnh</h3>
+            <ul class="clean">
+              <li>Tạo hình ảnh điểm đến và ảnh bài đăng bằng AI.</li>
+              <li>Nguyên tắc giữ đúng sự thật tour — AI làm đẹp, <strong>không bịa</strong>.</li>
+            </ul>
+            <div class="outcome"><b>Kết thúc buổi:</b> tự ra bộ ảnh cho bài đăng.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="num">4</div>
+          <div class="step-body">
+            <h3>Video</h3>
+            <ul class="clean">
+              <li>Từ kịch bản, AI dựng sẵn video gần như hoàn chỉnh.</li>
+              <li>Chị chỉ thêm <strong>nhạc &amp; chữ</strong> trong CapCut là đăng được.</li>
+            </ul>
+            <div class="outcome"><b>Kết thúc buổi:</b> tự ra một video du lịch hoàn chỉnh.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="num">5</div>
+          <div class="step-body">
+            <h3>Vận hành &amp; Tự chủ</h3>
+            <ul class="clean">
+              <li>Lên lịch đăng đều đặn, gom ý tưởng thành kho nội dung.</li>
+              <li>Cách tự xử lý khi AI ra chưa đúng ý.</li>
+            </ul>
+            <div class="outcome"><b>Kết thúc buổi:</b> tự vận hành kênh, ra nội dung đều mà không phụ thuộc.</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section>
+      <div class="principles">
+        <div class="label">Cam kết &amp; Nguyên tắc</div>
+        <h2>80% AI lo — 20% chị hoàn thiện</h2>
+        <div class="ratio">
+          <div class="bar">
+            <div class="ai">AI · 80%</div>
+            <div class="you">Chị · 20%</div>
+          </div>
+        </div>
+        <ul class="clean">
+          <li>Phần của chị là <b>final video, duyệt giọng và cấp thông tin tour thật</b> — để nội dung có hồn và đúng sự thật.</li>
+          <li>AI giúp <b>nhanh hơn</b>, không phải bấm-nút-tự-đăng.</li>
+          <li>Sau khoá, <b>đồng hành 1 tháng</b> gỡ các vướng mắc phát sinh.</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="brand">AI Content Coaching 1:1</div>
+    <div>Lộ trình thiết kế riêng cho kênh du lịch · Phan Duy Diện</div>
+  </footer>
+
+</body>
+</html>
