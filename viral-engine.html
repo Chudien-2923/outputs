@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Báo giá — Viral Engine</title>
+<style>
+  :root {
+    --ink: #1a1d24; --muted: #5b6471; --line: #e6e9ef; --soft: #f6f8fb;
+    --brand: #2f6df0; --brand-soft: #eaf1ff; --green: #1f9d57; --amber: #b9791b;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; color: var(--ink); background: #eef1f6;
+    font-family: -apple-system, "SF Pro Text", "Segoe UI", "Be Vietnam Pro", Roboto, Arial, sans-serif;
+    line-height: 1.6; font-size: 15px;
+  }
+  .page { max-width: 820px; margin: 32px auto; background: #fff; border-radius: var(--radius);
+    box-shadow: 0 10px 40px rgba(20,30,60,.08); overflow: hidden; }
+  .pad { padding: 40px 48px; }
+
+  /* Hero */
+  .hero { background: linear-gradient(135deg, #1c2b50, #2f6df0); color: #fff; padding: 44px 48px; }
+  .hero .eyebrow { text-transform: uppercase; letter-spacing: 1.5px; font-size: 12px; opacity: .85; margin: 0 0 10px; }
+  .hero h1 { margin: 0 0 8px; font-size: 30px; line-height: 1.2; }
+  .hero p { margin: 0; font-size: 16px; opacity: .92; }
+  .hero .meta { margin-top: 22px; font-size: 13px; opacity: .8; display: flex; gap: 22px; flex-wrap: wrap; }
+
+  h2 { font-size: 19px; margin: 0 0 14px; padding-bottom: 8px; border-bottom: 2px solid var(--line); }
+  section { margin-bottom: 34px; }
+  .lead { color: var(--muted); }
+
+  /* Get what */
+  .steps { list-style: none; margin: 0; padding: 0; counter-reset: s; }
+  .steps li { position: relative; padding: 14px 0 14px 52px; border-bottom: 1px solid var(--line); }
+  .steps li:last-child { border-bottom: 0; }
+  .steps li::before { counter-increment: s; content: counter(s); position: absolute; left: 0; top: 12px;
+    width: 34px; height: 34px; border-radius: 50%; background: var(--brand); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-weight: 700; }
+  .steps b { display: block; }
+  .steps span { color: var(--muted); font-size: 14px; }
+
+  /* Modules */
+  .modules { display: grid; gap: 12px; }
+  .modules .m { border: 1px solid var(--line); border-radius: var(--radius); padding: 15px 18px; background: #fff; }
+  .modules .m .mh { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; }
+  .modules .m .mh .ic { width: 28px; height: 28px; border-radius: 8px; background: var(--brand-soft); color: var(--brand); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; flex-shrink: 0; }
+  .modules .m .mh b { font-size: 15px; }
+  .modules .m .mh .tag { margin-left: auto; font-size: 11px; font-weight: 700; letter-spacing: .3px; color: var(--brand); background: var(--brand-soft); border-radius: 20px; padding: 3px 10px; white-space: nowrap; }
+  .modules .m ul { margin: 0; padding-left: 18px; } .modules .m li { margin: 3px 0; color: var(--muted); font-size: 14px; }
+  .modules .m li.hl { color: var(--green); font-weight: 600; }
+
+  /* Flow / liên kết */
+  .flowbox { background: linear-gradient(135deg, #eaf1ff, #f6f8fb); border: 1px solid #cfe0ff; border-radius: var(--radius); padding: 20px 22px; margin-top: 18px; }
+  .flowbox h3 { margin: 0 0 12px; font-size: 16px; color: var(--ink); }
+  .flowbox .chain { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13px; font-weight: 600; }
+  .flowbox .chain .node { background: #fff; border: 1px solid #cfe0ff; border-radius: 20px; padding: 6px 12px; }
+  .flowbox .chain .arr { color: var(--brand); font-weight: 800; }
+  .flowbox p { margin: 12px 0 0; font-size: 14px; color: var(--muted); }
+
+  /* Roadmap */
+  .road { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .road .r { border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; background: var(--soft); }
+  .road .r .ph { font-size: 12px; color: var(--brand); font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+  .road .r b { display: block; margin: 4px 0 4px; }
+  .road .r span { font-size: 13px; color: var(--muted); }
+  .road .r.gate { border-color: #cfe0ff; background: var(--brand-soft); }
+  .road .r.gate .ph { color: var(--green); }
+
+  /* Price */
+  .price-box { border: 2px solid var(--brand); border-radius: var(--radius); overflow: hidden; }
+  .price-box .top { background: var(--brand); color: #fff; padding: 22px 24px; display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+  .price-box .top .name { font-size: 17px; font-weight: 700; }
+  .price-box .top .amt { font-size: 30px; font-weight: 800; }
+  .price-box .body { padding: 18px 24px; }
+  .price-box ul { margin: 0; padding-left: 20px; } .price-box li { margin: 6px 0; }
+  .note { background: var(--soft); border-left: 3px solid var(--amber); padding: 12px 16px; border-radius: 8px; font-size: 14px; color: var(--muted); margin-top: 14px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; font-size: 13px; }
+  td.r, th.r { text-align: right; white-space: nowrap; }
+
+  .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 28px; }
+  .terms .t b { display: block; font-size: 13px; color: var(--brand); text-transform: uppercase; letter-spacing: .4px; }
+  .pay { display: flex; gap: 10px; flex-wrap: wrap; }
+  .pay .p { flex: 1; min-width: 150px; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; background: var(--soft); }
+  .pay .p .pct { font-size: 22px; font-weight: 800; color: var(--brand); }
+  .pay .p span { font-size: 13px; color: var(--muted); }
+
+  .excl ul { columns: 2; margin: 0; padding-left: 18px; } .excl li { margin: 4px 0; }
+
+  .cta { background: #1c2b50; color: #fff; border-radius: var(--radius); padding: 26px 28px; text-align: center; }
+  .cta h2 { color: #fff; border: 0; margin-bottom: 6px; }
+  .cta p { margin: 0 0 4px; opacity: .9; }
+  .cta .valid { font-size: 13px; opacity: .7; margin-top: 12px; }
+
+  .foot { text-align: center; color: var(--muted); font-size: 12px; padding: 18px; }
+
+  @media print {
+    body { background: #fff; font-size: 12.5px; }
+    .page { box-shadow: none; margin: 0; max-width: 100%; border-radius: 0; }
+    section { break-inside: avoid; }
+    .hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .price-box .top, .price-box, .cta, .road .r.gate, .flowbox { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+  @media (max-width: 680px) {
+    .road, .terms { grid-template-columns: 1fr; } .excl ul { columns: 1; }
+    .pad, .hero { padding: 28px 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <p class="eyebrow">Báo giá</p>
+    <h1>Viral Engine</h1>
+    <p>Một web app riêng của anh để vận hành nhiều kênh TikTok thời trang — từ bắt trend, giải mã video viral, tạo nhân vật AI, đến dựng video và tự tối ưu. Anh sở hữu trọn vẹn.</p>
+    <div class="meta">
+      <span>Chuẩn bị cho: <b>Anh Nguyễn Anh Duy</b></span>
+      <span>Ngày: 11/06/2026</span>
+      <span>Thời gian: 3–5 tuần</span>
+      <span>Hiệu lực: 14 ngày</span>
+    </div>
+  </div>
+
+  <div class="pad">
+
+    <section>
+      <h2>Web app gồm những gì</h2>
+      <p class="lead" style="margin-top:-6px">Một web app riêng, thao tác hoàn toàn bằng nút bấm — anh không cần biết kỹ thuật. Gồm các phần:</p>
+      <div class="modules">
+        <div class="m">
+          <div class="mh"><span class="ic">1</span><b>Trung tâm quản lý kênh</b><span class="tag">Channel Manager</span></div>
+          <ul>
+            <li>Quản nhiều kênh TikTok trong cùng một nơi</li>
+            <li>Mỗi kênh đặt hướng riêng (có nhân vật AI hoặc ẩn mặt) theo chiến lược</li>
+            <li>Theo dõi tình trạng và kết quả từng kênh</li>
+          </ul>
+        </div>
+        <div class="m">
+          <div class="mh"><span class="ic">2</span><b>Trung tâm bắt trend</b><span class="tag">TikTok Tracking</span></div>
+          <ul>
+            <li>Bảng video đang viral trong ngành thời trang (và cả ngoài ngành để học format hay)</li>
+            <li>Theo dõi creator nổi bật, âm thanh/nhạc đang lên, chủ đề đang hot</li>
+            <li>Phát hiện sớm video đang tăng tốc, theo dõi cả đối thủ</li>
+          </ul>
+        </div>
+        <div class="m">
+          <div class="mh"><span class="ic">3</span><b>Thư viện công thức nội dung</b><span class="tag">Viral Decoder</span></div>
+          <ul>
+            <li>Phân tích các video đang thắng để rút ra điều gì khiến chúng viral</li>
+            <li>Lưu lại thành thư viện công thức để tái sử dụng cho kênh của anh</li>
+          </ul>
+        </div>
+        <div class="m">
+          <div class="mh"><span class="ic">4</span><b>Xưởng nhân vật AI</b><span class="tag">AI Influencer Studio</span></div>
+          <ul>
+            <li>Tạo gương mặt đại diện AI riêng cho kênh cần nhân vật</li>
+            <li>Giữ nhất quán gương mặt, phong cách, tủ đồ qua mọi video</li>
+            <li>Mới hoàn toàn, an toàn bản quyền — không trùng người thật</li>
+          </ul>
+        </div>
+        <div class="m">
+          <div class="mh"><span class="ic">5</span><b>Xưởng nội dung &amp; kịch bản</b><span class="tag">Content Studio</span></div>
+          <ul>
+            <li>Tự đề xuất ý tưởng video theo chiến lược từng kênh</li>
+            <li>Anh duyệt ý tưởng trước khi sản xuất</li>
+            <li>Viết kịch bản hoàn chỉnh: lời thoại, phụ đề</li>
+          </ul>
+        </div>
+        <div class="m">
+          <div class="mh"><span class="ic">6</span><b>Xưởng dựng video</b><span class="tag">Render Studio</span></div>
+          <ul>
+            <li>Sinh hình ảnh, video và ghép nhạc/lời/phụ đề ngay trong app</li>
+            <li>Hàng đợi sản xuất, làm lại dễ dàng</li>
+            <li class="hl">Cỗ máy dựng video riêng cắm thẳng công nghệ Seedance 2.0: chỉ ~100k/video 1 phút — thay vì ~300k nếu làm thủ công qua công cụ phổ biến (Higgsfield). Tiết kiệm ~3 lần.</li>
+          </ul>
+        </div>
+        <div class="m">
+          <div class="mh"><span class="ic">7</span><b>Bộ tối ưu thông minh</b><span class="tag">Auto-Optimizer</span></div>
+          <ul>
+            <li>Theo dõi video nào giữ chân người xem tốt</li>
+            <li>Tự điều chỉnh để các video sau ngày càng hiệu quả hơn</li>
+          </ul>
+        </div>
+        <div class="m">
+          <div class="mh"><span class="ic">8</span><b>Trợ lý AI đồng hành</b><span class="tag">AI Copilot</span></div>
+          <ul>
+            <li>Hiểu dữ liệu tất cả các kênh của anh</li>
+            <li>Gợi ý nội dung, hỏi đáp, luôn nhớ việc — như một cộng sự</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flowbox">
+        <h3>⚡ Sức mạnh nằm ở sự liên kết</h3>
+        <div class="chain">
+          <span class="node">Bắt trend</span><span class="arr">→</span>
+          <span class="node">Rút công thức</span><span class="arr">→</span>
+          <span class="node">Lên ý tưởng &amp; kịch bản</span><span class="arr">→</span>
+          <span class="node">Dựng video</span><span class="arr">→</span>
+          <span class="node">Đo &amp; tối ưu</span><span class="arr">↺</span>
+        </div>
+        <p>Các phần <b>không rời rạc</b> — chúng nối thành một dây chuyền khép kín. Trend bắt được biến thành ý tưởng, ý tưởng thành video, kết quả lại quay về dạy hệ thống làm tốt hơn cho lần sau. Dữ liệu chảy xuyên suốt giữa các phần và các kênh, nên <b>càng dùng càng thông minh</b> — đây là thứ một bộ công cụ rời rạc không làm được.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Chi phí</h2>
+      <div class="price-box">
+        <div class="top">
+          <span class="name">Gói trọn gói — Xây dựng + Bàn giao</span>
+          <span class="amt">50.000.000đ</span>
+        </div>
+        <div class="body">
+          <ul>
+            <li>Xây dựng đầy đủ web app với các tính năng ở trên, vận hành được nhiều kênh.</li>
+            <li>Chạy thử ra video thật trên kênh để anh nghiệm thu trước khi bàn giao.</li>
+            <li>Thời gian thực hiện: <b>khoảng 3–5 tuần</b>.</li>
+            <li>Buổi hướng dẫn bàn giao + <b>30 ngày hỗ trợ</b> sau khi giao.</li>
+            <li>Anh <b>sở hữu trọn</b> web app, các kênh và toàn bộ nội dung sinh ra.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Chi phí công cụ hàng tháng</h2>
+      <p class="lead">Đây là phí các công cụ AI mà hệ thống dùng để vận hành — anh <b>mua trực tiếp từ nhà cung cấp</b>, trả theo thực dùng (không nằm trong giá xây dựng):</p>
+      <table>
+        <thead><tr><th>Công cụ</th><th>Dùng để</th><th class="r">Chi phí</th></tr></thead>
+        <tbody>
+          <tr><td>Apify</td><td>Cào dữ liệu video viral trong ngành</td><td class="r">theo thực dùng</td></tr>
+          <tr><td>API Claude / GPT</td><td>Bộ não viết kịch bản, ý tưởng, trợ lý</td><td class="r">theo thực dùng</td></tr>
+          <tr><td>API Gemini</td><td>Xem &amp; giải mã video</td><td class="r">theo thực dùng</td></tr>
+          <tr><td>Tool tạo ảnh / video</td><td>Sinh hình ảnh và video cho các kênh</td><td class="r">theo thực dùng</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Thanh toán · 2 đợt</h2>
+      <div class="pay">
+        <div class="p"><div class="pct">50%</div><span>Tạm ứng khởi động dự án</span></div>
+        <div class="p"><div class="pct">50%</div><span>Thanh toán nốt sau khi hoàn thành &amp; bàn giao</span></div>
+      </div>
+    </section>
+
+    <div class="cta">
+      <h2>Sẵn sàng bắt đầu</h2>
+      <p>Chốt gói và tạm ứng khởi động, dự án có thể chạy ngay trong tuần.</p>
+      <p>Phan Duy Diện · liên hệ trực tiếp để xác nhận.</p>
+      <div class="valid">Báo giá có hiệu lực 14 ngày — giá có thể thay đổi sau thời hạn này.</div>
+    </div>
+
+  </div>
+</div>
+<p class="foot">Báo giá lập ngày 11/06/2026 · dành riêng cho anh Nguyễn Anh Duy.</p>
+</body>
+</html>
