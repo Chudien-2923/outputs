@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OS Second Brains — Bộ não học cùng bạn, làm cùng bạn và hiểu bạn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F5F3EA; --cream-2:#EFEBDD; --paper:#FBFAF4;
+  --ink:#101418; --ink-soft:#3A4048; --muted:#6B7178;
+  --willow:#1F6F50; --willow-deep:#16543C; --willow-soft:#E4EFE8;
+  --amber:#C8743A; --line:#DAD5C4;
+  --shadow:0 1px 2px rgba(16,20,24,.04),0 12px 30px -12px rgba(16,20,24,.16);
+  --radius:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:var(--cream); color:var(--ink);
+  line-height:1.62; font-size:17px; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:880px;margin:0 auto;padding:0 22px}
+h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;letter-spacing:-.01em;line-height:1.18}
+.serif{font-family:'Playfair Display',serif;font-style:italic}
+a{color:inherit}
+
+/* ---------- HERO ---------- */
+.hero{padding:64px 0 30px;text-align:center}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-family:'Space Grotesk',sans-serif;
+  font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--willow-deep);background:var(--willow-soft);padding:7px 15px;border-radius:100px;margin-bottom:24px}
+.kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--willow);box-shadow:0 0 0 4px rgba(31,111,80,.18)}
+.hero h1{font-size:clamp(30px,5.4vw,50px);font-weight:700;margin-bottom:14px}
+.hero h1 .hl{color:var(--willow)}
+.hero .sub{font-size:clamp(16px,2.4vw,20px);color:var(--ink-soft);font-weight:500;max-width:600px;margin:0 auto}
+.promise{max-width:660px;margin:34px auto 0;background:var(--paper);border:1px solid var(--line);
+  border-radius:var(--radius);padding:26px 28px;box-shadow:var(--shadow);text-align:left;position:relative}
+.promise::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:4px;border-radius:4px;background:linear-gradient(var(--willow),var(--amber))}
+.promise p{font-size:17px;color:var(--ink-soft);padding-left:14px}
+.promise b{color:var(--ink);font-weight:600}
+
+/* ---------- SECTION SHELL ---------- */
+.sec{padding:30px 0}
+.sec-head{text-align:center;max-width:620px;margin:0 auto 34px}
+.sec-head .eyebrow{font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
+.sec-head h2{font-size:clamp(24px,3.6vw,32px);font-weight:700}
+.sec-head p{color:var(--muted);margin-top:8px}
+
+/* ---------- TIMELINE ---------- */
+.timeline{position:relative}
+.timeline::before{content:"";position:absolute;left:23px;top:14px;bottom:60px;width:2px;
+  background:linear-gradient(var(--willow),var(--line));border-radius:2px}
+.stage{position:relative;padding-left:64px;margin-bottom:30px}
+.stage .node{position:absolute;left:0;top:0;width:48px;height:48px;border-radius:14px;
+  background:var(--willow);color:#fff;display:flex;align-items:center;justify-content:center;
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;
+  box-shadow:0 8px 18px -6px rgba(31,111,80,.55);z-index:2}
+.stage.star .node{background:var(--amber);box-shadow:0 8px 18px -6px rgba(200,116,58,.55)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+  padding:24px 26px;box-shadow:var(--shadow);transition:transform .18s ease,box-shadow .18s ease}
+.card:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(16,20,24,.05),0 20px 40px -16px rgba(16,20,24,.22)}
+.card h3{font-size:clamp(19px,2.7vw,23px);font-weight:700;margin-bottom:4px}
+.card h3 .star{color:var(--amber)}
+.card .tailor{display:inline-block;font-size:12px;font-weight:600;color:var(--willow-deep);
+  background:var(--willow-soft);padding:3px 10px;border-radius:100px;margin-bottom:12px}
+.card ul{list-style:none;margin:10px 0 0}
+.card li{position:relative;padding-left:24px;margin-bottom:11px;color:var(--ink-soft);font-size:16px}
+.card li::before{content:"";position:absolute;left:3px;top:10px;width:8px;height:8px;border-radius:50%;
+  background:var(--willow-soft);border:2px solid var(--willow)}
+.card li b{color:var(--ink);font-weight:600}
+.card li em{font-style:normal;color:var(--willow-deep);font-weight:500}
+.outcome{margin-top:16px;padding:13px 16px;border-radius:12px;background:var(--willow-soft);
+  display:flex;gap:10px;align-items:flex-start;font-size:15.5px;color:var(--willow-deep)}
+.outcome svg{flex-shrink:0;margin-top:3px}
+.outcome b{color:var(--willow-deep);font-weight:700}
+
+/* visual slot */
+.vis{margin:18px 0 4px;border-radius:14px;background:linear-gradient(160deg,var(--cream-2),var(--paper));
+  border:1px solid var(--line);padding:18px;display:flex;justify-content:center}
+.vis svg{max-width:100%;height:auto}
+.imgwrap{margin:18px 0 4px;position:relative}
+.imgwrap img{width:100%;display:block;border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow)}
+.imgwrap .ph2{display:none}
+.imgwrap.miss img{display:none}
+.imgwrap.miss .ph2{display:block;border:2px dashed var(--line);border-radius:14px;
+  background:repeating-linear-gradient(135deg,var(--paper),var(--paper) 12px,var(--cream-2) 12px,var(--cream-2) 24px);
+  padding:34px 20px;text-align:center;color:var(--muted)}
+.imgwrap .ph-ic{font-size:26px;margin-bottom:6px}
+.imgwrap .ph-t{font-family:'Space Grotesk',sans-serif;font-weight:600;color:var(--ink-soft);font-size:14px}
+.imgwrap .ph-s{font-size:12.5px;margin-top:3px}
+
+/* ---------- TAKEAWAY ---------- */
+.take{background:var(--ink);color:var(--cream);border-radius:24px;padding:38px 34px;margin:14px 0;
+  box-shadow:0 30px 60px -24px rgba(16,20,24,.5)}
+.take h2{font-size:clamp(22px,3.4vw,28px);text-align:center;margin-bottom:6px}
+.take .lead{text-align:center;color:#B9BEC4;margin-bottom:26px}
+.take-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.take-col{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:22px}
+.take-col .tag{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;color:#fff;padding:5px 12px;border-radius:100px;display:inline-block;margin-bottom:14px}
+.take-col.skill .tag{background:var(--willow)}
+.take-col.asset .tag{background:var(--amber)}
+.take-col ul{list-style:none}
+.take-col li{position:relative;padding-left:26px;margin-bottom:10px;color:#E6E8EA;font-size:15.5px}
+.take-col li::before{content:"";position:absolute;left:0;top:8px;width:14px;height:9px;border-left:2px solid var(--willow);border-bottom:2px solid var(--willow);transform:rotate(-45deg)}
+.take-col.asset li::before{border-color:var(--amber)}
+
+/* ---------- FIT ---------- */
+.fit-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.fit{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow)}
+.fit h3{font-size:17px;display:flex;align-items:center;gap:9px;margin-bottom:12px}
+.fit.yes h3{color:var(--willow-deep)} .fit.no h3{color:var(--amber)}
+.fit p{color:var(--ink-soft);font-size:15.5px}
+.fit .ico{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;font-weight:700}
+.fit.yes .ico{background:var(--willow)} .fit.no .ico{background:var(--amber)}
+
+/* ---------- PROOF ---------- */
+.proof-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.proof{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--willow);
+  border-radius:14px;padding:22px 24px;box-shadow:var(--shadow)}
+.proof .who{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;color:var(--willow-deep);margin-bottom:8px}
+.proof .arc{color:var(--ink-soft);font-size:15.5px}
+.proof .arc .b4{color:var(--muted)} .proof .arc .af{color:var(--ink);font-weight:600}
+
+/* ---------- CTA ---------- */
+.cta{text-align:center;padding:50px 0 30px}
+.cta h2{font-size:clamp(24px,3.8vw,34px);font-weight:700;margin-bottom:10px}
+.cta p{color:var(--ink-soft);max-width:520px;margin:0 auto 26px}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--willow);color:#fff;
+  font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;text-decoration:none;
+  padding:16px 32px;border-radius:100px;box-shadow:0 14px 30px -10px rgba(31,111,80,.6);
+  transition:transform .15s ease,box-shadow .15s ease}
+.btn:hover{transform:translateY(-2px);box-shadow:0 20px 40px -12px rgba(31,111,80,.7)}
+.cta-phone{margin-top:14px;font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--muted)}
+.cta-phone b{color:var(--ink);font-weight:600}
+.foot{text-align:center;color:var(--muted);font-size:13px;padding:24px 0 50px}
+.foot .upd{font-family:'Space Grotesk',sans-serif}
+
+@media(max-width:680px){
+  body{font-size:16px}
+  .hero{padding:48px 0 22px}
+  .take-grid,.fit-grid,.proof-grid{grid-template-columns:1fr}
+  .take,.cta{padding-left:0;padding-right:0}
+  .take{padding:30px 22px}
+  .stage{padding-left:54px}
+  .timeline::before{left:19px}
+  .stage .node{width:40px;height:40px;font-size:17px}
+  .card{padding:20px 18px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <span class="kicker"><span class="dot"></span> Coaching 1:1 · Giáo án chương trình</span>
+    <h1 id="hero-h1"></h1>
+    <p class="sub" id="hero-sub"></p>
+    <div class="promise"><p id="hero-promise"></p></div>
+  </header>
+
+  <!-- ROADMAP -->
+  <section class="sec">
+    <div class="sec-head">
+      <div class="eyebrow">Lộ trình</div>
+      <h2>5 chặng — đi từ con số 0 tới một văn phòng AI riêng</h2>
+      <p>Khung cố định, nội dung may đo theo việc của bạn.</p>
+    </div>
+    <div class="timeline" id="timeline"></div>
+  </section>
+
+  <!-- TAKEAWAY -->
+  <section class="sec">
+    <div class="take">
+      <h2>Bạn rời khoá với gì?</h2>
+      <p class="lead">Không phải một khoá học rồi quên — bạn mang về cả năng lực lẫn tài sản.</p>
+      <div class="take-grid" id="takeaway"></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2 id="cta-h"></h2>
+    <p id="cta-p"></p>
+    <a class="btn" id="cta-btn" href="#">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3C7 3 3 6.5 3 11c0 2.4 1.2 4.5 3 6l-.8 3.2c-.1.4.3.7.6.5L9 18.6c.9.2 2 .4 3 .4 5 0 9-3.5 9-8s-4-8-9-8Z" fill="#fff"/></svg>
+      <span id="cta-btn-t"></span>
+    </a>
+    <div class="cta-phone" id="cta-phone"></div>
+  </section>
+
+  <div class="foot">
+    <div>OS Second Brains — Coaching 1:1 · Phan Duy Diện</div>
+    <div class="upd" id="last-updated"></div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   DATA — sửa ở đây, cả trang đổi theo (Rule #14)
+   ============================================================ */
+const LAST_UPDATED = "2026-06-17";
+
+const COURSE = {
+  title_html: 'OS Second Brains',
+  title_tail: '— Bộ não <span class="hl">học cùng bạn, làm cùng bạn</span> và hiểu bạn',
+  sub: 'Coaching 1:1 xây ê-kíp AI cho người làm một mình.',
+  promise: 'Bạn đang ôm hết một mình: nghĩ nội dung, làm ảnh, dựng video, lo khách… Xài AI thì cũng hỏi từng câu, sửa từng cái — cuối ngày vẫn là bạn gồng. <b>Khoá này lật cái đó:</b> bạn sẽ có một văn phòng AI riêng, vài "nhân viên" tự làm việc đều mỗi ngày, còn bạn lùi lại làm sếp — chỉ nghiệm thu.'
+};
+
+const STAGES = [
+  {
+    n:0, img:{src:'assets/giao-an/os-graph.png', label:'Ảnh graph OS Second Brains của bạn', hint:'thả ảnh vào assets/giao-an/os-graph.png'},
+    title:'Bộ não sống: dùng AI như một hệ điều hành, không phải Chatbox',
+    bullets:[
+      'Ngồi với mình trả lời vài câu thật: bạn bán gì, cho ai, giọng kiểu gì, khách hay hỏi gì',
+      'Mình gom hết thành một "bộ não" — từ giờ <b>mọi AI bạn xài đều đọc cái này trước khi làm</b>',
+      'Hết cảnh AI trả lời chung chung như trả bài; nó hiểu bạn, ra đúng chất bạn'
+    ],
+    outcome:'một bộ não sống, xài chung cho mọi việc về sau.'
+  },
+  {
+    n:1, vis:'loop',
+    title:'Cơ chế Loop: giao việc cho AI tự làm – tự kiểm – tự sửa',
+    bullets:[
+      'Cách cũ, <b>bạn chính là cái vòng lặp</b>: hỏi → AI trả lời → bạn soi → bắt sửa → soi lại… nó chỉ nhúc nhích khi bạn còn ngồi đó',
+      'Loop là bạn <b>giao việc rồi bước ra</b>: AI tự quay 5 nhịp <em>khám phá → lên kế hoạch → làm → tự kiểm → sửa</em>, tự soi bài của chính nó, chưa đạt tự sửa, <b>đạt rồi mới gọi bạn lại nghiệm thu</b>',
+      'Gọn một câu: <em>trước bạn là người chấm bài, giờ hệ thống tự chấm</em> — bạn rảnh tay làm việc khác trong lúc nó quay'
+    ],
+    outcome:'1 loop thật chạy trong buổi — bạn ngồi nhìn AI tự sửa rồi mới giao lại.'
+  },
+  {
+    n:2, img:{src:'assets/giao-an/content-plan.png', label:'Ảnh ví dụ content-plan AI dựng', hint:'assets/giao-an/content-plan.png'}, star:false, tailor:true,
+    title:'Creative Studio: tự ra content · ảnh · video bằng AI',
+    bullets:[
+      '✍️ <b>Content:</b> thôi ngồi vắt óc nghĩ caption. Đóng gói thành một quy trình — AI tự research, đóng vai chuyên gia lên hẳn <em>content direction</em>, rồi xuất ra một <b>file HTML đẹp</b> cho bạn duyệt',
+      '🎨 <b>Ảnh:</b> AI <b>thiết kế</b> ảnh sản phẩm, ảnh bài đăng ngay trên <b>Canva &amp; Figma</b> — tự dựng layout, bạn chỉ chỉnh vài chỗ cho vừa mắt',
+      '🎬 <b>Video:</b> dựng video từ A–Z bằng AI với <b>Hyperframes</b> — chữ chạy, nhạc, chuyển cảnh tự ráp thành clip',
+      'May đo: bám đúng việc bạn cần nhất, không dạy lan man'
+    ],
+    outcome:'quy trình riêng + bài/ảnh/video thật làm ngay tại buổi.'
+  },
+  {
+    n:3, vis:'org', star:true,
+    title:'Tuyển "nhân viên AI": đúc cách nghĩ của bạn thành cộng sự gọi-là-có',
+    bullets:[
+      'Loop lo mấy việc tay chân lặp lại. Còn việc cần đầu óc — kiểu nghĩ ý tưởng content — thì sao?',
+      'Bạn lấy chính <b>cách bạn hay nghĩ</b>, đúc thành một nhân viên AI thật, đặt tên luôn — ví dụ <b>Content Planner</b>',
+      'Bí ý tưởng thì gọi nó ra, nó gợi ý theo đúng gu bạn; xài càng nhiều, dạy nó càng giỏi',
+      'Lâu dần một mình bạn có cả ê-kíp: đứa nghĩ ý tưởng, đứa soát chất lượng, đứa lo ảnh…'
+    ],
+    outcome:'vài nhân viên AI có tên — gọi phát là có người cùng nghĩ, cùng làm.'
+  },
+  {
+    n:4, vis:null,
+    title:'Đồng hành 1 tháng',
+    bullets:[
+      'Một tháng sau khoá bạn tự chạy thật; vướng đâu nhắn mình gỡ ngay tại đó qua chat',
+      'Ca nào rối quá thì hẹn hẳn một buổi <b>meeting</b>, mình ngồi cùng xử cho xong',
+      'Mục tiêu: hệ thống chạy mượt, bạn tự tin tự đứng'
+    ],
+    outcome:'hệ thống chạy vững, bạn tự chủ.'
+  }
+];
+
+const TAKEAWAY = [
+  {cls:'skill', tag:'Năng lực', items:['Tự lên content theo quy trình','Tự thiết kế ảnh & dựng video bằng AI','Tự dựng loop cho việc lặp của mình']},
+  {cls:'asset', tag:'Tài sản', items:['Một OS Second Brains của riêng bạn','Ê-kíp "nhân viên AI" gọi-là-có','Một văn phòng AI tự chạy đều mỗi ngày']}
+];
+
+const CTA = {
+  h:'Nghe có vẻ hợp với bạn?',
+  p:'Mỗi người một việc khác nhau, nên mình tư vấn trực tiếp để may đo đúng cái bạn cần. Nhắn mình một câu, mình chỉ cho bạn bắt đầu từ đâu.',
+  btn:'Nhắn mình qua Zalo',
+  link:'https://zalo.me/0968459103',
+  phone:'0968459103'
+};
+
+/* ============================================================
+   SVG ILLUSTRATIONS (tự vẽ)
+   ============================================================ */
+const SVG = {
+  os:`<svg viewBox="0 0 560 200" width="560" role="img" aria-label="Chatbox rời rạc vs OS một bộ não">
+    <text x="120" y="22" text-anchor="middle" font-family="Space Grotesk" font-size="13" font-weight="600" fill="#6B7178">CHATBOX</text>
+    <g fill="#FBFAF4" stroke="#DAD5C4">
+      <rect x="40" y="38" width="120" height="26" rx="8"/><rect x="70" y="74" width="120" height="26" rx="8"/>
+      <rect x="40" y="110" width="120" height="26" rx="8"/><rect x="70" y="146" width="110" height="26" rx="8"/>
+    </g>
+    <g fill="#B7BCC2" font-family="Be Vietnam Pro" font-size="11">
+      <text x="52" y="55">hỏi câu 1…</text><text x="82" y="91">hỏi lại…</text>
+      <text x="52" y="127">sửa tiếp…</text><text x="82" y="163">lại hỏi…</text>
+    </g>
+    <line x1="270" y1="30" x2="270" y2="178" stroke="#DAD5C4" stroke-dasharray="4 5"/>
+    <text x="430" y="22" text-anchor="middle" font-family="Space Grotesk" font-size="13" font-weight="600" fill="#16543C">OS — HỆ ĐIỀU HÀNH</text>
+    <g stroke="#1F6F50" stroke-width="1.6">
+      <line x1="430" y1="108" x2="350" y2="56"/><line x1="430" y1="108" x2="510" y2="56"/>
+      <line x1="430" y1="108" x2="338" y2="120"/><line x1="430" y1="108" x2="522" y2="120"/>
+      <line x1="430" y1="108" x2="400" y2="172"/><line x1="430" y1="108" x2="460" y2="172"/>
+    </g>
+    <circle cx="430" cy="108" r="34" fill="#1F6F50"/>
+    <text x="430" y="113" text-anchor="middle" font-size="24">🧠</text>
+    <g font-family="Be Vietnam Pro" font-size="10.5" fill="#3A4048">
+      <g fill="#E4EFE8" stroke="#1F6F50"><rect x="312" y="44" width="56" height="22" rx="7"/><rect x="492" y="44" width="56" height="22" rx="7"/>
+      <rect x="300" y="110" width="50" height="22" rx="7"/><rect x="510" y="110" width="50" height="22" rx="7"/>
+      <rect x="368" y="162" width="56" height="22" rx="7"/><rect x="436" y="162" width="56" height="22" rx="7"/></g>
+      <text x="340" y="59" text-anchor="middle">Content</text><text x="520" y="59" text-anchor="middle">Ảnh</text>
+      <text x="325" y="125" text-anchor="middle">Video</text><text x="535" y="125" text-anchor="middle">Khách</text>
+      <text x="396" y="177" text-anchor="middle">Bán</text><text x="464" y="177" text-anchor="middle">Kế hoạch</text>
+    </g>
+  </svg>`,
+
+  loop:`<svg viewBox="0 0 560 230" width="560" role="img" aria-label="Vòng loop 5 nhịp, người đứng ngoài">
+    <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#1F6F50"/></marker></defs>
+    <g transform="translate(195,115)">
+      <circle r="86" fill="none" stroke="#E4EFE8" stroke-width="22"/>
+      <g stroke="#1F6F50" stroke-width="2.4" fill="none" marker-end="url(#ar)">
+        <path d="M 0,-86 A 86,86 0 0 1 81.8,-26.6"/>
+        <path d="M 81.8,-26.6 A 86,86 0 0 1 50.5,69.6"/>
+        <path d="M 50.5,69.6 A 86,86 0 0 1 -50.5,69.6"/>
+        <path d="M -50.5,69.6 A 86,86 0 0 1 -81.8,-26.6"/>
+        <path d="M -81.8,-26.6 A 86,86 0 0 1 0,-86"/>
+      </g>
+      <g font-family="Space Grotesk" font-size="11.5" font-weight="600" fill="#16543C" text-anchor="middle">
+        <g fill="#fff" stroke="#1F6F50"><circle cx="0" cy="-86" r="21"/><circle cx="81.8" cy="-26.6" r="21"/><circle cx="50.5" cy="69.6" r="21"/><circle cx="-50.5" cy="69.6" r="21"/><circle cx="-81.8" cy="-26.6" r="21"/></g>
+        <text x="0" y="-82">Khám<tspan x="0" dy="12">phá</tspan></text>
+        <text x="81.8" y="-30">Kế</text><text x="81.8" y="-18">hoạch</text>
+        <text x="50.5" y="73">Làm</text>
+        <text x="-50.5" y="67">Tự</text><text x="-50.5" y="79">kiểm</text>
+        <text x="-81.8" y="-22">Sửa</text>
+      </g>
+    </g>
+    <line x1="288" y1="115" x2="392" y2="115" stroke="#C8743A" stroke-width="2.4" stroke-dasharray="2 6" marker-end="url(#ar)"/>
+    <g transform="translate(430,115)">
+      <circle cx="0" cy="-14" r="16" fill="#101418"/><rect x="-22" y="6" width="44" height="34" rx="14" fill="#101418"/>
+      <text x="0" y="62" text-anchor="middle" font-family="Be Vietnam Pro" font-size="12" font-weight="600" fill="#101418">Bạn</text>
+      <text x="0" y="78" text-anchor="middle" font-family="Be Vietnam Pro" font-size="11" fill="#6B7178">nhận bản đạt</text>
+    </g>
+    <text x="430" y="40" text-anchor="middle" font-family="Be Vietnam Pro" font-size="11.5" fill="#C8743A" font-weight="600">đứng NGOÀI vòng</text>
+  </svg>`,
+
+  studio:`<svg viewBox="0 0 560 150" width="560" role="img" aria-label="Ba mũi: content, ảnh, video">
+    <g font-family="Space Grotesk" font-weight="600" font-size="14" fill="#16543C" text-anchor="middle">
+      <g fill="#FBFAF4" stroke="#DAD5C4"><rect x="30" y="30" width="150" height="90" rx="14"/><rect x="205" y="30" width="150" height="90" rx="14"/><rect x="380" y="30" width="150" height="90" rx="14"/></g>
+      <text x="105" y="68" font-size="30">✍️</text><text x="280" y="68" font-size="30">🎨</text><text x="455" y="68" font-size="30">🎬</text>
+      <text x="105" y="100">Content</text><text x="280" y="100">Ảnh</text><text x="455" y="100">Video</text>
+    </g>
+    <g font-family="Be Vietnam Pro" font-size="10.5" fill="#6B7178" text-anchor="middle">
+      <text x="105" y="115">research → direction</text><text x="280" y="115">Canva &amp; Figma</text><text x="455" y="115">Hyperframes</text>
+    </g>
+  </svg>`,
+
+  org:`<svg viewBox="0 0 560 222" width="560" role="img" aria-label="Org chart nhân viên AI quanh bạn">
+    <g stroke="#C8743A" stroke-width="1.8">
+      <line x1="280" y1="110" x2="120" y2="52"/><line x1="280" y1="110" x2="448" y2="52"/>
+      <line x1="280" y1="110" x2="108" y2="166"/><line x1="280" y1="110" x2="452" y2="166"/>
+      <line x1="280" y1="110" x2="280" y2="194"/>
+    </g>
+    <g font-family="Be Vietnam Pro" font-size="11.5" fill="#3A4048" text-anchor="middle">
+      <g fill="#FBFAF4" stroke="#C8743A">
+        <rect x="44" y="36" width="152" height="32" rx="10"/><rect x="372" y="36" width="152" height="32" rx="10"/>
+        <rect x="28" y="150" width="160" height="32" rx="10"/><rect x="372" y="150" width="160" height="32" rx="10"/>
+        <rect x="216" y="178" width="128" height="32" rx="10"/>
+      </g>
+      <text x="120" y="56">🤖 Content Planner</text><text x="448" y="56">🤖 Reviewer</text>
+      <text x="108" y="170">🤖 Graphic Designer</text><text x="452" y="170">🤖 Video Editor</text><text x="280" y="198">🤖 Bán hàng</text>
+    </g>
+    <circle cx="280" cy="110" r="36" fill="#101418"/>
+    <text x="280" y="105" text-anchor="middle" font-size="20">🧑‍💼</text>
+    <text x="280" y="123" text-anchor="middle" font-family="Space Grotesk" font-size="12" font-weight="700" fill="#fff">Bạn</text>
+  </svg>`
+};
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function el(html){const t=document.createElement('template');t.innerHTML=html.trim();return t.content.firstChild;}
+
+document.getElementById('hero-h1').innerHTML = COURSE.title_html + ' ' + COURSE.title_tail;
+document.getElementById('hero-sub').textContent = COURSE.sub;
+document.getElementById('hero-promise').innerHTML = COURSE.promise;
+
+const tl = document.getElementById('timeline');
+STAGES.forEach(s=>{
+  let visHtml = '';
+  if(s.vis){ visHtml = `<div class="vis">${SVG[s.vis]}</div>`; }
+  else if(s.img){
+    visHtml = `<div class="imgwrap"><img src="${s.img.src}" alt="${s.img.label}" onerror="this.parentNode.classList.add('miss')">`+
+      `<div class="ph2"><div class="ph-ic">🖼️</div><div class="ph-t">${s.img.label}</div>`+
+      (s.img.hint?`<div class="ph-s">${s.img.hint}</div>`:'')+`</div></div>`;
+  }
+  const phHtml = '';
+  const tailor = s.tailor ? `<span class="tailor">may đo riêng</span>` : '';
+  const star = s.star ? ' <span class="star">★</span>' : '';
+  const lis = s.bullets.map(b=>`<li>${b}</li>`).join('');
+  tl.appendChild(el(`
+    <div class="stage${s.star?' star':''}">
+      <div class="node">${s.n}</div>
+      <div class="card">
+        <h3>${s.title}${star}</h3>
+        ${tailor}
+        <ul>${lis}</ul>
+        ${visHtml}${phHtml}
+        <div class="outcome">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#16543C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><b>Có:</b> ${s.outcome}</div>
+        </div>
+      </div>
+    </div>`));
+});
+
+const tk = document.getElementById('takeaway');
+TAKEAWAY.forEach(c=>{
+  tk.appendChild(el(`<div class="take-col ${c.cls}"><span class="tag">${c.tag}</span><ul>${c.items.map(i=>`<li>${i}</li>`).join('')}</ul></div>`));
+});
+
+document.getElementById('cta-h').textContent = CTA.h;
+document.getElementById('cta-p').textContent = CTA.p;
+document.getElementById('cta-btn-t').textContent = CTA.btn;
+document.getElementById('cta-btn').href = CTA.link;
+document.getElementById('cta-phone').innerHTML = 'Zalo / SĐT: <b>' + CTA.phone + '</b>';
+document.getElementById('last-updated').textContent = 'Cập nhật ' + LAST_UPDATED;
+</script>
+</body>
+</html>
