@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lộ Trình 8 Buổi — Làm Chủ Agentic AI & OS Second Brains</title>
+<style>
+  :root{
+    --ink:#1a1830;
+    --ink-soft:#4b4866;
+    --muted:#6f6b86;
+    --line:#7c5cff;
+    --bg:#f4f4fb;
+    --card:#ffffff;
+    --shadow:0 14px 40px -18px rgba(60,40,140,.35);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+    background:
+      radial-gradient(1200px 600px at 50% -200px, #ece8ff 0%, rgba(236,232,255,0) 60%),
+      var(--bg);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    padding:0 0 90px;
+  }
+
+  /* ---------- HEADER ---------- */
+  header{
+    text-align:center;
+    padding:80px 24px 36px;
+    max-width:920px;
+    margin:0 auto;
+  }
+  header h1{
+    font-size:clamp(34px,6vw,62px);
+    font-weight:800;
+    letter-spacing:-.02em;
+    line-height:1.08;
+    color:var(--ink);
+  }
+  header p.sub{
+    margin-top:18px;
+    font-size:clamp(16px,2.4vw,22px);
+    color:var(--muted);
+    font-weight:500;
+  }
+  .meta-pills{
+    margin-top:26px;
+    display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+  }
+  .meta-pills span{
+    background:#fff;
+    border:1px solid #e6e2f7;
+    color:var(--ink-soft);
+    font-size:13px;font-weight:600;
+    padding:7px 14px;border-radius:999px;
+    box-shadow:0 4px 14px -10px rgba(80,60,160,.5);
+  }
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{
+    position:relative;
+    max-width:1080px;
+    margin:50px auto 0;
+    padding:0 24px;
+  }
+  /* the vertical spine */
+  .timeline::before{
+    content:"";
+    position:absolute;
+    top:8px;bottom:8px;
+    left:50%;
+    width:4px;
+    margin-left:-2px;
+    background:linear-gradient(180deg,#8a6bff,#6a3df0);
+    border-radius:4px;
+  }
+
+  .row{
+    position:relative;
+    display:flex;
+    margin-bottom:46px;
+  }
+  .row:last-child{margin-bottom:0}
+  .row.left{justify-content:flex-start}
+  .row.right{justify-content:flex-end}
+
+  /* node dot on the spine */
+  .node{
+    position:absolute;
+    left:50%;
+    top:30px;
+    transform:translateX(-50%);
+    width:40px;height:40px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#7d5cff,#6233e8);
+    color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:16px;
+    border:4px solid #fff;
+    box-shadow:0 6px 18px -6px rgba(98,51,232,.7);
+    z-index:2;
+  }
+
+  .card{
+    width:calc(50% - 46px);
+    background:var(--card);
+    border:1px solid #ece9f8;
+    border-radius:22px;
+    padding:26px 28px;
+    box-shadow:var(--shadow);
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 22px 50px -20px rgba(60,40,140,.45);
+  }
+
+  .badge{
+    display:inline-block;
+    font-size:12px;font-weight:700;
+    letter-spacing:.04em;
+    padding:5px 12px;border-radius:999px;
+    margin-bottom:14px;
+  }
+  .b1{background:#eee9ff;color:#5b39d6}
+  .b2{background:#f0e6ff;color:#7b32d6}
+  .b3{background:#e6efff;color:#2f6bd6}
+  .b4{background:#e6fbf3;color:#149e72}
+  .b5{background:#fff0e6;color:#d9711f}
+  .b6{background:#ffe9ef;color:#d6315f}
+
+  .card h2{
+    font-size:21px;
+    font-weight:800;
+    color:var(--ink);
+    line-height:1.28;
+    letter-spacing:-.01em;
+    margin-bottom:14px;
+  }
+  .card ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+  .card li{
+    position:relative;
+    padding-left:20px;
+    font-size:15px;
+    color:var(--ink-soft);
+  }
+  .card li::before{
+    content:"";
+    position:absolute;left:2px;top:9px;
+    width:7px;height:7px;border-radius:50%;
+    background:#a99bf0;
+  }
+  .card li b{color:var(--ink);font-weight:700}
+
+  .practice .card{
+    background:linear-gradient(135deg,#fff,#fdf2f6);
+    border-color:#fbdfe8;
+  }
+
+  .closing{
+    max-width:760px;
+    margin:64px auto 0;
+    padding:0 24px;
+    text-align:center;
+    color:var(--muted);
+    font-size:15px;
+  }
+  .closing strong{color:var(--ink-soft)}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:760px){
+    .timeline::before{left:22px}
+    .node{left:22px;top:26px}
+    .row.left,.row.right{justify-content:flex-start}
+    .card{
+      width:100%;
+      margin-left:54px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Lộ Trình 8 Buổi<br>Làm Chủ Agentic AI &amp; OS Second Brains</h1>
+  <p class="sub">Từ tư duy nền tảng đến ra sản phẩm thật — bạn tự vận hành được</p>
+  <div class="meta-pills">
+    <span>🧠 Coaching 1:1</span>
+    <span>⚙️ Claude Code · Antigravity · Codex · Gemini</span>
+    <span>📦 8 buổi · Buổi 1–5 xây nền · 6–7–8 thực hành</span>
+  </div>
+</header>
+
+<div class="timeline">
+
+  <!-- BUỔI 1 -->
+  <div class="row left">
+    <div class="node">1</div>
+    <div class="card">
+      <span class="badge b1">Buổi 1 · Mindset Day</span>
+      <h2>Đặt nền tư duy: Agentic AI là gì &amp; vì sao nó khác hẳn</h2>
+      <ul>
+        <li>Tổng quan sự phát triển của AI &amp; <b>Agentic AI là gì</b> — khác biệt giữa <b>AI Chatbot</b> và <b>Agentic AI</b></li>
+        <li>Cơ chế hoạt động của <b>LLM</b> &amp; <b>cấu trúc Context</b></li>
+        <li>Làm rõ các khái niệm: <b>Skill · Connector/MCP · file CLAUDE.md · Agent &amp; Sub-agent</b></li>
+        <li>Kỹ thuật <b>Prompting (GCAO)</b></li>
+        <li><b>Agentic Framework</b> (Research → Plan → Execute → Verify) — thực hành 1 ví dụ thật ngay</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BUỔI 2 -->
+  <div class="row right">
+    <div class="node">2</div>
+    <div class="card">
+      <span class="badge b2">Buổi 2 · Hệ thống &amp; Công cụ</span>
+      <h2>Hệ thống OS Second Brains &amp; bộ công cụ Antigravity / Claude Code</h2>
+      <ul>
+        <li>Giải phẫu giao diện <b>Antigravity</b> và <b>Claude Code</b></li>
+        <li><b>Setup &amp; cài đặt</b> OS Second Brains</li>
+        <li><b>OSSB là gì</b> — làm được gì &amp; vì sao cần một hệ thống như vậy (giải phẫu chi tiết)</li>
+        <li><b>Kiến trúc của 1 Project</b> — gồm những phần gì &amp; chúng liên kết ra sao</li>
+        <li>Framework <b>WTA = Workflow – Tools – Agent</b> (ẩn dụ nhà bếp) + áp dụng vào thực thi</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BUỔI 3 -->
+  <div class="row left">
+    <div class="node">3</div>
+    <div class="card">
+      <span class="badge b3">Buổi 3 · Nghiên cứu</span>
+      <h2>Agentic Workflow cho Nghiên cứu (OS Wiki)</h2>
+      <ul>
+        <li><b>Workflow</b> là gì?</li>
+        <li><b>LLM Internal — Knowledges</b> (kiến thức nội tại của mô hình)</li>
+        <li><b>Agentic research</b> — khai thác external-knowledges</li>
+        <li><b>From Research to Workflow:</b> chưng cất kiến thức thành quy trình làm việc</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BUỔI 4 -->
+  <div class="row right">
+    <div class="node">4</div>
+    <div class="card">
+      <span class="badge b4">Buổi 4 · Năng lực</span>
+      <h2>Build Agent Skills — trang bị "siêu năng lực" cho AI</h2>
+      <ul>
+        <li>Từ Workflows tạo <b>Agent Skills</b>: quy trình 4 bước</li>
+        <li><b>Research → Convert to Agent Skill → Simulating → Finetuning</b></li>
+        <li>Trang bị siêu năng lực bằng <b>API &amp; MCP</b> (vd <b>Firecrawl</b> biến website bất kỳ thành dữ liệu sạch)</li>
+        <li><b>Giả lập vận hành thử</b> + <b>Fine-tuning Skill</b> để tối ưu hiệu suất</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BUỔI 5 -->
+  <div class="row left">
+    <div class="node">5</div>
+    <div class="card">
+      <span class="badge b5">Buổi 5 · Đội ngũ AI</span>
+      <h2>Build Agent Company — vận hành như một doanh nghiệp thật</h2>
+      <ul>
+        <li>Giới thiệu <b>app Crew</b> là gì</li>
+        <li>Vì sao cần những <b>nhân viên AI chuyên biệt</b> vận hành như doanh nghiệp thật</li>
+        <li>Tạo <b>phòng ban</b> &amp; <b>tuyển dụng</b> những nhân viên AI đầu tiên</li>
+        <li>Ứng dụng vào <b>workflow làm việc</b> hằng ngày</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BUỔI 6-7-8 -->
+  <div class="row right practice">
+    <div class="node">6</div>
+    <div class="card">
+      <span class="badge b6">Buổi 6 · 7 · 8 · Thực chiến</span>
+      <h2>Thực hành ra kết quả THẬT &amp; dùng được</h2>
+      <ul>
+        <li><b>3 buổi thực hành</b> — bạn bắt tay làm ra kết quả thật, dùng được ngay</li>
+        <li>Áp toàn bộ nền tảng buổi 1–5 vào chính việc/ngành của bạn</li>
+        <li>Rời khoá học với <b>tài sản thật</b>: hệ thống OS + ê-kíp AI tự vận hành</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<p class="closing">
+  Buổi 1–5 xây <strong>nền tảng &amp; năng lực</strong> · Buổi 6–7–8 <strong>thực hành ra kết quả thật</strong>.<br>
+  Khung được may đo theo ngành &amp; mục tiêu của từng học viên.
+</p>
+
+</body>
+</html>
