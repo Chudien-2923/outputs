@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buổi 3 — Agentic Workflow cho Nghiên cứu (OS Wiki)</title>
+<style>
+  :root{
+    --ink:#1c2530; --ink-soft:#46556a; --muted:#7b8aa0;
+    --paper:#f6f4ef; --card:#ffffff; --line:#e6e1d7;
+    --teal:#0f7c79; --teal-d:#0a5654; --teal-soft:#e6f3f2;
+    --amber:#c4761a; --amber-soft:#fbeeda;
+    --rose:#b5443f; --rose-soft:#fbeae8;
+    --indigo:#3a4a7a; --indigo-soft:#eaecf6;
+    --shadow:0 1px 2px rgba(28,37,48,.04),0 8px 28px rgba(28,37,48,.07);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Inter",system-ui,"Helvetica Neue",Arial,sans-serif;
+    line-height:1.68; font-size:17px; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px; margin:0 auto; padding:0 22px;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:linear-gradient(135deg,#0a5654 0%,#0f7c79 55%,#149b8e 100%);
+    color:#fff; padding:54px 0 46px; position:relative; overflow:hidden;
+  }
+  .hero::after{content:""; position:absolute; right:-80px; top:-80px; width:320px; height:320px;
+    background:radial-gradient(circle,rgba(255,255,255,.13),transparent 70%); border-radius:50%;}
+  .badge{display:inline-block; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3);
+    color:#fff; font-size:13px; font-weight:600; letter-spacing:.5px; padding:5px 13px; border-radius:99px; margin-bottom:16px;}
+  .hero h1{margin:0 0 10px; font-size:34px; line-height:1.18; font-weight:800; letter-spacing:-.4px;}
+  .hero .sub{font-size:17px; color:rgba(255,255,255,.9); max-width:680px; margin:0;}
+  .meta{display:flex; flex-wrap:wrap; gap:10px; margin-top:22px;}
+  .chip{background:rgba(255,255,255,.13); border:1px solid rgba(255,255,255,.22); border-radius:8px;
+    padding:6px 12px; font-size:13.5px; color:#fff;}
+  .chip b{font-weight:700;}
+
+  /* ---------- NAV ---------- */
+  nav.toc{position:sticky; top:0; z-index:20; background:rgba(246,244,239,.92);
+    backdrop-filter:blur(8px); border-bottom:1px solid var(--line);}
+  nav.toc .row{display:flex; gap:6px; overflow-x:auto; padding:11px 22px; max-width:920px; margin:0 auto;}
+  nav.toc a{flex:0 0 auto; text-decoration:none; color:var(--ink-soft); font-size:13.5px; font-weight:600;
+    padding:7px 13px; border-radius:8px; white-space:nowrap; transition:.15s; border:1px solid transparent;}
+  nav.toc a:hover{background:var(--teal-soft); color:var(--teal-d);}
+  nav.toc a .n{display:inline-flex; width:20px; height:20px; align-items:center; justify-content:center;
+    background:var(--teal); color:#fff; border-radius:6px; font-size:12px; margin-right:6px; font-weight:700;}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:40px 0 8px; border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  .sec-head{display:flex; align-items:flex-start; gap:15px; margin-bottom:6px;}
+  .sec-num{flex:0 0 auto; width:42px; height:42px; border-radius:11px;
+    background:linear-gradient(135deg,var(--teal),var(--teal-d)); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:19px; box-shadow:var(--shadow);}
+  h2{font-size:24px; font-weight:800; margin:4px 0 2px; letter-spacing:-.3px; line-height:1.25;}
+  h3{font-size:18px; font-weight:700; margin:26px 0 8px; color:var(--ink);}
+  p{margin:12px 0;}
+  .lead{color:var(--ink-soft); font-size:17.5px;}
+  strong{font-weight:700; color:var(--ink);}
+  em{color:var(--indigo); font-style:italic;}
+
+  /* ---------- TABLES ---------- */
+  .tbl{width:100%; border-collapse:collapse; margin:18px 0; background:var(--card);
+    border:1px solid var(--line); border-radius:12px; overflow:hidden; box-shadow:var(--shadow); font-size:15.5px;}
+  .tbl th{background:var(--indigo-soft); color:var(--indigo); text-align:left; padding:11px 14px; font-weight:700; font-size:14px;}
+  .tbl td{padding:11px 14px; border-top:1px solid var(--line); vertical-align:top; color:var(--ink-soft);}
+  .tbl td strong{color:var(--ink);}
+  .tbl tr:hover td{background:#faf9f6;}
+  .tbl .c0{width:42px; text-align:center; font-weight:800; color:var(--teal); font-size:16px;}
+
+  /* ---------- METAPHOR / CALLOUTS ---------- */
+  .meta-box{background:var(--amber-soft); border:1px solid #eed6ad; border-left:4px solid var(--amber);
+    border-radius:12px; padding:15px 18px; margin:18px 0; position:relative;}
+  .meta-box .tag{font-size:12px; font-weight:800; letter-spacing:.6px; color:var(--amber); text-transform:uppercase; display:block; margin-bottom:4px;}
+  .meta-box p{margin:4px 0; color:#7a5418;}
+  .meta-box p strong{color:#5e3f0e;}
+
+  .key{background:linear-gradient(135deg,#0a5654,#0f7c79); color:#fff; border-radius:12px;
+    padding:15px 18px 15px 52px; margin:20px 0; position:relative; box-shadow:var(--shadow); font-size:15.5px; line-height:1.55;}
+  .key::before{content:"🎯"; position:absolute; left:16px; top:14px; font-size:20px;}
+  .key b{color:#ffe6b8;}
+
+  /* ---------- FLOW DIAGRAM ---------- */
+  .flow{display:flex; align-items:stretch; gap:0; flex-wrap:wrap; margin:22px 0; }
+  .flow .step{flex:1 1 140px; background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:14px 12px; text-align:center; box-shadow:var(--shadow); min-width:130px;}
+  .flow .step .ic{font-size:22px;}
+  .flow .step .t{font-weight:800; font-size:14.5px; margin:5px 0 3px; color:var(--teal-d);}
+  .flow .step .d{font-size:12.5px; color:var(--muted); line-height:1.4;}
+  .flow .arr{flex:0 0 26px; display:flex; align-items:center; justify-content:center; color:var(--teal); font-size:22px; font-weight:800;}
+  @media(max-width:640px){ .flow .arr{transform:rotate(90deg); flex-basis:100%; height:24px;} }
+
+  /* ---------- HOLE CARDS ---------- */
+  .holes{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:20px 0;}
+  .hole{background:var(--rose-soft); border:1px solid #efc9c5; border-radius:12px; padding:14px;}
+  .hole .num{display:inline-flex; width:24px;height:24px; background:var(--rose); color:#fff; border-radius:7px;
+    align-items:center; justify-content:center; font-weight:800; font-size:13px; margin-bottom:7px;}
+  .hole .h{font-weight:800; font-size:15px; color:#8e2f2b; margin-bottom:3px;}
+  .hole .x{font-size:13.5px; color:#9a5450; line-height:1.45;}
+  @media(max-width:640px){ .holes{grid-template-columns:1fr;} }
+
+  /* ---------- STEPS (practice) ---------- */
+  .steps{counter-reset:s; margin:18px 0;}
+  .stp{display:flex; gap:14px; padding:13px 0; border-top:1px dashed var(--line);}
+  .stp:first-child{border-top:none;}
+  .stp .b{counter-increment:s; flex:0 0 auto; width:30px; height:30px; border-radius:9px;
+    background:var(--indigo); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px;}
+  .stp .b::before{content:counter(s);}
+  .stp .c{flex:1;}
+  .stp .c .lbl{font-weight:700;}
+  .stp .c .lbl .rp{display:inline-block; background:var(--teal-soft); color:var(--teal-d); font-size:11.5px;
+    font-weight:800; padding:1px 7px; border-radius:6px; margin-left:6px; letter-spacing:.4px;}
+
+  .prompt{background:#0e1822; color:#dce6f0; border-radius:12px; padding:16px 18px; margin:14px 0;
+    font-size:14.5px; line-height:1.6; border:1px solid #20303f;}
+  .prompt .g{color:#62d6c2; font-weight:700;}
+
+  .pill-list{display:flex; flex-direction:column; gap:8px; margin:14px 0;}
+  .pill{background:var(--card); border:1px solid var(--line); border-left:3px solid var(--teal); border-radius:9px;
+    padding:10px 14px; font-size:15px; color:var(--ink-soft);}
+  .pill b{color:var(--ink);}
+
+  .asset{background:var(--teal-soft); border:1px dashed var(--teal); border-radius:12px; padding:14px 16px; margin:18px 0;}
+  .asset .t{font-weight:800; color:var(--teal-d); font-size:14px; letter-spacing:.4px; text-transform:uppercase; margin-bottom:3px;}
+  .asset p{margin:2px 0; color:#0a5654;}
+
+  /* ---------- footer ---------- */
+  footer{padding:30px 0 50px; color:var(--muted); font-size:13.5px;}
+  footer .links{margin-top:8px; line-height:1.9;}
+  footer code{background:#ece8df; padding:2px 6px; border-radius:5px; font-size:12.5px; color:var(--ink-soft);}
+
+  .note{background:var(--indigo-soft); border-radius:10px; padding:12px 16px; font-size:14.5px; color:var(--indigo); margin:18px 0;}
+  .note b{color:var(--indigo);}
+
+  /* ---------- PRINT / PDF ---------- */
+  @page{ margin:13mm 11mm; }
+  @media print{
+    html,body{ background:#fff !important; font-size:12.5px;
+      -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    nav.toc{ display:none !important; }
+    .hero{ padding:30px 0 26px; }
+    .hero::after{ display:none; }
+    .wrap{ max-width:100%; }
+    section{ padding:20px 0 4px; }
+    .sec-head, h2, h3{ break-after:avoid; page-break-after:avoid; }
+    .meta-box,.key,.hole,.asset,.prompt,.note,.tbl,.flow,.stp{
+      break-inside:avoid; page-break-inside:avoid; }
+    .holes{ break-inside:avoid; }
+    a[href]{ color:inherit; text-decoration:none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="badge">● KHOÁ COACHING 1:1 · BUỔI 3 / 8</span>
+    <h1>Agentic Workflow cho Nghiên cứu<br>— xây "tủ tri thức" OS Wiki</h1>
+    <p class="sub">Lần đầu học viên bắt AI <b>đi nghiên cứu thật</b> và biến cái hay ngoài đời thành <b>tài sản nằm lại trong hệ thống của mình</b>.</p>
+    <div class="meta">
+      <span class="chip">🏨 Ví dụ ngành: <b>Quản lý khách sạn</b></span>
+      <span class="chip">🛠 Nền tảng: <b>Claude Code · OSSB</b></span>
+      <span class="chip">⏱ <b>120 phút</b> · ra 1 tài sản</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="row">
+    <a href="#s1"><span class="n">1</span>Workflow tri thức</a>
+    <a href="#s2"><span class="n">2</span>3 lỗ hổng của AI</a>
+    <a href="#s3"><span class="n">3</span>AI tự nghiên cứu</a>
+    <a href="#s4"><span class="n">4</span>Chắt thành tri thức</a>
+    <a href="#s5"><span class="n">5</span>Thực hành</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- ===== SECTION 1 ===== -->
+  <section id="s1">
+    <div class="sec-head">
+      <div class="sec-num">1</div>
+      <div><h2>Workflow nghiên cứu tri thức của OSSB — dòng chảy thật</h2></div>
+    </div>
+    <p class="lead">Buổi 2 anh đã biết <strong>WTA</strong> và rằng chữ <strong>W — Workflow</strong> là "dây chuyền nhiều bước AI chạy theo thứ tự". Buổi này ta đi vào <strong>một workflow quan trọng bậc nhất</strong>: biến tri thức ngoài đời thành tài sản trong hệ thống của anh.</p>
+    <p>Đừng hình dung nó là một định nghĩa. Hãy nhìn nó là một <strong>dòng chảy 4 chặng</strong> — thứ gì đi vào ở đầu này, đi ra thành cái gì ở đầu kia:</p>
+
+    <div class="flow">
+      <div class="step"><div class="ic">🌐</div><div class="t">Nguồn ngoài</div><div class="d">YouTube · X · GitHub · blog</div></div>
+      <div class="arr">→</div>
+      <div class="step"><div class="ic">📥</div><div class="t">raw/ — kho thô</div><div class="d">giữ NGUYÊN, không sửa</div></div>
+      <div class="arr">→</div>
+      <div class="step"><div class="ic">📚</div><div class="t">wiki/ — tri thức</div><div class="d">AI biên thành note có liên kết</div></div>
+      <div class="arr">→</div>
+      <div class="step"><div class="ic">🎯</div><div class="t">output/ — hành động</div><div class="d">kết luận để LÀM trong dự án</div></div>
+    </div>
+
+    <table class="tbl">
+      <tr><th class="c0">#</th><th>Chặng</th><th>Chuyện gì xảy ra (vỡ lòng)</th></tr>
+      <tr><td class="c0">1</td><td><strong>Nguồn</strong></td><td>Một thứ đáng học ngoài đời: video YouTube, thread trên X, repo GitHub, bài blog</td></tr>
+      <tr><td class="c0">2</td><td><strong>raw/</strong> (kho thô)</td><td>Đưa nguyên văn nguồn vào kho — <strong>giữ y nguyên, không bao giờ sửa</strong> (để sau còn đối chiếu gốc)</td></tr>
+      <tr><td class="c0">3</td><td><strong>wiki/</strong> (tri thức)</td><td>AI <strong>đọc kho thô → biên lại</strong> thành các trang gọn, liên kết với nhau: tóm tắt nguồn → gom vào chủ đề → rút khái niệm</td></tr>
+      <tr><td class="c0">4</td><td><strong>output/</strong> (hành động)</td><td>Khi anh hỏi "tôi nên làm gì", AI <strong>tổng hợp từ wiki → bản kết luận để LÀM</strong>, áp thẳng vào dự án</td></tr>
+    </table>
+
+    <div class="meta-box">
+      <span class="tag">💡 Ẩn dụ cốt lõi</span>
+      <p>Giống một <strong>toà soạn báo</strong>. Phóng viên mang tin thô về <em>(raw)</em> → biên tập viên viết thành bài có mục lục, liên kết bài cũ <em>(wiki)</em> → cuối cùng ra một <strong>bản tin hành động</strong> cho sếp đọc để ra quyết <em>(output)</em>. Anh là tổng biên tập; AI làm cả phóng viên lẫn biên tập.</p>
+    </div>
+
+    <h3>Flow chạy trọn vào một dự án THỰC TẾ</h3>
+    <p>Để thấy nó không phải lý thuyết — một vòng chảy trọn vẹn cho mục tiêu <strong>tăng khách quay lại</strong>:</p>
+    <div class="steps">
+      <div class="stp"><div class="b"></div><div class="c">Anh đặt câu hỏi: <em>"các khách sạn nhỏ đang chạy chương trình khách-thân-thiết kiểu gì?"</em></div></div>
+      <div class="stp"><div class="b"></div><div class="c">AI <strong>đi nghiên cứu</strong> → mang về vài nguồn thật, để vào <strong>raw</strong>.</div></div>
+      <div class="stp"><div class="b"></div><div class="c">AI <strong>biên thành wiki</strong>: 1 trang tóm tắt mỗi nguồn + 1 trang chủ đề <em>"Loyalty cho khách sạn nhỏ"</em> + vài khái niệm.</div></div>
+      <div class="stp"><div class="b"></div><div class="c">Anh hỏi <em>"khách sạn tôi nên làm gì?"</em> → AI ra <strong>output</strong>: đề xuất 3 bước áp đúng quy mô của anh.</div></div>
+      <div class="stp"><div class="b"></div><div class="c">Bản output <strong>nằm lại</strong> — lần sau bàn loyalty, AI đã có nền, không bắt đầu từ số 0.</div></div>
+    </div>
+
+    <div class="key">Workflow nghiên cứu của OSSB là một <b>dòng chảy 4 chặng</b>: Nguồn → raw/ (giữ thô) → wiki/ (AI biên thành tri thức có liên kết) → output/ (kết luận để làm). Nó biến <b>cái hay ngoài đời</b> thành <b>tài sản nằm lại trong hệ thống của anh</b>.</div>
+  </section>
+
+  <!-- ===== SECTION 2 ===== -->
+  <section id="s2">
+    <div class="sec-head">
+      <div class="sec-num">2</div>
+      <div><h2>Vì sao phải đi nghiên cứu? — Tri thức sẵn của AI có 3 lỗ hổng</h2></div>
+    </div>
+    <p class="lead">Câu hỏi tự nhiên: <em>"AI biết cả internet rồi, hỏi thẳng chả được sao?"</em> — Hiểu chỗ này thật chắc, vì nó là <strong>lý do tồn tại của cả buổi học</strong>.</p>
+    <p>Phần kiến thức <strong>có sẵn trong đầu</strong> AI (<em>tri thức nội tại</em>) đúng là khổng lồ, nhưng có <strong>3 lỗ hổng chí mạng</strong>:</p>
+
+    <div class="holes">
+      <div class="hole"><span class="num">1</span><div class="h">Không biết riêng anh</div><div class="x">Học kiến thức <em>chung</em> của thế giới, nhưng không có một dòng nào về khách sạn của anh — phong cách, khách, giá, vùng.</div></div>
+      <div class="hole"><span class="num">2</span><div class="h">Bị cũ</div><div class="x">Đầu nó "chốt sổ" tại một thời điểm <em>(cutoff)</em> — tin tức, công cụ, xu hướng sau mốc đó nó không biết.</div></div>
+      <div class="hole"><span class="num">3</span><div class="h">Bịa rất tự tin</div><div class="x">Khi không chắc, vẫn đoán và nói như thật <em>(ảo giác)</em>: bịa số liệu, bịa tên — y như Buổi 1.</div></div>
+    </div>
+
+    <div class="meta-box">
+      <span class="tag">💡 Ẩn dụ cốt lõi</span>
+      <p>Tri thức sẵn của AI giống <strong>một chuyên gia tư vấn vừa đáp máy bay tới gặp anh</strong> — đã đọc qua cả triệu cuốn sách, kiến thức rộng kinh khủng, <strong>nhưng chưa từng bước chân vào khách sạn của anh ngày nào</strong>, cuốn sách mới nhất họ đọc thì <strong>in từ năm ngoái</strong>, và khi bị hỏi điều không chắc họ vẫn <strong>trả lời trơn tru cho đỡ mất mặt</strong>.</p>
+      <p>→ Anh sẽ không để người như vậy tự ý ra quyết cho khách sạn. Anh bảo họ: <em>"đi khảo sát thực tế, đọc tài liệu mới nhất, rồi mang bằng chứng về đây."</em> — <strong>Đó chính là "đi nghiên cứu".</strong></p>
+    </div>
+
+    <h3>Ví dụ khách sạn — thấy ngay lỗ hổng</h3>
+    <p>Hỏi thẳng <em>"phần mềm quản lý đặt phòng nào tốt nhất 2026?"</em>:</p>
+    <div class="pill-list">
+      <div class="pill">😐 <b>Dựa tri thức sẵn:</b> kể vài tên quen → nhưng có thể đã đổi giá, ra bản mới, hoặc khai tử mà nó không biết; tệ hơn là <b>bịa một cái tên</b> nghe hợp lý.</div>
+      <div class="pill">✅ <b>Bắt nó đi nghiên cứu:</b> tra nguồn thật mới nhất → trả lời <b>kèm dẫn nguồn để anh kiểm</b> → dùng được.</div>
+    </div>
+
+    <div class="key">Tri thức sẵn của AI <b>rộng nhưng 3 lỗ hổng</b>: không biết riêng anh · bị cũ · bịa tự tin. Vì vậy việc quan trọng <b>không hỏi chay</b> — phải bắt AI <b>đi nghiên cứu nguồn thật</b> rồi mới tin.</div>
+  </section>
+
+  <!-- ===== SECTION 3 ===== -->
+  <section id="s3">
+    <div class="sec-head">
+      <div class="sec-num">3</div>
+      <div><h2>AI tự đi nghiên cứu — cơ chế &amp; 4 đường nạp nguồn</h2></div>
+    </div>
+
+    <h3>3.1 · "AI tự nghiên cứu" chạy thế nào?</h3>
+    <p>Nó <strong>không phải phép màu</strong> — chỉ là cái <strong>vòng lặp Quan sát → Suy nghĩ → Hành động</strong> (Buổi 1) áp vào việc <em>đi tìm tin</em>:</p>
+
+    <div class="flow">
+      <div class="step"><div class="ic">❓</div><div class="t">Anh ra 1 câu hỏi</div><div class="d">chủ đề cần biết</div></div>
+      <div class="arr">→</div>
+      <div class="step"><div class="ic">🔎</div><div class="t">AI tra nhiều nguồn</div><div class="d">đọc &amp; rút ý chính</div></div>
+      <div class="arr">↻</div>
+      <div class="step"><div class="ic">🧩</div><div class="t">"Còn thiếu góc nào?"</div><div class="d">tra tiếp tới khi đủ</div></div>
+      <div class="arr">→</div>
+      <div class="step"><div class="ic">📄</div><div class="t">Bản tổng hợp</div><div class="d">gọn, CÓ dẫn nguồn thật</div></div>
+    </div>
+
+    <p><strong>Khác Google ở đâu?</strong> — Google đưa anh <strong>10 cái link để anh tự ngồi đọc</strong>. AI nghiên cứu thì <strong>đọc thay anh cả chục nguồn, rồi giao lại một bản tóm gọn</strong> đã sàng lọc. Và vì ta bắt nó <strong>dẫn nguồn ra</strong>, nó hết đường bịa — anh bấm vào kiểm được.</p>
+
+    <div class="meta-box">
+      <span class="tag">💡 Ẩn dụ</span>
+      <p>Giống anh sai <strong>một trợ lý đi khảo sát thị trường</strong>: anh chỉ nói chủ đề, trợ lý tự đi gặp nhiều nơi, đọc nhiều tài liệu, rồi mang về <strong>một tập hồ sơ tóm tắt + ghi rõ lấy ở đâu</strong> — chứ không quăng cho anh nguyên đống tài liệu thô.</p>
+    </div>
+
+    <h3>3.2 · Bốn đường nạp nguồn vào kho thô — và công cụ đi kèm</h3>
+    <p>Tri thức ngoài đời nằm ở nhiều dạng. OSSB <strong>đã dựng sẵn "đường ống"</strong> để hút từng dạng vào kho thô — anh không phải copy-paste tay:</p>
+
+    <table class="tbl">
+      <tr><th>Nguồn</th><th>Công cụ nạp (đã có sẵn)</th><th>Hợp để học gì</th></tr>
+      <tr><td>🎥 <strong>YouTube</strong></td><td><code>watch-cli</code> — tự tải video, <strong>bóc lời thoại</strong> + chụp hình minh hoạ</td><td>Bài giảng, talk hội thảo, demo công cụ mới</td></tr>
+      <tr><td>🐦 <strong>X / Twitter</strong></td><td>Web Clipper / AI tự đọc trang</td><td>Tip ngắn, thread chuyên gia, tin nóng trong ngành</td></tr>
+      <tr><td>💻 <strong>GitHub</strong></td><td><code>gh</code> — lấy mô tả + cấu trúc + file chính của dự án code</td><td>Hiểu <strong>một công cụ/công nghệ mới làm được gì</strong> mà không cần biết code</td></tr>
+      <tr><td>📰 <strong>Blog / báo</strong></td><td>Web Clipper / AI tự đọc trang</td><td>Bài phân tích, hướng dẫn, case study</td></tr>
+    </table>
+
+    <div class="note"><b>⚠️ Lưu ý vàng:</b> kho <code>raw/</code> là <b>bất biến — không bao giờ sửa</b>. Để nguồn gốc luôn nguyên vẹn mà đối chiếu, phòng khi AI biên sai ở bước sau còn lần về gốc kiểm. Giống <b>bản gốc hợp đồng</b> cất két — mọi người chỉ làm việc trên bản photo.</div>
+
+    <h3>3.3 · Mục đích KÉP — chỗ "lợi hại" nhất</h3>
+    <p>Đi nghiên cứu không chỉ để <em>học ngành mình</em>. Nó còn để <strong>soi ra hướng nâng cấp chính cái hệ thống của anh</strong>:</p>
+    <div class="pill-list">
+      <div class="pill">🏨 <b>Hướng 1 — học ngành:</b> nghiên cứu "xu hướng tiện ích khách sạn boutique 2026" → áp vào vận hành.</div>
+      <div class="pill">⚙️ <b>Hướng 2 — nâng cấp hệ thống &amp; cách làm việc:</b> thấy một <b>công cụ/quy trình hay</b> trên YouTube hay GitHub → nạp vào <code>raw/</code> → bảo AI <em>"đọc hộ, cái này lắp vào OSSB của tôi được không, lắp kiểu gì?"</em> → AI ra output đề xuất. Đây là cách <b>hệ thống tự lớn lên</b> thay vì đứng yên.</div>
+    </div>
+    <div class="meta-box">
+      <span class="tag">💡 Ẩn dụ Hướng 2</span>
+      <p>Giống ông chủ đi hội chợ ngành, thấy một <strong>máy pha cà phê đời mới</strong> ở gian hàng khác → mang catalog về, hỏi quản lý <em>"lắp con này vào quy trình buổi sáng của mình được không?"</em>. Hệ thống nào cũng phải <strong>liên tục hút cái mới về để tự nâng cấp</strong>.</p>
+    </div>
+
+    <div class="key">"AI tự nghiên cứu" = vòng <b>Quan sát→Suy nghĩ→Hành động</b> đi tìm tin, đọc thay anh rồi <b>giao bản tóm tắt có dẫn nguồn</b>. OSSB có sẵn <b>4 đường nạp</b> (YouTube · X · GitHub · blog) vào kho raw/ <i>bất biến</i>. Mục đích <b>kép</b>: học ngành mình <b>và</b> soi hướng nâng cấp chính hệ thống của mình.</div>
+  </section>
+
+  <!-- ===== SECTION 4 ===== -->
+  <section id="s4">
+    <div class="sec-head">
+      <div class="sec-num">4</div>
+      <div><h2>From Research → Wiki → Output: chắt thành tri thức DÙNG MÃI</h2></div>
+    </div>
+    <p class="lead">Nghiên cứu xong mà để đó thì <strong>lần sau lại phải nghiên cứu lại từ đầu</strong> — phí. Sức mạnh thật nằm ở chỗ <strong>chắt nó thành tri thức nằm lại</strong>, dùng mãi.</p>
+
+    <h3>AI "biên" kho thô thành wiki như thế nào</h3>
+    <p>Từ một nguồn trong <code>raw/</code>, AI tạo/cập nhật vài loại trang nối với nhau:</p>
+    <table class="tbl">
+      <tr><th>Loại trang</th><th>Trả lời câu hỏi</th><th>Ví dụ khách sạn</th></tr>
+      <tr><td><strong>Trang nguồn</strong> <span style="color:var(--muted)">(source)</span></td><td>"Nguồn này nói gì?"</td><td>Tóm tắt 1 video về loyalty khách sạn</td></tr>
+      <tr><td><strong>Trang chủ đề</strong> <span style="color:var(--muted)">(topic)</span></td><td>"Tất cả những gì tôi biết về X?"</td><td>Hub <em>"Giữ chân khách khách sạn nhỏ"</em> gom mọi nguồn</td></tr>
+      <tr><td><strong>Trang khái niệm</strong> <span style="color:var(--muted)">(concept)</span></td><td>"Nguyên lý này là gì?"</td><td><em>"Ưu đãi đặt-trực-tiếp"</em> — dùng lại cho nhiều chủ đề</td></tr>
+    </table>
+    <p>Các trang <strong>liên kết với nhau</strong> (giống chú thích "xem thêm" trong sách), và có một <strong>trang mục lục</strong> (<code>index.md</code>) để AI biết "câu hỏi này thì lật tới trang nào".</p>
+
+    <div class="meta-box">
+      <span class="tag">💡 Ẩn dụ "biên dịch"</span>
+      <p>Giống <strong>biên một cuốn cẩm nang nội bộ</strong> từ đống tài liệu rời. Tài liệu rời = <em>raw/</em>. Người biên tập (AI) đọc hết, viết lại gọn, <strong>đánh số trang + làm mục lục + ghi "xem thêm trang…"</strong>. Cuốn cẩm nang đã đóng gáy = <em>wiki/</em>. Lần sau cần, anh <strong>lật mục lục là ra</strong>, khỏi đọc lại đống thô.</p>
+    </div>
+
+    <h3>Compounding — vì sao càng dùng càng mạnh</h3>
+    <p>Mỗi nguồn nạp vào <strong>nằm lại vĩnh viễn</strong> và <strong>nối với cái đã có</strong>. Nghiên cứu thứ 10 không bắt đầu từ số 0 — nó <strong>đứng trên vai 9 cái trước</strong>. Đây là điều một cuộc chat ChatGPT rời rạc <strong>không bao giờ có</strong> (chat xong là quên).</p>
+
+    <div class="key">Nghiên cứu chỉ thành <b>tài sản</b> khi được <b>chắt vào wiki</b> (trang nguồn → chủ đề → khái niệm, có mục lục + liên kết) rồi ra <b>output để làm</b>. Tri thức <b>nằm lại và cộng dồn</b> — càng nạp, hệ thống càng khôn. Đây là khác biệt gốc giữa "hỏi AI" và "có một bộ não thứ hai".</div>
+  </section>
+
+  <!-- ===== SECTION 5 ===== -->
+  <section id="s5">
+    <div class="sec-head">
+      <div class="sec-num">5</div>
+      <div><h2>🛠 Thực hành tại chỗ — ra tài sản thứ ba cầm về</h2></div>
+    </div>
+    <p class="lead"><strong>Việc:</strong> bắt AI <strong>đi nghiên cứu một chủ đề thật của khách sạn anh</strong> → ra một <strong>bản tổng hợp có dẫn nguồn, dùng được ngay</strong>. Chạy đúng nhịp <strong>R→P→E→V</strong> + mở màn bằng <strong>prompt GCAO</strong> (Buổi 1).</p>
+
+    <h3>Chọn 1 chủ đề (lấy cái nóng nhất với anh)</h3>
+    <div class="pill-list">
+      <div class="pill">⭐ Cách tăng đánh giá 5 sao trên Booking/Google cho khách sạn nhỏ.</div>
+      <div class="pill">🤝 Các chương trình giữ chân khách (loyalty) khách sạn quy mô nhỏ đang chạy.</div>
+      <div class="pill">🛏 Xu hướng tiện ích phòng được khách 2026 tìm kiếm nhiều.</div>
+    </div>
+
+    <h3>Các bước thực thi</h3>
+    <div class="steps">
+      <div class="stp"><div class="b"></div><div class="c"><span class="lbl">Mở Claude Code, gõ prompt nghiên cứu theo GCAO</span>
+        <div class="prompt"><span class="g">[G]</span> Nghiên cứu giúp tôi: cách tăng lượng đánh giá 5 sao trên Booking &amp; Google cho một khách sạn nhỏ. <span class="g">[C]</span> Khách sạn ~20 phòng, phong cách ấm cúng, khách chính là cặp đôi đi nghỉ cuối tuần; tôi muốn cách làm thực tế, hợp quy mô nhỏ, không tốn ngân sách lớn. <span class="g">[A]</span> Đi tìm nhiều nguồn thật, đọc, tổng hợp; <strong>mỗi ý phải dẫn nguồn</strong> để tôi kiểm; nói rõ chỗ nào các nguồn mâu thuẫn. <span class="g">[O]</span> Một bản tổng hợp gọn: 5–7 cách làm, mỗi cách 1–2 câu + nguồn; cuối bài ghi 3 việc tôi nên làm trước.</div>
+      </div></div>
+      <div class="stp"><div class="b"></div><div class="c"><span class="lbl">AI trình kế hoạch nghiên cứu<span class="rp">PLAN</span></span><br>Định tra những góc nào, nguồn dạng gì → anh đọc, gật <em>"ok làm đi"</em> hoặc bảo thêm góc.</div></div>
+      <div class="stp"><div class="b"></div><div class="c"><span class="lbl">AI đi nghiên cứu<span class="rp">EXECUTE</span></span><br>Trả về bản tổng hợp <strong>có dẫn nguồn</strong>.</div></div>
+      <div class="stp"><div class="b"></div><div class="c"><span class="lbl">Anh kiểm — cổng bắt buộc<span class="rp">VERIFY</span></span><br>Vì AI có thể bịa (Buổi 1): bấm thử 1–2 nguồn xem có thật không, đọc xem cách làm có hợp khách sạn anh → bảo nó chỉnh chỗ chưa sát.</div></div>
+      <div class="stp"><div class="b"></div><div class="c"><span class="lbl">Cất thành tài sản</span><br>Bảo AI <em>"lưu bản này lại để lần sau dùng tiếp"</em> → đưa vào <code>output/</code>. (Muốn thành tri thức nền lâu dài thì đây là nguyên liệu để nạp vào wiki — làm sâu ở buổi sau.)</div></div>
+    </div>
+
+    <div class="asset">
+      <div class="t">📦 Tài sản cầm về</div>
+      <p>Một <strong>bản tổng hợp nghiên cứu có dẫn nguồn</strong> về đúng một việc thật của khách sạn anh — <strong>dùng để ra quyết ngay</strong>, và đã nằm lại trong hệ thống.</p>
+    </div>
+
+    <div class="key">Nghiên cứu một chủ đề thật chạy đúng <b>R→P→E→V</b>, mở bằng <b>GCAO</b>, <b>bắt dẫn nguồn</b> và <b>tự mình Verify</b> trước khi tin. Sản phẩm là một bản tổng hợp dùng-được, không phải một câu trả lời chat trôi mất.</div>
+  </section>
+
+  <!-- ===== NỐI DÀI ===== -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-num" style="background:linear-gradient(135deg,var(--indigo),#2b3a63)">➜</div>
+      <div><h2>Nối dài — để dành buổi sau</h2></div>
+    </div>
+    <p>Hai hướng mở rộng, chỉ giới thiệu tên cho anh biết có đường đi tiếp, <strong>chưa làm sâu ở buổi này</strong>:</p>
+    <div class="pill-list">
+      <div class="pill">📚 <b>Nạp chính thức vào wiki:</b> biến bản nghiên cứu thành các trang wiki có mục lục + liên kết để cộng dồn lâu dài.</div>
+      <div class="pill">🔬 <b>AI tự cải tiến hệ thống:</b> ngoài "đi tìm tin", AI còn chạy <b>vòng lặp tự thử – đo – giữ cái tốt hơn</b> để tối ưu một quy trình có "điểm số" (nghĩa thứ hai của <em>autoresearch</em>, kiểu Karpathy) — một chủ đề nâng cao.</div>
+    </div>
+  </section>
+
+  <footer>
+    <div>📄 <strong>Tài liệu nguồn cho NotebookLM → slide thuyết trình.</strong> Ví dụ ngành: quản lý khách sạn.</div>
+    <div class="links">
+      Khung gốc: <code>master-curriculum-8-sessions</code> (Buổi 3) · Buổi trước: <code>session-2-ossb-and-wta</code><br>
+      Nền khái niệm (OS Wiki): LLM Wiki Architecture (raw→wiki→output) · AutoResearch Pattern · Compounding Knowledge Loop · Core Agent Loop.
+    </div>
+  </footer>
+
+</main>
+</body>
+</html>
