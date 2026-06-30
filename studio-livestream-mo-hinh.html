@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mô hình kinh doanh — Studio cho thuê Livestream</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#fff; --ink:#1a1d24; --muted:#6b7280; --line:#e6e8ec;
+    --brand:#2563eb; --brand-soft:#eaf1ff; --green:#16a34a; --green-soft:#e9f7ef;
+    --red:#dc2626; --red-soft:#fdecec; --amber:#b45309; --amber-soft:#fef3e2;
+    --shadow:0 1px 3px rgba(16,24,40,.06),0 8px 24px rgba(16,24,40,.05);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:18px 14px 70px}
+  header.hero{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;border-radius:16px;padding:22px 20px;box-shadow:var(--shadow)}
+  header.hero h1{font-size:21px;font-weight:750;margin-bottom:4px}
+  header.hero p{opacity:.9;font-size:13px}
+  /* result sticky */
+  .result{position:sticky;top:8px;z-index:30;margin:12px 0;border-radius:16px;padding:16px 18px;box-shadow:var(--shadow);
+    background:var(--card);border:2px solid var(--green)}
+  .result.loss{border-color:var(--red)}
+  .result .big{font-size:30px;font-weight:800;color:var(--green);line-height:1.05}
+  .result.loss .big{color:var(--red)}
+  .result .biglabel{font-size:12.5px;color:var(--muted);font-weight:600;margin-bottom:2px}
+  .result .sub{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+  .result .sub div{background:var(--bg);border-radius:10px;padding:8px 10px}
+  .result .sub .v{font-size:15px;font-weight:750}
+  .result .sub .l{font-size:11px;color:var(--muted);margin-top:1px}
+  @media(max-width:520px){.result .sub{grid-template-columns:1fr 1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);margin-top:12px}
+  .card h2{font-size:15px;font-weight:720;margin-bottom:12px;display:flex;align-items:center;gap:7px}
+  .badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;margin-left:auto}
+  .b-cost{background:var(--red-soft);color:var(--red)} .b-rev{background:var(--green-soft);color:var(--green)}
+  .row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .row:last-child{border-bottom:none}
+  .row label{flex:1;font-size:13.5px}
+  .row label small{display:block;color:var(--muted);font-size:11px}
+  .row input[type=range]{flex:1.1;accent-color:var(--brand)}
+  .row .num{width:140px;display:flex;align-items:center;gap:4px}
+  .row input[type=number]{width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:8px;font-size:13.5px;
+    text-align:right;font-variant-numeric:tabular-nums;font-family:inherit;font-weight:600}
+  .row .unit{font-size:11px;color:var(--muted);white-space:nowrap}
+  .rangeval{width:58px;text-align:right;font-weight:700;font-size:13.5px;font-variant-numeric:tabular-nums}
+  .subtot{display:flex;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:2px solid var(--ink);font-weight:750;font-size:14px}
+  .subtot .v{font-variant-numeric:tabular-nums}
+  .presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+  .presets button{flex:1;min-width:90px;border:1px solid var(--line);background:var(--card);padding:10px;border-radius:10px;
+    font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;transition:.15s}
+  .presets button:hover{border-color:var(--brand);color:var(--brand)}
+  .cap{margin-top:10px;font-size:12.5px;padding:9px 11px;border-radius:9px;background:var(--brand-soft);color:#1e40af}
+  .cap.warn{background:var(--amber-soft);color:var(--amber)}
+  .note{font-size:11.5px;color:var(--muted);margin-top:8px;line-height:1.5}
+  .bars{margin-top:10px}
+  .bar{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:12px}
+  .bar .lab{width:96px;color:var(--muted)}
+  .bar .track{flex:1;height:14px;background:var(--bg);border-radius:7px;overflow:hidden}
+  .bar .fill{height:100%;border-radius:7px}
+  .bar .amt{width:74px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+  .foot{text-align:center;color:var(--muted);font-size:11.5px;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <h1>🧮 Mô hình kinh doanh — Studio cho thuê Livestream</h1>
+    <p>Kéo trượt / gõ số → Lãi · Hòa vốn · Hoàn vốn tự tính. Số mặc định từ research thị trường HCM 06/2026.</p>
+  </header>
+
+  <!-- KẾT QUẢ (sticky) -->
+  <div class="result" id="result">
+    <div class="biglabel">LÃI RÒNG / THÁNG</div>
+    <div class="big" id="r-profit">—</div>
+    <div class="sub">
+      <div><div class="v" id="r-rev">—</div><div class="l">Doanh thu/tháng</div></div>
+      <div><div class="v" id="r-cost">—</div><div class="l">Chi phí/tháng</div></div>
+      <div><div class="v" id="r-be">—</div><div class="l">Hòa vốn (buổi/th)</div></div>
+      <div><div class="v" id="r-payback">—</div><div class="l">Hoàn vốn đầu tư</div></div>
+      <div><div class="v" id="r-buoi">—</div><div class="l">Tổng buổi bán/th</div></div>
+      <div><div class="v" id="r-margin">—</div><div class="l">Biên lãi</div></div>
+    </div>
+  </div>
+
+  <!-- KỊCH BẢN NHANH -->
+  <div class="card">
+    <h2>⚡ Kịch bản nhanh</h2>
+    <div class="presets">
+      <button onclick="preset('low')">🔴 Thấp<br><small>~30 buổi</small></button>
+      <button onclick="preset('mid')">🟡 Trung<br><small>~50 buổi</small></button>
+      <button onclick="preset('high')">🟢 Cao<br><small>~75 buổi</small></button>
+    </div>
+    <div class="note">Bấm để nạp nhanh số bán hàng tháng, rồi tinh chỉnh bên dưới.</div>
+  </div>
+
+  <!-- CHI PHÍ -->
+  <div class="card">
+    <h2>💸 Chi phí cố định <span class="badge b-cost">phải gánh dù vắng khách</span></h2>
+    <div class="row"><label>Thuê mặt bằng<small>nhà ~90m² Gò Vấp/Tân Phú</small></label>
+      <div class="num"><input type="text" inputmode="numeric" data-money="1" id="matbang" value="12000000" step="500000"><span class="unit">đ</span></div></div>
+    <div class="row"><label>Số nhân viên<small>kỹ thuật live + trực phòng</small></label>
+      <input type="range" id="soNV" min="0" max="5" step="1" value="2"><span class="rangeval" id="soNV-v">2</span></div>
+    <div class="row"><label>Lương / người / tháng</label>
+      <div class="num"><input type="text" inputmode="numeric" data-money="1" id="luong" value="8000000" step="500000"><span class="unit">đ</span></div></div>
+    <div class="row"><label>Tiền điện<small>giá kinh doanh, đèn + máy lạnh</small></label>
+      <div class="num"><input type="text" inputmode="numeric" data-money="1" id="dien" value="4500000" step="250000"><span class="unit">đ</span></div></div>
+    <div class="row"><label>Internet doanh nghiệp</label>
+      <div class="num"><input type="text" inputmode="numeric" data-money="1" id="net" value="1000000" step="100000"><span class="unit">đ</span></div></div>
+    <div class="row"><label>Vận hành khác<small>nước, vệ sinh, phần mềm, bảo trì</small></label>
+      <div class="num"><input type="text" inputmode="numeric" data-money="1" id="khac" value="3000000" step="250000"><span class="unit">đ</span></div></div>
+    <div class="row"><label>Vốn đầu tư thiết bị<small>để tính khấu hao</small></label>
+      <div class="num"><input type="text" inputmode="numeric" data-money="1" id="von" value="175000000" step="5000000"><span class="unit">đ</span></div></div>
+    <div class="row"><label>Khấu hao trong<small>chia đều vốn để thu hồi</small></label>
+      <input type="range" id="khauThang" min="12" max="48" step="6" value="30"><span class="rangeval"><span id="khauThang-v">30</span>th</span></div>
+    <div class="subtot"><span>Tổng chi phí / tháng <small id="khauNote" style="color:var(--muted);font-weight:500"></small></span><span class="v" id="costTotal">—</span></div>
+  </div>
+
+  <!-- DOANH THU -->
+  <div class="card">
+    <h2>🏷️ Doanh thu — gói bán cho khách <span class="badge b-rev">điều chỉnh giá & số khách</span></h2>
+    <div class="row"><label><b>Gói tháng</b> (khung giờ cố định, ~26 buổi)<small>giá / khách / tháng</small></label>
+      <div class="num"><input type="text" inputmode="numeric" data-money="1" id="giaThang" value="30000000" step="1000000"><span class="unit">đ</span></div></div>
+    <div class="row"><label>↳ Số khách mua gói tháng</label>
+      <input type="range" id="soThang" min="0" max="6" step="1" value="2"><span class="rangeval" id="soThang-v">2</span></div>
+    <div class="row"><label><b>Gói 10 buổi</b><small>giá / gói</small></label>
+      <div class="num"><input type="text" inputmode="numeric" data-money="1" id="gia10" value="17000000" step="500000"><span class="unit">đ</span></div></div>
+    <div class="row"><label>↳ Số gói 10 buổi bán / tháng</label>
+      <input type="range" id="so10" min="0" max="20" step="1" value="0"><span class="rangeval" id="so10-v">0</span></div>
+    <div class="row"><label><b>Buổi lẻ</b> (2h, có kỹ thuật)<small>giá / buổi</small></label>
+      <div class="num"><input type="text" inputmode="numeric" data-money="1" id="giaLe" value="2000000" step="100000"><span class="unit">đ</span></div></div>
+    <div class="row"><label>↳ Số buổi lẻ bán / tháng</label>
+      <input type="range" id="soLe" min="0" max="60" step="1" value="4"><span class="rangeval" id="soLe-v">4</span></div>
+    <div class="subtot"><span>Tổng doanh thu / tháng</span><span class="v" id="revTotal">—</span></div>
+  </div>
+
+  <!-- CÔNG SUẤT + BIỂU ĐỒ -->
+  <div class="card">
+    <h2>📊 Công suất & cơ cấu</h2>
+    <div class="row" style="border:none;padding-bottom:4px"><label>Số phòng cho thuê</label>
+      <input type="range" id="soPhong" min="1" max="4" step="1" value="2"><span class="rangeval" id="soPhong-v">2</span></div>
+    <div class="row" style="padding-top:4px"><label>Buổi/ngày mỗi phòng<small>× 26 ngày = sức chứa</small></label>
+      <input type="range" id="buoiNgay" min="1" max="6" step="1" value="3"><span class="rangeval" id="buoiNgay-v">3</span></div>
+    <div class="cap" id="capMsg">—</div>
+    <div class="bars" id="bars"></div>
+  </div>
+
+  <div class="foot">OS Second Brain · Mô hình SỐNG · số mặc định từ research HCM 06/2026 (AF Studio, phongtro123, EVN, Indeed…) — chỉnh được, nên gọi NCC/đối thủ xác nhận trước khi quyết</div>
+</div>
+
+<script>
+const fmt = n => Math.round(n).toLocaleString('vi-VN')+"đ";
+const fmtTr = n => (n/1e6).toLocaleString('vi-VN',{maximumFractionDigits:1})+" tr";
+const ids=["matbang","soNV","luong","dien","net","khac","von","khauThang","giaThang","soThang","gia10","so10","giaLe","soLe","soPhong","buoiNgay"];
+const val=id=>{const el=document.getElementById(id);const raw=el.dataset.money?el.value.replace(/\D/g,''):el.value;return parseFloat(raw)||0;};
+function fmtMoneyField(el){const d=el.value.replace(/\D/g,'');el.value=d?parseInt(d,10).toLocaleString('vi-VN'):'';}
+
+function calc(){
+  // sync range value labels
+  ["soNV","khauThang","soThang","so10","soLe","soPhong","buoiNgay"].forEach(id=>{
+    const el=document.getElementById(id+"-v"); if(el) el.textContent=val(id);
+  });
+
+  const khauHao = val("von")/val("khauThang");
+  const luongTong = val("soNV")*val("luong");
+  const fixed = val("matbang")+luongTong+val("dien")+val("net")+val("khac")+khauHao;
+  document.getElementById("costTotal").textContent=fmt(fixed);
+  document.getElementById("khauNote").textContent="(gồm khấu hao "+fmtTr(khauHao)+")";
+
+  const revThang=val("soThang")*val("giaThang");
+  const rev10=val("so10")*val("gia10");
+  const revLe=val("soLe")*val("giaLe");
+  const revenue=revThang+rev10+revLe;
+  document.getElementById("revTotal").textContent=fmt(revenue);
+
+  const buoi=val("soThang")*26+val("so10")*10+val("soLe");
+  const profit=revenue-fixed;
+  const giaBlend= buoi>0 ? revenue/buoi : 0;
+  const beBuoi= giaBlend>0 ? Math.ceil(fixed/giaBlend) : 0;
+  const payback= profit>0 ? val("von")/profit : 0;
+  const margin= revenue>0 ? profit/revenue*100 : 0;
+
+  const rEl=document.getElementById("result");
+  rEl.classList.toggle("loss", profit<0);
+  document.getElementById("r-profit").textContent=(profit>=0?"+":"")+fmt(profit);
+  document.getElementById("r-rev").textContent=fmtTr(revenue);
+  document.getElementById("r-cost").textContent=fmtTr(fixed);
+  document.getElementById("r-be").textContent=beBuoi+" buổi";
+  document.getElementById("r-payback").textContent= profit>0 ? payback.toFixed(1).replace('.',',')+" tháng" : "—";
+  document.getElementById("r-buoi").textContent=buoi+" buổi";
+  document.getElementById("r-margin").textContent= revenue>0 ? margin.toFixed(0)+"%" : "—";
+
+  // công suất
+  const cap=val("soPhong")*val("buoiNgay")*26;
+  const pct= cap>0 ? buoi/cap*100 : 0;
+  const capEl=document.getElementById("capMsg");
+  let msg=`Đang bán <b>${buoi}</b> / sức chứa tối đa <b>${cap}</b> buổi/tháng = <b>${pct.toFixed(0)}%</b> công suất.`;
+  let warn=false;
+  if(buoi>cap){ msg+=" ⚠️ VƯỢT sức chứa — cần thêm phòng hoặc giảm buổi."; warn=true; }
+  else if(val("soPhong")>val("soNV")){ msg+=" ⚠️ Số phòng > số nhân viên: 2 phòng chạy ĐỒNG THỜI cần thêm kỹ thuật."; warn=true; }
+  capEl.classList.toggle("warn",warn);
+  capEl.innerHTML=msg;
+
+  // bars cơ cấu chi phí
+  const items=[["Mặt bằng",val("matbang"),"#2563eb"],["Lương NV",luongTong,"#7c3aed"],
+    ["Điện",val("dien"),"#dc2626"],["Internet",val("net"),"#0891b2"],
+    ["Khác",val("khac"),"#b45309"],["Khấu hao",khauHao,"#6b7280"]];
+  const max=Math.max(...items.map(i=>i[1]),1);
+  document.getElementById("bars").innerHTML=items.map(([l,v,c])=>
+    `<div class="bar"><span class="lab">${l}</span><div class="track"><div class="fill" style="width:${v/max*100}%;background:${c}"></div></div><span class="amt">${fmtTr(v)}</span></div>`).join("");
+}
+
+function preset(k){
+  const s={low:[1,0,4],mid:[2,0,0],high:[2,2,5]}[k];
+  document.getElementById("soThang").value=s[0];
+  document.getElementById("so10").value=s[1];
+  document.getElementById("soLe").value=s[2];
+  calc();
+}
+
+ids.forEach(id=>{const el=document.getElementById(id);el.addEventListener("input",()=>{if(el.dataset.money)fmtMoneyField(el);calc();});});
+document.querySelectorAll('[data-money]').forEach(fmtMoneyField);
+calc();
+</script>
+</body>
+</html>
