@@ -3,223 +3,336 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mô hình kinh doanh — Studio cho thuê Livestream</title>
+<title>Studio Livestream — Bảng giá & Mô hình kinh doanh</title>
 <style>
   :root{
     --bg:#f6f7f9; --card:#fff; --ink:#1a1d24; --muted:#6b7280; --line:#e6e8ec;
     --brand:#2563eb; --brand-soft:#eaf1ff; --green:#16a34a; --green-soft:#e9f7ef;
     --red:#dc2626; --red-soft:#fdecec; --amber:#b45309; --amber-soft:#fef3e2;
+    --cyan:#0891b2; --cyan-soft:#e6f6fa; --violet:#7c3aed; --violet-soft:#f1ebfe;
     --shadow:0 1px 3px rgba(16,24,40,.06),0 8px 24px rgba(16,24,40,.05);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
     background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:880px;margin:0 auto;padding:18px 14px 70px}
+  .wrap{max-width:900px;margin:0 auto;padding:18px 14px 70px}
   header.hero{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;border-radius:16px;padding:22px 20px;box-shadow:var(--shadow)}
   header.hero h1{font-size:21px;font-weight:750;margin-bottom:4px}
   header.hero p{opacity:.9;font-size:13px}
-  /* result sticky */
-  .result{position:sticky;top:8px;z-index:30;margin:12px 0;border-radius:16px;padding:16px 18px;box-shadow:var(--shadow);
-    background:var(--card);border:2px solid var(--green)}
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+  .chip{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.22);padding:4px 10px;border-radius:999px;font-size:12px;font-weight:500}
+  nav.tabs{position:sticky;top:0;z-index:40;background:var(--bg);padding:12px 0 8px;display:flex;gap:7px}
+  nav.tabs button{border:1px solid var(--line);background:var(--card);color:var(--muted);padding:9px 16px;border-radius:999px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.15s;font-family:inherit}
+  nav.tabs button.active{background:var(--brand);color:#fff;border-color:var(--brand);box-shadow:0 4px 12px rgba(37,99,235,.3)}
+  section.panel{display:none;animation:fade .25s ease}
+  section.panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);margin-top:12px}
+  .card h2{font-size:16px;font-weight:720;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .lead{color:var(--muted);font-size:13px;margin-bottom:12px}
+  /* price matrix */
+  .ptbl{width:100%;border-collapse:collapse;margin-top:6px}
+  .ptbl th,.ptbl td{border:1px solid var(--line);padding:10px 8px;text-align:center}
+  .ptbl thead th{background:#1e3a8a;color:#fff;font-size:12.5px;font-weight:700}
+  .ptbl .rowh{background:var(--brand-soft);font-weight:700;text-align:left;font-size:13px;color:#1e3a8a}
+  .ptbl .tot{font-size:15px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+  .ptbl .per{font-size:11px;color:var(--muted);margin-top:2px}
+  .ptbl .best{background:var(--green-soft)}
+  .ptbl .best .tot{color:var(--green)}
+  .roomcap{font-size:13px;font-weight:700;margin:14px 0 4px;padding:6px 12px;border-radius:8px;display:inline-block}
+  .cap-a{background:var(--cyan-soft);color:var(--cyan)} .cap-b{background:var(--violet-soft);color:var(--violet)}
+  .bench{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
+  .bench th,.bench td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:right}
+  .bench th:first-child,.bench td:first-child{text-align:left}
+  .bench th{color:var(--muted);font-size:11px;text-transform:uppercase;font-weight:700}
+  .bench .me{color:var(--green);font-weight:800}
+  .callout{border-radius:12px;padding:12px 14px;font-size:13px;margin:12px 0;border:1px solid}
+  .callout.note{background:var(--brand-soft);border-color:#cfe0fb;color:#1e40af}
+  .callout.warn{background:var(--amber-soft);border-color:#f4d9a8;color:#7c4a09}
+  .callout b{font-weight:700}
+  details{margin-top:10px;font-size:12.5px}
+  details summary{cursor:pointer;color:var(--brand);font-weight:600}
+  details ul{margin:8px 0 0 16px;color:var(--muted);line-height:1.7}
+  details a{color:var(--brand)}
+  /* result */
+  .result{position:sticky;top:58px;z-index:30;margin:12px 0;border-radius:16px;padding:16px 18px;box-shadow:var(--shadow);background:var(--card);border:2px solid var(--green)}
   .result.loss{border-color:var(--red)}
-  .result .big{font-size:30px;font-weight:800;color:var(--green);line-height:1.05}
+  .result .big{font-size:29px;font-weight:800;color:var(--green);line-height:1.05}
   .result.loss .big{color:var(--red)}
-  .result .biglabel{font-size:12.5px;color:var(--muted);font-weight:600;margin-bottom:2px}
+  .result .biglabel{font-size:12px;color:var(--muted);font-weight:600}
   .result .sub{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
   .result .sub div{background:var(--bg);border-radius:10px;padding:8px 10px}
   .result .sub .v{font-size:15px;font-weight:750}
   .result .sub .l{font-size:11px;color:var(--muted);margin-top:1px}
   @media(max-width:520px){.result .sub{grid-template-columns:1fr 1fr}}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);margin-top:12px}
-  .card h2{font-size:15px;font-weight:720;margin-bottom:12px;display:flex;align-items:center;gap:7px}
   .badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;margin-left:auto}
-  .b-cost{background:var(--red-soft);color:var(--red)} .b-rev{background:var(--green-soft);color:var(--green)}
+  .b-rev{background:var(--green-soft);color:var(--green)} .b-cost{background:var(--red-soft);color:var(--red)}
   .row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
   .row:last-child{border-bottom:none}
   .row label{flex:1;font-size:13.5px}
   .row label small{display:block;color:var(--muted);font-size:11px}
-  .row input[type=range]{flex:1.1;accent-color:var(--brand)}
-  .row .num{width:140px;display:flex;align-items:center;gap:4px}
-  .row input[type=number]{width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:8px;font-size:13.5px;
-    text-align:right;font-variant-numeric:tabular-nums;font-family:inherit;font-weight:600}
+  .row input[type=range]{flex:1.1;accent-color:var(--brand);min-width:90px}
+  .row .num{width:138px;display:flex;align-items:center;gap:4px}
+  .row input[type=text]{width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:8px;font-size:13.5px;text-align:right;font-variant-numeric:tabular-nums;font-family:inherit;font-weight:600}
   .row .unit{font-size:11px;color:var(--muted);white-space:nowrap}
-  .rangeval{width:58px;text-align:right;font-weight:700;font-size:13.5px;font-variant-numeric:tabular-nums}
+  .rangeval{width:46px;text-align:right;font-weight:700;font-size:13.5px;font-variant-numeric:tabular-nums}
+  .revrow{display:grid;grid-template-columns:1fr 78px 116px 96px;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+  .revrow .nm{font-size:13px;font-weight:600}.revrow .nm small{display:block;color:var(--muted);font-size:11px;font-weight:400}
+  .revrow input[type=range]{accent-color:var(--brand);width:100%}
+  .revrow .ph{text-align:center;font-weight:700;font-size:13px}
+  .revrow input[type=text]{width:100%;padding:6px;border:1px solid var(--line);border-radius:7px;text-align:right;font-size:12.5px;font-variant-numeric:tabular-nums;font-family:inherit}
+  .revrow .amt{text-align:right;font-weight:750;color:var(--green);font-variant-numeric:tabular-nums;font-size:13px}
+  .revhd{display:grid;grid-template-columns:1fr 78px 116px 96px;gap:8px;font-size:10.5px;color:var(--muted);text-transform:uppercase;font-weight:700;padding-bottom:4px;border-bottom:2px solid var(--ink)}
+  .revhd span:nth-child(2),.revhd span:nth-child(3){text-align:center}.revhd span:nth-child(4){text-align:right}
   .subtot{display:flex;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:2px solid var(--ink);font-weight:750;font-size:14px}
   .subtot .v{font-variant-numeric:tabular-nums}
-  .presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
-  .presets button{flex:1;min-width:90px;border:1px solid var(--line);background:var(--card);padding:10px;border-radius:10px;
-    font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;transition:.15s}
+  .presets{display:flex;gap:8px;flex-wrap:wrap}
+  .presets button{flex:1;min-width:90px;border:1px solid var(--line);background:var(--card);padding:9px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
   .presets button:hover{border-color:var(--brand);color:var(--brand)}
-  .cap{margin-top:10px;font-size:12.5px;padding:9px 11px;border-radius:9px;background:var(--brand-soft);color:#1e40af}
-  .cap.warn{background:var(--amber-soft);color:var(--amber)}
-  .note{font-size:11.5px;color:var(--muted);margin-top:8px;line-height:1.5}
-  .bars{margin-top:10px}
-  .bar{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:12px}
-  .bar .lab{width:96px;color:var(--muted)}
-  .bar .track{flex:1;height:14px;background:var(--bg);border-radius:7px;overflow:hidden}
-  .bar .fill{height:100%;border-radius:7px}
-  .bar .amt{width:74px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
-  .foot{text-align:center;color:var(--muted);font-size:11.5px;margin-top:20px}
+  .capmsg{margin-top:8px;font-size:12.5px;padding:8px 11px;border-radius:9px;background:var(--brand-soft);color:#1e40af}
+  .capmsg.warn{background:var(--amber-soft);color:var(--amber)}
+  .foot{text-align:center;color:var(--muted);font-size:11.5px;margin-top:20px;line-height:1.6}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="hero">
-    <h1>🧮 Mô hình kinh doanh — Studio cho thuê Livestream</h1>
-    <p>Kéo trượt / gõ số → Lãi · Hòa vốn · Hoàn vốn tự tính. Số mặc định từ research thị trường HCM 06/2026.</p>
+    <h1>🎬 Studio Livestream — Bảng giá & Mô hình kinh doanh</h1>
+    <p>Giá theo <b>phiên (2 tiếng)</b> × loại phòng × chế độ vận hành. Số liệu thị trường HCM 06/2026 — verify từ 8 studio thật.</p>
+    <div class="chips">
+      <span class="chip">📐 1 phiên = 2 tiếng</span>
+      <span class="chip">🏠 2 loại phòng</span>
+      <span class="chip">🔧 Tự vận hành / Có kỹ thuật</span>
+      <span class="chip">📦 Gói 7 / 14 / 30 phiên</span>
+    </div>
   </header>
 
-  <!-- KẾT QUẢ (sticky) -->
-  <div class="result" id="result">
-    <div class="biglabel">LÃI RÒNG / THÁNG</div>
-    <div class="big" id="r-profit">—</div>
-    <div class="sub">
-      <div><div class="v" id="r-rev">—</div><div class="l">Doanh thu/tháng</div></div>
-      <div><div class="v" id="r-cost">—</div><div class="l">Chi phí/tháng</div></div>
-      <div><div class="v" id="r-be">—</div><div class="l">Hòa vốn (buổi/th)</div></div>
-      <div><div class="v" id="r-payback">—</div><div class="l">Hoàn vốn đầu tư</div></div>
-      <div><div class="v" id="r-buoi">—</div><div class="l">Tổng buổi bán/th</div></div>
-      <div><div class="v" id="r-margin">—</div><div class="l">Biên lãi</div></div>
+  <nav class="tabs" id="tabs">
+    <button class="active" data-t="price">💰 Bảng giá</button>
+    <button data-t="calc">📊 Tính lãi</button>
+  </nav>
+
+  <!-- ===== BẢNG GIÁ ===== -->
+  <section class="panel active" data-p="price">
+    <div class="card">
+      <h2>💰 Bảng giá thuê (bán cho khách)</h2>
+      <p class="lead">Đặt <b>dưới PuStudio ~7–15%</b> để mới mở dễ hút khách, nhưng vẫn trên giá sàn để không lỗ. Càng mua nhiều phiên càng rẻ.</p>
+      <div id="price-tables"></div>
+      <div class="callout note">📐 <b>1 phiên = 2 tiếng.</b> Gói 30 phiên ≈ live đều mỗi ngày trong tháng. Giá trên là <b>trọn gói</b>; số nhỏ là quy ra mỗi phiên.</div>
     </div>
-  </div>
 
-  <!-- KỊCH BẢN NHANH -->
-  <div class="card">
-    <h2>⚡ Kịch bản nhanh</h2>
-    <div class="presets">
-      <button onclick="preset('low')">🔴 Thấp<br><small>~30 buổi</small></button>
-      <button onclick="preset('mid')">🟡 Trung<br><small>~50 buổi</small></button>
-      <button onclick="preset('high')">🟢 Cao<br><small>~75 buổi</small></button>
+    <div class="card">
+      <h2>⚖️ So với đối thủ <span class="badge b-rev">không "ảo" — có nguồn</span></h2>
+      <p class="lead">Giá/phiên khi mua gói 30 — anh luôn rẻ hơn PuStudio &amp; rẻ hơn nhiều AF Studio:</p>
+      <table class="bench">
+        <thead><tr><th>Tổ hợp (mua 30 phiên)</th><th>Giá anh</th><th>PuStudio</th><th>Khác</th></tr></thead>
+        <tbody>
+          <tr><td>Cơ bản · Tự vận hành</td><td class="me">275k</td><td>298k</td><td>LP 79–250k</td></tr>
+          <tr><td>Cơ bản · Có kỹ thuật</td><td class="me">450k</td><td>498k</td><td>—</td></tr>
+          <tr><td>Cao cấp · Tự vận hành</td><td class="me">760k</td><td>900k</td><td>AF 1.250k</td></tr>
+          <tr><td>Cao cấp · Có kỹ thuật</td><td class="me">1.080k</td><td>1.260k</td><td>AF 2.500k</td></tr>
+        </tbody>
+      </table>
+      <details>
+        <summary>Nguồn dữ liệu (8 studio HCM)</summary>
+        <ul>
+          <li><b>PuStudio</b> — ma trận giá đọc trực tiếp từ web (12 mức, đang khuyến mãi)</li>
+          <li><b>AF Studio</b> — self 800k/h · LIVE DAILY 2,5tr/2h · LIVE MEGA 4,5tr/2h</li>
+          <li><b>LP Studio</b> — phòng trống 79k/h · trọn gói + kỹ thuật 349k/h</li>
+          <li><b>Enter</b> 40m² 1,9tr · 60m² 2,8tr/buổi · <b>TCA</b> 200k/h–7tr/buổi · <b>Trọng Kiểm</b> 5,5–11,5tr/buổi · <b>Meta</b> 500k/h</li>
+          <li>Xác minh: "1 phiên = 2h" (PuStudio·AF·tin tuyển dụng). Tách "tự vận hành vs có kỹ thuật" = chuẩn ngành (AF·LP).</li>
+        </ul>
+      </details>
+      <div class="callout warn">⚠️ Thang 7/14/30 phiên là <b>nét riêng PuStudio</b> (chưa thấy studio thứ 2 dùng y hệt). Giá khuyến mãi PuStudio có thể đổi → nên gọi hotline 1–2 chỗ xác nhận trước khi in báo giá.</div>
     </div>
-    <div class="note">Bấm để nạp nhanh số bán hàng tháng, rồi tinh chỉnh bên dưới.</div>
-  </div>
+  </section>
 
-  <!-- CHI PHÍ -->
-  <div class="card">
-    <h2>💸 Chi phí cố định <span class="badge b-cost">phải gánh dù vắng khách</span></h2>
-    <div class="row"><label>Thuê mặt bằng<small>nhà ~90m² Gò Vấp/Tân Phú</small></label>
-      <div class="num"><input type="text" inputmode="numeric" data-money="1" id="matbang" value="12000000" step="500000"><span class="unit">đ</span></div></div>
-    <div class="row"><label>Số nhân viên<small>kỹ thuật live + trực phòng</small></label>
-      <input type="range" id="soNV" min="0" max="5" step="1" value="2"><span class="rangeval" id="soNV-v">2</span></div>
-    <div class="row"><label>Lương / người / tháng</label>
-      <div class="num"><input type="text" inputmode="numeric" data-money="1" id="luong" value="8000000" step="500000"><span class="unit">đ</span></div></div>
-    <div class="row"><label>Tiền điện<small>giá kinh doanh, đèn + máy lạnh</small></label>
-      <div class="num"><input type="text" inputmode="numeric" data-money="1" id="dien" value="4500000" step="250000"><span class="unit">đ</span></div></div>
-    <div class="row"><label>Internet doanh nghiệp</label>
-      <div class="num"><input type="text" inputmode="numeric" data-money="1" id="net" value="1000000" step="100000"><span class="unit">đ</span></div></div>
-    <div class="row"><label>Vận hành khác<small>nước, vệ sinh, phần mềm, bảo trì</small></label>
-      <div class="num"><input type="text" inputmode="numeric" data-money="1" id="khac" value="3000000" step="250000"><span class="unit">đ</span></div></div>
-    <div class="row"><label>Vốn đầu tư thiết bị<small>để tính khấu hao</small></label>
-      <div class="num"><input type="text" inputmode="numeric" data-money="1" id="von" value="175000000" step="5000000"><span class="unit">đ</span></div></div>
-    <div class="row"><label>Khấu hao trong<small>chia đều vốn để thu hồi</small></label>
-      <input type="range" id="khauThang" min="12" max="48" step="6" value="30"><span class="rangeval"><span id="khauThang-v">30</span>th</span></div>
-    <div class="subtot"><span>Tổng chi phí / tháng <small id="khauNote" style="color:var(--muted);font-weight:500"></small></span><span class="v" id="costTotal">—</span></div>
-  </div>
+  <!-- ===== TÍNH LÃI ===== -->
+  <section class="panel" data-p="calc">
+    <div class="result" id="result">
+      <div class="biglabel">LÃI RÒNG / THÁNG</div>
+      <div class="big" id="r-profit">—</div>
+      <div class="sub">
+        <div><div class="v" id="r-rev">—</div><div class="l">Doanh thu/tháng</div></div>
+        <div><div class="v" id="r-cost">—</div><div class="l">Chi phí/tháng</div></div>
+        <div><div class="v" id="r-payback">—</div><div class="l">Hoàn vốn đầu tư</div></div>
+        <div><div class="v" id="r-phien">—</div><div class="l">Tổng phiên bán/th</div></div>
+        <div><div class="v" id="r-margin">—</div><div class="l">Biên lãi</div></div>
+        <div><div class="v" id="r-be">—</div><div class="l">Hòa vốn (phiên/th)</div></div>
+      </div>
+    </div>
 
-  <!-- DOANH THU -->
-  <div class="card">
-    <h2>🏷️ Doanh thu — gói bán cho khách <span class="badge b-rev">điều chỉnh giá & số khách</span></h2>
-    <div class="row"><label><b>Gói tháng</b> (khung giờ cố định, ~26 buổi)<small>giá / khách / tháng</small></label>
-      <div class="num"><input type="text" inputmode="numeric" data-money="1" id="giaThang" value="30000000" step="1000000"><span class="unit">đ</span></div></div>
-    <div class="row"><label>↳ Số khách mua gói tháng</label>
-      <input type="range" id="soThang" min="0" max="6" step="1" value="2"><span class="rangeval" id="soThang-v">2</span></div>
-    <div class="row"><label><b>Gói 10 buổi</b><small>giá / gói</small></label>
-      <div class="num"><input type="text" inputmode="numeric" data-money="1" id="gia10" value="17000000" step="500000"><span class="unit">đ</span></div></div>
-    <div class="row"><label>↳ Số gói 10 buổi bán / tháng</label>
-      <input type="range" id="so10" min="0" max="20" step="1" value="0"><span class="rangeval" id="so10-v">0</span></div>
-    <div class="row"><label><b>Buổi lẻ</b> (2h, có kỹ thuật)<small>giá / buổi</small></label>
-      <div class="num"><input type="text" inputmode="numeric" data-money="1" id="giaLe" value="2000000" step="100000"><span class="unit">đ</span></div></div>
-    <div class="row"><label>↳ Số buổi lẻ bán / tháng</label>
-      <input type="range" id="soLe" min="0" max="60" step="1" value="4"><span class="rangeval" id="soLe-v">4</span></div>
-    <div class="subtot"><span>Tổng doanh thu / tháng</span><span class="v" id="revTotal">—</span></div>
-  </div>
+    <div class="card">
+      <h2>⚡ Kịch bản nhanh</h2>
+      <div class="presets">
+        <button onclick="preset('low')">🔴 Mới mở<br><small>vắng khách</small></button>
+        <button onclick="preset('mid')">🟡 Ổn định<br><small>~55% công suất</small></button>
+        <button onclick="preset('high')">🟢 Đông khách<br><small>~80% công suất</small></button>
+      </div>
+    </div>
 
-  <!-- CÔNG SUẤT + BIỂU ĐỒ -->
-  <div class="card">
-    <h2>📊 Công suất & cơ cấu</h2>
-    <div class="row" style="border:none;padding-bottom:4px"><label>Số phòng cho thuê</label>
-      <input type="range" id="soPhong" min="1" max="4" step="1" value="2"><span class="rangeval" id="soPhong-v">2</span></div>
-    <div class="row" style="padding-top:4px"><label>Buổi/ngày mỗi phòng<small>× 26 ngày = sức chứa</small></label>
-      <input type="range" id="buoiNgay" min="1" max="6" step="1" value="3"><span class="rangeval" id="buoiNgay-v">3</span></div>
-    <div class="cap" id="capMsg">—</div>
-    <div class="bars" id="bars"></div>
-  </div>
+    <div class="card">
+      <h2>🏷️ Doanh thu <span class="badge b-rev">nhập số phiên bán/tháng</span></h2>
+      <p class="lead">Mỗi tổ hợp: kéo <b>số phiên/tháng</b> bán được + sửa <b>giá/phiên</b> (mặc định = giá gói 30, khách live đều).</p>
+      <div class="revhd"><span>Tổ hợp</span><span>Phiên/th</span><span>Giá/phiên</span><span>Thành tiền</span></div>
+      <div id="rev-rows"></div>
+      <div class="subtot"><span>Tổng doanh thu / tháng</span><span class="v" id="revTotal">—</span></div>
+    </div>
 
-  <div class="foot">OS Second Brain · Mô hình SỐNG · số mặc định từ research HCM 06/2026 (AF Studio, phongtro123, EVN, Indeed…) — chỉnh được, nên gọi NCC/đối thủ xác nhận trước khi quyết</div>
+    <div class="card">
+      <h2>🏠 Công suất & nhân sự</h2>
+      <div class="row"><label>Số ngày hoạt động / tháng</label>
+        <input type="range" id="ngay" min="20" max="30" step="1" value="26"><span class="rangeval" id="ngay-v">26</span></div>
+      <div class="row"><label>Phiên/ngày tối đa mỗi phòng<small>giờ mở 8:30–20:30 ≈ 6 phiên; thực tế bán 4–5</small></label>
+        <input type="range" id="phienNgay" min="2" max="6" step="1" value="4"><span class="rangeval" id="phienNgay-v">4</span></div>
+      <div class="capmsg" id="capBasic">—</div>
+      <div class="capmsg" id="capCao" style="margin-top:6px">—</div>
+    </div>
+
+    <div class="card">
+      <h2>💸 Chi phí cố định <span class="badge b-cost">gánh dù vắng khách</span></h2>
+      <div class="row"><label>Thuê mặt bằng<small>nhà ~90m² chứa 2 phòng, Gò Vấp/Tân Phú</small></label>
+        <div class="num"><input type="text" inputmode="numeric" data-money="1" id="matbang" value="12000000"><span class="unit">đ</span></div></div>
+      <div class="row"><label>Số nhân viên<small>trực sảnh + kỹ thuật live (chế độ có-KT cần thêm)</small></label>
+        <input type="range" id="soNV" min="0" max="6" step="1" value="2"><span class="rangeval" id="soNV-v">2</span></div>
+      <div class="row"><label>Lương / người / tháng</label>
+        <div class="num"><input type="text" inputmode="numeric" data-money="1" id="luong" value="8000000"><span class="unit">đ</span></div></div>
+      <div class="row"><label>Tiền điện<small>giá kinh doanh, 2 phòng đèn + máy lạnh</small></label>
+        <div class="num"><input type="text" inputmode="numeric" data-money="1" id="dien" value="5000000"><span class="unit">đ</span></div></div>
+      <div class="row"><label>Internet doanh nghiệp</label>
+        <div class="num"><input type="text" inputmode="numeric" data-money="1" id="net" value="1000000"><span class="unit">đ</span></div></div>
+      <div class="row"><label>Vận hành khác<small>nước, vệ sinh, phần mềm, bảo trì</small></label>
+        <div class="num"><input type="text" inputmode="numeric" data-money="1" id="khac" value="3000000"><span class="unit">đ</span></div></div>
+      <div class="row"><label>Vốn đầu tư thiết bị 2 phòng<small>= báo giá thiết bị, để tính khấu hao</small></label>
+        <div class="num"><input type="text" inputmode="numeric" data-money="1" id="von" value="175000000"><span class="unit">đ</span></div></div>
+      <div class="row"><label>Khấu hao trong<small>chia đều vốn để thu hồi</small></label>
+        <input type="range" id="khauThang" min="12" max="48" step="6" value="30"><span class="rangeval"><span id="khauThang-v">30</span>th</span></div>
+      <div class="subtot"><span>Tổng chi phí / tháng <small id="khauNote" style="color:var(--muted);font-weight:500"></small></span><span class="v" id="costTotal">—</span></div>
+    </div>
+  </section>
+
+  <div class="foot">OS Second Brain · Mô hình SỐNG (cập nhật <span id="lastup"></span>) · giá tham khảo thị trường HCM 06/2026, verify 8 studio<br>Số mặc định là ƯỚC LƯỢNG cạnh tranh — nên gọi PuStudio/AF/LP xác nhận giá thật trước khi chốt báo giá khách</div>
 </div>
 
 <script>
-const fmt = n => Math.round(n).toLocaleString('vi-VN')+"đ";
-const fmtTr = n => (n/1e6).toLocaleString('vi-VN',{maximumFractionDigits:1})+" tr";
-const ids=["matbang","soNV","luong","dien","net","khac","von","khauThang","giaThang","soThang","gia10","so10","giaLe","soLe","soPhong","buoiNgay"];
-const val=id=>{const el=document.getElementById(id);const raw=el.dataset.money?el.value.replace(/\D/g,''):el.value;return parseFloat(raw)||0;};
+const LAST_UPDATED = "30/06/2026";
+// ===== GIÁ/PHIÊN ĐỀ XUẤT (verify thị trường, dưới PuStudio ~7-15%) =====
+const PRICE = {
+  'co-ban':{ name:'Phòng Cơ bản', sub:'~12m² · 1 camera · live bán hàng phổ thông', cls:'cap-a',
+    modes:[ {key:'tu',name:'Tự vận hành',p:[460000,420000,275000]},
+            {key:'kt',name:'Có kỹ thuật',p:[555000,510000,450000]} ] },
+  'cao-cap':{ name:'Phòng Cao cấp', sub:'~45m² · 2 camera · trang sức / sản phẩm cận cảnh', cls:'cap-b',
+    modes:[ {key:'tu',name:'Tự vận hành',p:[920000,850000,760000]},
+            {key:'kt',name:'Có kỹ thuật',p:[1300000,1190000,1080000]} ] },
+};
+const VOLS=[7,14,30];
+const fmt=n=>Math.round(n).toLocaleString('vi-VN')+"đ";
+const fmtK=n=>n>=1000000?(n/1000000).toLocaleString('vi-VN',{maximumFractionDigits:1})+"tr":(n/1000).toLocaleString('vi-VN')+"k";
+const fmtTr=n=>(n/1e6).toLocaleString('vi-VN',{maximumFractionDigits:1})+" tr";
+
+// render bảng giá
+function renderPrice(){
+  let h='';
+  for(const rk in PRICE){const r=PRICE[rk];
+    h+=`<div class="roomcap ${r.cls}">${r.name} · <span style="font-weight:500">${r.sub}</span></div>`;
+    h+=`<table class="ptbl"><thead><tr><th>Chế độ</th>`+VOLS.map(v=>`<th>${v} phiên</th>`).join('')+`</tr></thead><tbody>`;
+    r.modes.forEach(m=>{
+      h+=`<tr><td class="rowh">${m.name}</td>`;
+      m.p.forEach((pp,i)=>{
+        const best=i===2?' best':'';
+        h+=`<td class="${best}"><div class="tot">${fmt(pp*VOLS[i])}</div><div class="per">${fmtK(pp)}/phiên</div></td>`;
+      });
+      h+=`</tr>`;
+    });
+    h+=`</tbody></table>`;
+  }
+  document.getElementById('price-tables').innerHTML=h;
+}
+
+// ===== DOANH THU: 4 tổ hợp =====
+const COMBOS=[
+  {key:'cb_tu',room:'co-ban',label:'Cơ bản · Tự vận hành',price:275000,phien:40},
+  {key:'cb_kt',room:'co-ban',label:'Cơ bản · Có kỹ thuật',price:450000,phien:25},
+  {key:'cc_tu',room:'cao-cap',label:'Cao cấp · Tự vận hành',price:760000,phien:20},
+  {key:'cc_kt',room:'cao-cap',label:'Cao cấp · Có kỹ thuật',price:1080000,phien:25},
+];
+function renderRev(){
+  document.getElementById('rev-rows').innerHTML=COMBOS.map(c=>`
+   <div class="revrow">
+     <div class="nm">${c.label}<small>${c.room==='co-ban'?'Phòng cơ bản':'Phòng cao cấp'}</small></div>
+     <div><input type="range" id="${c.key}_ph" min="0" max="120" step="1" value="${c.phien}"><div class="ph" id="${c.key}_phv">${c.phien}</div></div>
+     <div class="num" style="width:auto"><input type="text" inputmode="numeric" data-money="1" id="${c.key}_pr" value="${c.price}"></div>
+     <div class="amt" id="${c.key}_amt">—</div>
+   </div>`).join('');
+}
+
+const val=id=>{const el=document.getElementById(id);if(!el)return 0;const raw=el.dataset&&el.dataset.money?el.value.replace(/\D/g,''):el.value;return parseFloat(raw)||0;};
 function fmtMoneyField(el){const d=el.value.replace(/\D/g,'');el.value=d?parseInt(d,10).toLocaleString('vi-VN'):'';}
 
 function calc(){
-  // sync range value labels
-  ["soNV","khauThang","soThang","so10","soLe","soPhong","buoiNgay"].forEach(id=>{
-    const el=document.getElementById(id+"-v"); if(el) el.textContent=val(id);
+  ['soNV','khauThang','ngay','phienNgay'].forEach(id=>{const e=document.getElementById(id+'-v');if(e)e.textContent=val(id);});
+  // doanh thu
+  let revenue=0, phienTotal=0, phByRoom={'co-ban':0,'cao-cap':0}, phKT=0;
+  COMBOS.forEach(c=>{
+    const ph=val(c.key+'_ph'), pr=val(c.key+'_pr'), amt=ph*pr;
+    document.getElementById(c.key+'_phv').textContent=ph;
+    document.getElementById(c.key+'_amt').textContent=fmtTr(amt);
+    revenue+=amt; phienTotal+=ph; phByRoom[c.room]+=ph;
+    if(c.key.endsWith('_kt')) phKT+=ph;
   });
+  document.getElementById('revTotal').textContent=fmt(revenue);
 
-  const khauHao = val("von")/val("khauThang");
-  const luongTong = val("soNV")*val("luong");
-  const fixed = val("matbang")+luongTong+val("dien")+val("net")+val("khac")+khauHao;
-  document.getElementById("costTotal").textContent=fmt(fixed);
-  document.getElementById("khauNote").textContent="(gồm khấu hao "+fmtTr(khauHao)+")";
-
-  const revThang=val("soThang")*val("giaThang");
-  const rev10=val("so10")*val("gia10");
-  const revLe=val("soLe")*val("giaLe");
-  const revenue=revThang+rev10+revLe;
-  document.getElementById("revTotal").textContent=fmt(revenue);
-
-  const buoi=val("soThang")*26+val("so10")*10+val("soLe");
-  const profit=revenue-fixed;
-  const giaBlend= buoi>0 ? revenue/buoi : 0;
-  const beBuoi= giaBlend>0 ? Math.ceil(fixed/giaBlend) : 0;
-  const payback= profit>0 ? val("von")/profit : 0;
-  const margin= revenue>0 ? profit/revenue*100 : 0;
-
-  const rEl=document.getElementById("result");
-  rEl.classList.toggle("loss", profit<0);
-  document.getElementById("r-profit").textContent=(profit>=0?"+":"")+fmt(profit);
-  document.getElementById("r-rev").textContent=fmtTr(revenue);
-  document.getElementById("r-cost").textContent=fmtTr(fixed);
-  document.getElementById("r-be").textContent=beBuoi+" buổi";
-  document.getElementById("r-payback").textContent= profit>0 ? payback.toFixed(1).replace('.',',')+" tháng" : "—";
-  document.getElementById("r-buoi").textContent=buoi+" buổi";
-  document.getElementById("r-margin").textContent= revenue>0 ? margin.toFixed(0)+"%" : "—";
+  // chi phí
+  const khauHao=val('von')/val('khauThang');
+  const fixed=val('matbang')+val('soNV')*val('luong')+val('dien')+val('net')+val('khac')+khauHao;
+  document.getElementById('costTotal').textContent=fmt(fixed);
+  document.getElementById('khauNote').textContent='(gồm khấu hao '+fmtTr(khauHao)+')';
 
   // công suất
-  const cap=val("soPhong")*val("buoiNgay")*26;
-  const pct= cap>0 ? buoi/cap*100 : 0;
-  const capEl=document.getElementById("capMsg");
-  let msg=`Đang bán <b>${buoi}</b> / sức chứa tối đa <b>${cap}</b> buổi/tháng = <b>${pct.toFixed(0)}%</b> công suất.`;
-  let warn=false;
-  if(buoi>cap){ msg+=" ⚠️ VƯỢT sức chứa — cần thêm phòng hoặc giảm buổi."; warn=true; }
-  else if(val("soPhong")>val("soNV")){ msg+=" ⚠️ Số phòng > số nhân viên: 2 phòng chạy ĐỒNG THỜI cần thêm kỹ thuật."; warn=true; }
-  capEl.classList.toggle("warn",warn);
-  capEl.innerHTML=msg;
+  const cap=val('ngay')*val('phienNgay');
+  function capLine(el,name,used){
+    const pct=cap>0?used/cap*100:0; const e=document.getElementById(el);
+    let m=`<b>${name}:</b> bán ${used} / sức chứa ${cap} phiên/tháng = <b>${pct.toFixed(0)}%</b>`;
+    let w=false; if(used>cap){m+=' ⚠️ VƯỢT sức chứa!';w=true;}
+    e.className='capmsg'+(w?' warn':''); e.innerHTML=m;
+  }
+  capLine('capBasic','Phòng Cơ bản',phByRoom['co-ban']);
+  capLine('capCao','Phòng Cao cấp',phByRoom['cao-cap']);
 
-  // bars cơ cấu chi phí
-  const items=[["Mặt bằng",val("matbang"),"#2563eb"],["Lương NV",luongTong,"#7c3aed"],
-    ["Điện",val("dien"),"#dc2626"],["Internet",val("net"),"#0891b2"],
-    ["Khác",val("khac"),"#b45309"],["Khấu hao",khauHao,"#6b7280"]];
-  const max=Math.max(...items.map(i=>i[1]),1);
-  document.getElementById("bars").innerHTML=items.map(([l,v,c])=>
-    `<div class="bar"><span class="lab">${l}</span><div class="track"><div class="fill" style="width:${v/max*100}%;background:${c}"></div></div><span class="amt">${fmtTr(v)}</span></div>`).join("");
+  // kết quả
+  const profit=revenue-fixed;
+  const giaBlend=phienTotal>0?revenue/phienTotal:0;
+  const bech=giaBlend>0?Math.ceil(fixed/giaBlend):0;
+  const payback=profit>0?val('von')/profit:0;
+  const margin=revenue>0?profit/revenue*100:0;
+  const R=document.getElementById('result'); R.classList.toggle('loss',profit<0);
+  document.getElementById('r-profit').textContent=(profit>=0?'+':'')+fmt(profit);
+  document.getElementById('r-rev').textContent=fmtTr(revenue);
+  document.getElementById('r-cost').textContent=fmtTr(fixed);
+  document.getElementById('r-payback').textContent=profit>0?payback.toFixed(1).replace('.',',')+' tháng':'—';
+  document.getElementById('r-phien').textContent=phienTotal+' phiên';
+  document.getElementById('r-margin').textContent=revenue>0?margin.toFixed(0)+'%':'—';
+  document.getElementById('r-be').textContent=bech+' phiên';
 }
 
 function preset(k){
-  const s={low:[1,0,4],mid:[2,0,0],high:[2,2,5]}[k];
-  document.getElementById("soThang").value=s[0];
-  document.getElementById("so10").value=s[1];
-  document.getElementById("soLe").value=s[2];
+  const s={low:[20,8,10,8], mid:[42,26,24,30], high:[55,45,40,48]}[k];
+  COMBOS.forEach((c,i)=>{document.getElementById(c.key+'_ph').value=s[i];});
   calc();
 }
 
-ids.forEach(id=>{const el=document.getElementById(id);el.addEventListener("input",()=>{if(el.dataset.money)fmtMoneyField(el);calc();});});
+document.getElementById('tabs').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  document.querySelectorAll('#tabs button').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');document.querySelector(`.panel[data-p="${b.dataset.t}"]`).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+renderPrice(); renderRev();
+document.querySelectorAll('input').forEach(el=>el.addEventListener('input',()=>{if(el.dataset&&el.dataset.money)fmtMoneyField(el);calc();}));
 document.querySelectorAll('[data-money]').forEach(fmtMoneyField);
+document.getElementById('lastup').textContent=LAST_UPDATED;
 calc();
 </script>
 </body>
