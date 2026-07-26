@@ -79,7 +79,69 @@ pre{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;
 footer{margin-top:80px;padding-top:24px;border-top:1px solid var(--line);
   display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
   font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--grey);letter-spacing:.06em}
-</style></head><body><div class="wrap">
+
+/* ================= CHUYỂN ĐỘNG =================
+   Tiết chế: mỗi lớp có việc riêng, không hiệu ứng cho-vui.
+   Tôn trọng prefers-reduced-motion ở cuối file. */
+
+/* ① thanh tiến trình đọc — cho biết còn bao nhiêu, làm trang "sống" */
+.prog{position:fixed;top:0;left:0;height:3px;width:0;z-index:99;
+  background:linear-gradient(90deg,var(--willow),var(--mint));transition:width .1s linear}
+
+/* ② header hiện dần theo thứ tự khi mở trang */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+header>*{animation:fadeUp .55s cubic-bezier(.22,.7,.3,1) both}
+header>*:nth-child(1){animation-delay:.02s}
+header>*:nth-child(2){animation-delay:.10s}
+header>*:nth-child(3){animation-delay:.18s}
+header>*:nth-child(4){animation-delay:.26s}
+header>*:nth-child(5){animation-delay:.34s}
+
+/* ③ mỗi prompt trồi lên khi cuộn tới (JS gắn class .in) */
+.item{opacity:0;transform:translateY(26px);
+  transition:opacity .6s ease,transform .6s cubic-bezier(.22,.7,.3,1)}
+.item.in{opacity:1;transform:none}
+.coach{opacity:0;transform:translateY(26px);
+  transition:opacity .6s ease,transform .6s cubic-bezier(.22,.7,.3,1)}
+.coach.in{opacity:1;transform:none}
+
+/* ④ ảnh phóng nhẹ khi trỏ vào — mời người ta xem kỹ */
+.grid2 img{transition:transform .55s cubic-bezier(.22,.7,.3,1),box-shadow .35s ease}
+.grid2 img:hover{transform:scale(1.022);box-shadow:0 18px 44px rgba(16,20,24,.16)}
+.copy{transition:background .2s ease,transform .15s ease}
+.copy:active{transform:scale(.94)}
+.btn-cta{transition:transform .16s ease,filter .16s ease,box-shadow .25s ease}
+.btn-cta:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,104,255,.24)}
+.pill{transition:border-color .25s ease,color .25s ease}
+.pill:hover{border-color:var(--willow);color:var(--willow)}
+
+/* ⑤ đèn nhấp nháy liên tục — dùng ở dải CTA đầu trang và tag CTA cuối */
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}
+  45%{opacity:.28;transform:scale(.7)}}
+@keyframes halo{0%{box-shadow:0 0 0 0 rgba(217,119,69,.55)}
+  70%{box-shadow:0 0 0 11px rgba(217,119,69,0)}
+  100%{box-shadow:0 0 0 0 rgba(217,119,69,0)}}
+.coach-dot{animation:blink 1.5s ease-in-out infinite,halo 1.5s ease-out infinite}
+
+/* ---------- dải CTA nhỏ ở ĐẦU trang ---------- */
+.cta-mini{margin:26px 0 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  background:#0B1514;color:#EDEFE9;border-radius:14px;padding:13px 16px;
+  text-decoration:none;transition:transform .18s ease,box-shadow .3s ease}
+.cta-mini:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(11,21,20,.22)}
+.mini-dot{width:9px;height:9px;border-radius:50%;background:#D97745;flex:0 0 auto;
+  animation:blink 1.15s ease-in-out infinite,halo 1.15s ease-out infinite}
+.mini-txt{font-size:14.5px;color:#C8D5CD;flex:1 1 260px;min-width:0}
+.mini-txt b{color:#fff}
+.mini-go{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;letter-spacing:.06em;
+  color:#7CE6B0;white-space:nowrap;font-weight:600}
+.cta-mini:hover .mini-go{color:#fff}
+@media (max-width:520px){.mini-txt{font-size:13.5px}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .item,.coach{opacity:1!important;transform:none!important}
+}
+</style></head><body><div class="prog"></div><div class="wrap">
 <header>
   <div class="eyebrow">Bộ prompt · @chudien · OS Second Brains</div>
   <h1>6 prompt ảnh Sprite — 6 bối cảnh, 6 kiểu ánh sáng</h1>
@@ -90,6 +152,7 @@ footer{margin-top:80px;padding-top:24px;border-top:1px solid var(--line);
     <span class="pill">KHÔNG STUDIO · KHÔNG MÁY ẢNH</span>
   </div>
   <div class="note">Mỗi prompt dưới đây <b>đã gen ra đúng tấm ảnh bên cạnh nó</b>. Bấm <b>Copy</b> rồi dán vào máy gen ảnh của bạn, kèm một ảnh sản phẩm thật làm tham chiếu.</div>
+  <a class="cta-mini" href="https://zalo.me/0968459103" target="_blank" rel="noopener"><span class="mini-dot"></span><span class="mini-txt"><b>Coaching 1:1</b> — mình dựng hệ thống AI riêng cho việc của bạn</span><span class="mini-go">NHẮN ZALO →</span></a>
 </header>
 <section class="item">
   <div class="num">PROMPT 01 / 06</div>
@@ -465,4 +528,30 @@ document.querySelectorAll('.copy').forEach(function(b){
     });
   });
 });
+
+/* thanh tiến trình đọc */
+(function(){
+  var bar = document.querySelector('.prog');
+  if(!bar) return;
+  function upd(){
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+  }
+  window.addEventListener('scroll', upd, {passive:true});
+  window.addEventListener('resize', upd); upd();
+})();
+
+/* mỗi prompt trồi lên khi cuộn tới */
+(function(){
+  var els = document.querySelectorAll('.item, .coach');
+  if(!('IntersectionObserver' in window)){
+    els.forEach(function(e){ e.classList.add('in'); }); return;
+  }
+  var io = new IntersectionObserver(function(rows){
+    rows.forEach(function(r){
+      if(r.isIntersecting){ r.target.classList.add('in'); io.unobserve(r.target); }
+    });
+  }, {rootMargin:'0px 0px -12% 0px', threshold:0.06});
+  els.forEach(function(e){ io.observe(e); });
+})();
 </script></body></html>
